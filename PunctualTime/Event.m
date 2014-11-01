@@ -8,7 +8,7 @@
 
 #import "Event.h"
 
-@interface Event ()
+@interface Event () <NSCoding>
 
 @property (readwrite) NSString* eventName;
 @property (readwrite) NSString* startingAddress;
@@ -30,6 +30,30 @@
     }
 
     return self;
+}
+
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    if (self = [super init])
+    {
+        self.eventName = [decoder decodeObjectForKey:@"kName"];
+        self.startingAddress = [decoder decodeObjectForKey:@"kStartingAddress"];
+        self.endingAddress = [decoder decodeObjectForKey:@"kEndingAddress"];
+        self.desiredArrivalTime = [decoder decodeObjectForKey:@"kArrivalTime"];
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.eventName forKey:@"kName"];
+    [encoder encodeObject:self.startingAddress forKey:@"kStartingAddress"];
+    [encoder encodeObject:self.endingAddress forKey:@"kEndingAddress"];
+    [encoder encodeObject:self.desiredArrivalTime forKey:@"kArrivalTime"];
 }
 
 @end
