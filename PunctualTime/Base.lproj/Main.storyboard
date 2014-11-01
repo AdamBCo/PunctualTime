@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="EXa-Df-8Er">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -146,35 +147,18 @@
                                     </mask>
                                 </variation>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Desired arrival time" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OIB-Ct-rHq">
-                                <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="6Hl-ky-paE"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Rbc-tW-wwK"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="6Hl-ky-paE"/>
-                                        <exclude reference="Rbc-tW-wwK"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="6Hl-ky-paE"/>
-                                        <include reference="Rbc-tW-wwK"/>
-                                    </mask>
-                                </variation>
-                            </textField>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-WW-LaZ">
+                                <rect key="frame" x="-160" y="-81" width="320" height="162"/>
+                                <date key="date" timeIntervalSinceReferenceDate="436499156.66239101">
+                                    <!--2014-11-01 01:45:56 +0000-->
+                                </date>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EFi-bP-pmX" firstAttribute="leading" secondItem="iO1-Wm-PnF" secondAttribute="leadingMargin" id="0qJ-4o-h0v"/>
+                            <constraint firstItem="wVb-WW-LaZ" firstAttribute="top" secondItem="EFi-bP-pmX" secondAttribute="bottom" constant="8" id="2Fk-Qe-V9t"/>
                             <constraint firstAttribute="centerX" secondItem="Bu2-Z3-l62" secondAttribute="centerX" id="6uF-hI-qkJ"/>
-                            <constraint firstItem="OIB-Ct-rHq" firstAttribute="top" secondItem="EFi-bP-pmX" secondAttribute="bottom" constant="74" id="7n4-n3-FRP">
-                                <variation key="widthClass=compact" constant="8"/>
-                            </constraint>
                             <constraint firstItem="BqN-3V-uVI" firstAttribute="top" secondItem="Bu2-Z3-l62" secondAttribute="bottom" constant="75" id="8wc-MG-QrI">
                                 <variation key="widthClass=compact" constant="8"/>
                             </constraint>
@@ -182,13 +166,13 @@
                             <constraint firstAttribute="centerY" secondItem="EFi-bP-pmX" secondAttribute="centerY" id="FId-tg-VMO">
                                 <variation key="widthClass=compact" constant="137"/>
                             </constraint>
-                            <constraint firstItem="OIB-Ct-rHq" firstAttribute="trailing" secondItem="iO1-Wm-PnF" secondAttribute="trailingMargin" id="VNy-I7-xzu"/>
+                            <constraint firstItem="wVb-WW-LaZ" firstAttribute="leading" secondItem="iO1-Wm-PnF" secondAttribute="leading" id="LeY-bC-y0C"/>
+                            <constraint firstAttribute="trailing" secondItem="wVb-WW-LaZ" secondAttribute="trailing" id="Nsr-d9-oqa"/>
                             <constraint firstItem="Bu2-Z3-l62" firstAttribute="top" secondItem="9Z1-rB-OVU" secondAttribute="bottom" constant="8" id="Vtz-yw-4eR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EFi-bP-pmX" secondAttribute="trailing" id="XjF-Ma-lj9"/>
                             <constraint firstAttribute="centerX" secondItem="BqN-3V-uVI" secondAttribute="centerX" id="bht-p5-S8B"/>
                             <constraint firstAttribute="trailingMargin" secondItem="BqN-3V-uVI" secondAttribute="trailing" id="fAa-iL-xAj"/>
                             <constraint firstItem="Bu2-Z3-l62" firstAttribute="leading" secondItem="iO1-Wm-PnF" secondAttribute="leadingMargin" id="hp4-KG-1oP"/>
-                            <constraint firstItem="OIB-Ct-rHq" firstAttribute="leading" secondItem="iO1-Wm-PnF" secondAttribute="leadingMargin" id="pBt-gd-WAO"/>
                             <constraint firstItem="BqN-3V-uVI" firstAttribute="leading" secondItem="iO1-Wm-PnF" secondAttribute="leadingMargin" id="rEE-Uy-fCo"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Bu2-Z3-l62" secondAttribute="trailing" id="rO0-8u-7kK"/>
                         </constraints>
@@ -197,7 +181,7 @@
                                 <exclude reference="Bu2-Z3-l62"/>
                                 <exclude reference="BqN-3V-uVI"/>
                                 <exclude reference="EFi-bP-pmX"/>
-                                <exclude reference="OIB-Ct-rHq"/>
+                                <exclude reference="wVb-WW-LaZ"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="6uF-hI-qkJ"/>
@@ -212,9 +196,9 @@
                                 <exclude reference="DuP-Xg-JIM"/>
                                 <exclude reference="FId-tg-VMO"/>
                                 <exclude reference="XjF-Ma-lj9"/>
-                                <exclude reference="7n4-n3-FRP"/>
-                                <exclude reference="VNy-I7-xzu"/>
-                                <exclude reference="pBt-gd-WAO"/>
+                                <exclude reference="2Fk-Qe-V9t"/>
+                                <exclude reference="LeY-bC-y0C"/>
+                                <exclude reference="Nsr-d9-oqa"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -222,7 +206,7 @@
                                 <include reference="Bu2-Z3-l62"/>
                                 <include reference="BqN-3V-uVI"/>
                                 <include reference="EFi-bP-pmX"/>
-                                <include reference="OIB-Ct-rHq"/>
+                                <include reference="wVb-WW-LaZ"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="6uF-hI-qkJ"/>
@@ -237,9 +221,9 @@
                                 <include reference="DuP-Xg-JIM"/>
                                 <include reference="FId-tg-VMO"/>
                                 <include reference="XjF-Ma-lj9"/>
-                                <include reference="7n4-n3-FRP"/>
-                                <include reference="VNy-I7-xzu"/>
-                                <include reference="pBt-gd-WAO"/>
+                                <include reference="2Fk-Qe-V9t"/>
+                                <include reference="LeY-bC-y0C"/>
+                                <include reference="Nsr-d9-oqa"/>
                             </mask>
                         </variation>
                     </view>
@@ -251,10 +235,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="datePicker" destination="wVb-WW-LaZ" id="ecG-ME-JYF"/>
                         <outlet property="endingLocationTextField" destination="EFi-bP-pmX" id="ulS-bT-C4f"/>
                         <outlet property="nameTextField" destination="Bu2-Z3-l62" id="03a-g7-ihP"/>
                         <outlet property="startingLocationTextField" destination="BqN-3V-uVI" id="oVx-Sa-dTV"/>
-                        <outlet property="timeTextField" destination="OIB-Ct-rHq" id="vXI-8o-pq1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pXN-Ts-aBU" userLabel="First Responder" sceneMemberID="firstResponder"/>
