@@ -17,6 +17,7 @@
 		661079081A0463CC0096479F /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079071A0463CC0096479F /* UserLocationManager.m */; };
 		6610790A1A04642E0096479F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661079091A04642E0096479F /* CoreLocation.framework */; };
 		6610790C1A0464390096479F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6610790B1A0464390096479F /* MapKit.framework */; };
+		661079121A056A700096479F /* GooglePlacesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079111A056A700096479F /* GooglePlacesController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		661079071A0463CC0096479F /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserLocationManager.m; path = ../UserLocationManager.m; sourceTree = "<group>"; };
 		661079091A04642E0096479F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6610790B1A0464390096479F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		661079101A056A700096479F /* GooglePlacesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GooglePlacesController.h; path = ../GooglePlacesController.h; sourceTree = "<group>"; };
+		661079111A056A700096479F /* GooglePlacesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GooglePlacesController.m; path = ../GooglePlacesController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 		661078DF1A044D830096479F /* PunctualTime */ = {
 			isa = PBXGroup;
 			children = (
+				661079101A056A700096479F /* GooglePlacesController.h */,
+				661079111A056A700096479F /* GooglePlacesController.m */,
 				661079061A0463CC0096479F /* UserLocationManager.h */,
 				661079071A0463CC0096479F /* UserLocationManager.m */,
 				661078E41A044D830096479F /* AppDelegate.h */,
@@ -236,6 +241,7 @@
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				661079081A0463CC0096479F /* UserLocationManager.m in Sources */,
+				661079121A056A700096479F /* GooglePlacesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

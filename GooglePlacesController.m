@@ -10,6 +10,9 @@
 
 @interface GooglePlacesController ()
 
+NSString * const apiURL = @"https://maps.googleapis.com/maps/api/place/";
+NSString * const apiKey = @"AIzaSyBv2BUjFaxjpwjWngV8sXZRocmQNqzxxN8";
+
 @end
 
 @implementation GooglePlacesController
@@ -19,19 +22,8 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)requestDataFromTheUser{
+    NSURL * [NSURL URLWithString:<#(NSString *)#>]
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
