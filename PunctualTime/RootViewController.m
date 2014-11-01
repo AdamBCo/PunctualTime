@@ -56,7 +56,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         [self.sharedEventController removeEvent:[self.sharedEventController.events objectAtIndex:indexPath.row] withCompletion:^{}];
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
 
