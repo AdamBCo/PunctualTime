@@ -20,6 +20,12 @@
     [self.userLocationManager startUpdatingLocation];
 }
 
+
+-(void)dealloc
+{
+    [self.userLocationManager setDelegate:nil];
+}
+
 #pragma mark - Location
 
 + (BOOL)canGetLocation
