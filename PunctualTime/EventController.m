@@ -39,12 +39,16 @@
     }
 
     [self.events addObject:event];
+    [self saveEvents];
+
     completion();
 }
 
 - (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion
 {
     [self.events removeObject:event];
+    [self saveEvents];
+
     completion();
 }
 
@@ -93,8 +97,8 @@
 {
     if (self = [super init])
     {
-        // Do init prep if necessary
-        return self;
+        // Load any saved Event objects from local storage
+        [self loadEvents];
     }
 
     return self;
