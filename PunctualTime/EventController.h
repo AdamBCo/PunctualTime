@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Event.h"
 
 @interface EventController : NSObject
+
+@property (readonly) NSMutableArray* events;
+
++ (EventController *)sharedEventController;
+- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion;
+- (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion;
 
 @end
