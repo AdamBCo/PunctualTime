@@ -73,7 +73,7 @@
         } else {
             oldLocation = nil;
         }
-        NSLog(@"\nThe Users most recent location is: %@\n", newLocation);
+//        NSLog(@"\nThe Users most recent location is: %@\n", newLocation);
 
 }
 
