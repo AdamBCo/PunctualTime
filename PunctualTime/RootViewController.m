@@ -8,9 +8,12 @@
 
 #import "RootViewController.h"
 
-@interface RootViewController ()
+@interface RootViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
+
 
 @implementation RootViewController
 
@@ -19,6 +22,27 @@
     [super viewDidLoad];
 
     //
+}
+
+- (IBAction)onCreateNewEventButtonPressed:(id)sender
+{
+    // Add new event
+}
+
+
+#pragma mark - UITableView
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+#warning tableview not setup
+    return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+
+    return cell;
 }
 
 @end

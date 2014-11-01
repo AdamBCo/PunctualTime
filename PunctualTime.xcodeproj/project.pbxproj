@@ -85,8 +85,8 @@
 				661078E51A044D830096479F /* AppDelegate.m */,
 				661078E71A044D830096479F /* RootViewController.h */,
 				661078E81A044D830096479F /* RootViewController.m */,
-				661078EA1A044D830096479F /* Main.storyboard */,
 				661078ED1A044D830096479F /* Images.xcassets */,
+				E9558B2E1A04636200A45E87 /* Storyboard */,
 				661078EF1A044D830096479F /* LaunchScreen.xib */,
 				661078E01A044D830096479F /* Supporting Files */,
 			);
@@ -117,6 +117,14 @@
 				661078FB1A044D830096479F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E9558B2E1A04636200A45E87 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				661078EA1A044D830096479F /* Main.storyboard */,
+			);
+			name = Storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
