@@ -7,6 +7,7 @@
 //
 
 #import "CreateEventViewController.h"
+#import "EventController.h"
 #import "Event.h"
 
 @interface CreateEventViewController ()
@@ -15,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *startingLocationTextField;
 @property (strong, nonatomic) IBOutlet UITextField *endingLocationTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property EventController *sharedEventController;
 
 @end
 
@@ -25,6 +27,7 @@
     [super viewDidLoad];
 
     self.datePicker.minimumDate = [NSDate date];
+    self.sharedEventController = [EventController sharedEventController];
 }
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
@@ -33,7 +36,20 @@
                                        startingAddress:self.startingLocationTextField.text
                                          endingAddress:self.endingLocationTextField.text
                                            arrivalTime:self.datePicker.date];
-    // Pass event back to rootVC
+
+    __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
+    [self.sharedEventController addEvent:newEvent withCompletion:
+    ^{
+        [weakSelf resetTextFields];
+    }];
+}
+
+- (void)resetTextFields
+{
+    self.nameTextField.text = @"";
+    self.startingLocationTextField.text = @"";
+    self.endingLocationTextField.text = @"";
+    self.datePicker.date = [NSDate date];
 }
 
 @end
