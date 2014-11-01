@@ -39,13 +39,55 @@
     }
 
     [self.events addObject:event];
+    [self saveEvents];
+
     completion();
 }
 
 - (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion
 {
     [self.events removeObject:event];
+    [self saveEvents];
+
     completion();
+}
+
+
+#pragma mark - Data persistence
+
+- (NSURL *)documentsDirectory
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *files = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+
+    return files.firstObject;
+}
+
+- (void)saveEvents
+{
+    NSURL *plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
+    NSMutableArray *dataToSave = [NSMutableArray array];
+
+    for (Event* event in self.events)
+    {
+        NSData* eventData = [NSKeyedArchiver archivedDataWithRootObject:event];
+        [dataToSave addObject:eventData];
+    }
+
+    [dataToSave writeToURL:plist atomically:YES];
+}
+
+- (void)loadEvents
+{
+    NSURL *plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
+    self.events = [NSMutableArray array];
+    NSArray *savedData = [NSArray arrayWithContentsOfURL:plist];
+
+    for (NSData* data in savedData)
+    {
+        Event* event = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [self.events addObject:event];
+    }
 }
 
 
@@ -55,8 +97,8 @@
 {
     if (self = [super init])
     {
-        // Do init prep if necessary
-        return self;
+        // Load any saved Event objects from local storage
+        [self loadEvents];
     }
 
     return self;
