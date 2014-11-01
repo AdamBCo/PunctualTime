@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserLocationManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
+@property (strong, nonatomic) UserLocationManager *userLocationManager;
 
 @property (strong, nonatomic) UIWindow *window;
 

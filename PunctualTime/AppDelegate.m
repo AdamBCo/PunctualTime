@@ -16,7 +16,9 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
+    //I instantiated the userLocationManager here, so that it's the first thing created when the application loads.
+    self.userLocationManager = [UserLocationManager new];
     return YES;
 }
 
@@ -36,6 +38,9 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
+    //If the app is active and the location manager has been created, I start updating the users location.
+    [self.userLocationManager updateLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
