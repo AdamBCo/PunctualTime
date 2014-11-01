@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
 
-@interface UserLocationController : NSObject
+@interface UserLocationManager : NSObject
+
+@property CLLocation *userLocation;
+
+-(void)updateLocation;
 
 @end
