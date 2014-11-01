@@ -24,11 +24,6 @@
     //
 }
 
-- (IBAction)onCreateNewEventButtonPressed:(id)sender
-{
-    // Add new event
-}
-
 
 #pragma mark - UITableView
 
