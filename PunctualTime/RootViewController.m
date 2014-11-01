@@ -41,7 +41,10 @@
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     cell.textLabel.text = event.eventName;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"From:%@ To:%@ By:%@", event.startingAddress, event.endingAddress, event.desiredArrivalTime];
+    NSString *formattedArrivalDate = [NSDateFormatter localizedStringFromDate:event.desiredArrivalTime
+                                                                    dateStyle:NSDateFormatterMediumStyle
+                                                                    timeStyle:NSDateFormatterShortStyle];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@  To: %@  By: %@", event.startingAddress, event.endingAddress, formattedArrivalDate];
 
     return cell;
 }
