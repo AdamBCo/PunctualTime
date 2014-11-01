@@ -14,10 +14,10 @@
 		661078EE1A044D830096479F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 661078ED1A044D830096479F /* Images.xcassets */; };
 		661078F11A044D830096479F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 661078EF1A044D830096479F /* LaunchScreen.xib */; };
 		661078FD1A044D830096479F /* PunctualTimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 661078FC1A044D830096479F /* PunctualTimeTests.m */; };
-		661079081A0463CC0096479F /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079071A0463CC0096479F /* UserLocationManager.m */; };
 		6610790A1A04642E0096479F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661079091A04642E0096479F /* CoreLocation.framework */; };
 		E90100DA1A04692A00D44789 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E90100D91A04692A00D44789 /* CreateEventViewController.m */; };
 		E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB791A054E3700F56EBA /* EventController.m */; };
+		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
 /* End PBXBuildFile section */
 
@@ -45,14 +45,14 @@
 		661078F61A044D830096479F /* PunctualTimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PunctualTimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		661078FB1A044D830096479F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		661078FC1A044D830096479F /* PunctualTimeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PunctualTimeTests.m; sourceTree = "<group>"; };
-		661079061A0463CC0096479F /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserLocationManager.h; path = ../UserLocationManager.h; sourceTree = "<group>"; };
-		661079071A0463CC0096479F /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserLocationManager.m; path = ../UserLocationManager.m; sourceTree = "<group>"; };
 		661079091A04642E0096479F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		E90100D81A04692A00D44789 /* CreateEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateEventViewController.h; sourceTree = "<group>"; };
 		E90100D91A04692A00D44789 /* CreateEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateEventViewController.m; sourceTree = "<group>"; };
 		E90100DB1A046CEF00D44789 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E9ACBB781A054E3700F56EBA /* EventController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventController.h; sourceTree = "<group>"; };
 		E9ACBB791A054E3700F56EBA /* EventController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventController.m; sourceTree = "<group>"; };
+		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
+		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9D79C341A046DE600C9D65F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		E9D79C351A046DE600C9D65F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -157,8 +157,8 @@
 		E9ACBB7B1A054E6000F56EBA /* Data Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				661079061A0463CC0096479F /* UserLocationManager.h */,
-				661079071A0463CC0096479F /* UserLocationManager.m */,
+				E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */,
+				E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */,
 				E9ACBB781A054E3700F56EBA /* EventController.h */,
 				E9ACBB791A054E3700F56EBA /* EventController.m */,
 			);
@@ -289,7 +289,7 @@
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
-				661079081A0463CC0096479F /* UserLocationManager.m in Sources */,
+				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
 				E90100DA1A04692A00D44789 /* CreateEventViewController.m in Sources */,
 			);
