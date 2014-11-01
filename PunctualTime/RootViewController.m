@@ -7,10 +7,13 @@
 //
 
 #import "RootViewController.h"
+#import "EventController.h"
+#import "Event.h"
 
 @interface RootViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property EventController *sharedEventController;
 
 @end
 
@@ -21,7 +24,7 @@
 {
     [super viewDidLoad];
 
-    //
+    self.sharedEventController = [EventController sharedEventController];
 }
 
 
@@ -29,13 +32,16 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning tableview not setup
-    return 0;
+    return self.sharedEventController.events.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Event *event = [self.sharedEventController.events objectAtIndex:indexPath.row];
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+
+    cell.textLabel.text = event.eventName;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ to %@ by %@", event.startingAddress, event.endingAddress, event.desiredArrivalTime];
 
     return cell;
 }
