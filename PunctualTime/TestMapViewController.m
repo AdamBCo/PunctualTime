@@ -62,7 +62,7 @@
             [self.mapView addAnnotations:self.destinationLocations];
             [self.destinationSearchBar resignFirstResponder];
             [self.mapView showAnnotations:self.destinationLocations animated:YES];
-            [self getDirections];
+            [self getDirectionsAuto];
             NSLog(@"%@",self.sourceLocations);
         }];
     }
