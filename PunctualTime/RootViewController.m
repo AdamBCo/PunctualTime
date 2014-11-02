@@ -33,9 +33,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.sharedEventController refreshEventsWithCompletion:^{
-        // Do I need to reload tableView or will it happen after viewWillAppear?
-    }];
+    [self.sharedEventController refreshEvents];
+
+    [self.tableView reloadData];
 
     [super viewWillAppear:animated];
 }
@@ -71,7 +71,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [self.sharedEventController removeEvent:[self.sharedEventController.events objectAtIndex:indexPath.row] withCompletion:^{}];
+        [self.sharedEventController removeEvent:[self.sharedEventController.events objectAtIndex:indexPath.row]];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }

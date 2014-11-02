@@ -15,7 +15,7 @@
 
 + (EventController *)sharedEventController;
 - (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion;
-- (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion;
-- (void)refreshEventsWithCompletion:(void (^)(void))completion;
+- (void)removeEvent:(Event *)event;
+- (void)refreshEvents;
 
 @end
