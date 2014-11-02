@@ -15,8 +15,6 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property EventController *sharedEventController;
 
-
-
 @end
 
 
@@ -75,10 +73,5 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
-
-
-
-
-
 
 @end
