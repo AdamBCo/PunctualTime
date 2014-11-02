@@ -20,11 +20,22 @@
 
 @implementation RootViewController
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     self.sharedEventController = [EventController sharedEventController];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.sharedEventController refreshEventsWithCompletion:^{
+        // Do I need to reload tableView or will it happen after viewWillAppear?
+    }];
+
+    [super viewWillAppear:animated];
 }
 
 
