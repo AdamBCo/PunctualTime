@@ -44,10 +44,23 @@
     completion();
 }
 
-- (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion
+- (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion // May not need completion blcok
 {
     [self.events removeObject:event];
     [self saveEvents];
+
+    completion();
+}
+
+- (void)refreshEventsWithCompletion:(void (^)(void))completion // Removes expired events // May not need completion block
+{
+    for (Event* event in self.events)
+    {
+        if ([[NSDate date] compare:event.desiredArrivalTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self removeEvent:event withCompletion:^{}];
+        }
+    }
 
     completion();
 }
@@ -88,6 +101,8 @@
         Event* event = [NSKeyedUnarchiver unarchiveObjectWithData:data];
         [self.events addObject:event];
     }
+
+    [self refreshEventsWithCompletion:^{}];
 }
 
 
