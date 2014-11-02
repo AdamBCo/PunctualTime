@@ -11,8 +11,9 @@
 
 @interface LocationSearchController : NSObject <MKMapViewDelegate>
 
--(void)searchForPlacesNamed:(NSString *)search inArea:(CLLocation *)location;
--(void)localSearch:(CLLocation *)location;
+@property NSArray *searchResults;
+
+- (void)searchLocations:(NSString *)search withCompletion:(void (^)(NSArray *placemarks))completion;
 
 
 @end

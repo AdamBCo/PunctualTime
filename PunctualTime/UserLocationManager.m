@@ -16,6 +16,8 @@
 @implementation UserLocationManager
 
 
+
+
 -(void)updateLocation {
     [self.userLocationManager startUpdatingLocation];
 }
@@ -73,12 +75,13 @@
         } else {
             oldLocation = nil;
         }
-//        NSLog(@"\nThe Users most recent location is: %@\n", newLocation);
-
+    self.location = newLocation;
 }
 
+
+
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-    //Add refresh again button
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Failure" message:@"We failed to find your current location?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [alert addButtonWithTitle:@"Close"];
     [alert show];

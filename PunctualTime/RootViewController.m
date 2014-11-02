@@ -15,6 +15,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property EventController *sharedEventController;
 
+
+
 @end
 
 
@@ -23,8 +25,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.sharedEventController = [EventController sharedEventController];
+
 }
 
 
@@ -59,5 +61,10 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
+
+
+
+
+
 
 @end

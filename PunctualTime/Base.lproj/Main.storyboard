@@ -6,6 +6,100 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
+        <!--Test Map View Controller-->
+        <scene sceneID="ydb-wV-iQn">
+            <objects>
+                <viewController id="iwd-P0-ZC4" customClass="TestMapViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3RZ-dJ-BOW"/>
+                        <viewControllerLayoutGuide type="bottom" id="vIK-9U-I3I"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nic-no-DNy">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ju2-2E-P0h">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <connections>
+                                    <outlet property="delegate" destination="iwd-P0-ZC4" id="ENL-dF-iz5"/>
+                                </connections>
+                            </mapView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="rcE-VO-dcp">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="iwd-P0-ZC4" id="9ZU-er-ONq"/>
+                                </connections>
+                            </searchBar>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Xft-zM-9sH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="iwd-P0-ZC4" id="d69-K7-dXR"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Xft-zM-9sH" firstAttribute="top" secondItem="rcE-VO-dcp" secondAttribute="bottom" id="5BC-iL-OW9"/>
+                            <constraint firstItem="rcE-VO-dcp" firstAttribute="leading" secondItem="Xft-zM-9sH" secondAttribute="leading" id="CGx-Vf-Ed3"/>
+                            <constraint firstItem="Xft-zM-9sH" firstAttribute="leading" secondItem="ju2-2E-P0h" secondAttribute="leading" id="SBx-qk-duR"/>
+                            <constraint firstItem="rcE-VO-dcp" firstAttribute="top" secondItem="3RZ-dJ-BOW" secondAttribute="bottom" id="W4f-6N-Tmm"/>
+                            <constraint firstItem="rcE-VO-dcp" firstAttribute="trailing" secondItem="Xft-zM-9sH" secondAttribute="trailing" id="gwN-nd-7Sa"/>
+                            <constraint firstItem="ju2-2E-P0h" firstAttribute="trailing" secondItem="Xft-zM-9sH" secondAttribute="trailing" id="hoK-Uw-Smy"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="ju2-2E-P0h" secondAttribute="bottom" constant="-33" id="n77-ln-2aE"/>
+                            <constraint firstItem="Xft-zM-9sH" firstAttribute="leading" secondItem="Nic-no-DNy" secondAttribute="leading" id="u7J-EN-vJd"/>
+                            <constraint firstAttribute="trailing" secondItem="rcE-VO-dcp" secondAttribute="trailing" id="vqz-2a-B9c"/>
+                            <constraint firstItem="ju2-2E-P0h" firstAttribute="top" secondItem="Xft-zM-9sH" secondAttribute="bottom" id="xzB-K8-C2r"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="ju2-2E-P0h"/>
+                                <exclude reference="rcE-VO-dcp"/>
+                                <exclude reference="Xft-zM-9sH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="CGx-Vf-Ed3"/>
+                                <exclude reference="W4f-6N-Tmm"/>
+                                <exclude reference="gwN-nd-7Sa"/>
+                                <exclude reference="vqz-2a-B9c"/>
+                                <exclude reference="5BC-iL-OW9"/>
+                                <exclude reference="SBx-qk-duR"/>
+                                <exclude reference="u7J-EN-vJd"/>
+                                <exclude reference="hoK-Uw-Smy"/>
+                                <exclude reference="n77-ln-2aE"/>
+                                <exclude reference="xzB-K8-C2r"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="ju2-2E-P0h"/>
+                                <include reference="rcE-VO-dcp"/>
+                                <include reference="Xft-zM-9sH"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="CGx-Vf-Ed3"/>
+                                <include reference="W4f-6N-Tmm"/>
+                                <include reference="gwN-nd-7Sa"/>
+                                <include reference="vqz-2a-B9c"/>
+                                <include reference="5BC-iL-OW9"/>
+                                <include reference="SBx-qk-duR"/>
+                                <include reference="u7J-EN-vJd"/>
+                                <include reference="hoK-Uw-Smy"/>
+                                <include reference="n77-ln-2aE"/>
+                                <include reference="xzB-K8-C2r"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="destinationSearchBar" destination="Xft-zM-9sH" id="44x-FC-yR4"/>
+                        <outlet property="mapView" destination="ju2-2E-P0h" id="07w-ZV-WXA"/>
+                        <outlet property="startSearchBar" destination="rcE-VO-dcp" id="x9r-Km-HbY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gR0-r6-ejN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1950" y="-371"/>
+        </scene>
         <!--Events-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
@@ -22,7 +116,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="702-25-jrm" detailTextLabel="7Dc-w1-jJI" style="IBUITableViewCellStyleSubtitle" id="bTs-EG-XCv">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="702-25-jrm" detailTextLabel="7Dc-w1-jJI" rowHeight="51" style="IBUITableViewCellStyleSubtitle" id="bTs-EG-XCv">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bTs-EG-XCv" id="mwD-6U-pvn">
@@ -87,6 +181,11 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Events" id="qLK-pN-YiO">
+                        <barButtonItem key="leftBarButtonItem" title="Map" id="W76-2i-F2P">
+                            <connections>
+                                <segue destination="iwd-P0-ZC4" kind="show" identifier="MapSegue" id="dnQ-h4-cip"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="xVw-Bf-khV">
                             <connections>
                                 <segue destination="Ixt-pj-krL" kind="show" id="4k8-EW-42U"/>
@@ -149,6 +248,12 @@
                                     </mask>
                                 </variation>
                             </textField>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-WW-LaZ">
+                                <rect key="frame" x="-160" y="-81" width="320" height="162"/>
+                                <date key="date" timeIntervalSinceReferenceDate="436499156.66239101">
+                                    <!--2014-11-01 01:45:56 +0000-->
+                                </date>
+                            </datePicker>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ending location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EFi-bP-pmX">
                                 <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                 <constraints>
@@ -167,12 +272,6 @@
                                     </mask>
                                 </variation>
                             </textField>
-                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="wVb-WW-LaZ">
-                                <rect key="frame" x="-160" y="-81" width="320" height="162"/>
-                                <date key="date" timeIntervalSinceReferenceDate="436499156.66239101">
-                                    <!--2014-11-01 01:45:56 +0000-->
-                                </date>
-                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -197,18 +296,18 @@
                             <mask key="subviews">
                                 <exclude reference="Bu2-Z3-l62"/>
                                 <exclude reference="BqN-3V-uVI"/>
-                                <exclude reference="EFi-bP-pmX"/>
                                 <exclude reference="wVb-WW-LaZ"/>
+                                <exclude reference="EFi-bP-pmX"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="6uF-hI-qkJ"/>
-                                <exclude reference="Vtz-yw-4eR"/>
-                                <exclude reference="hp4-KG-1oP"/>
-                                <exclude reference="rO0-8u-7kK"/>
                                 <exclude reference="8wc-MG-QrI"/>
                                 <exclude reference="bht-p5-S8B"/>
                                 <exclude reference="fAa-iL-xAj"/>
                                 <exclude reference="rEE-Uy-fCo"/>
+                                <exclude reference="6uF-hI-qkJ"/>
+                                <exclude reference="Vtz-yw-4eR"/>
+                                <exclude reference="hp4-KG-1oP"/>
+                                <exclude reference="rO0-8u-7kK"/>
                                 <exclude reference="WuI-pz-8jg"/>
                                 <exclude reference="Xj5-IX-aXC"/>
                                 <exclude reference="yeb-GW-tam"/>
@@ -221,18 +320,18 @@
                             <mask key="subviews">
                                 <include reference="Bu2-Z3-l62"/>
                                 <include reference="BqN-3V-uVI"/>
-                                <include reference="EFi-bP-pmX"/>
                                 <include reference="wVb-WW-LaZ"/>
+                                <include reference="EFi-bP-pmX"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="6uF-hI-qkJ"/>
-                                <include reference="Vtz-yw-4eR"/>
-                                <include reference="hp4-KG-1oP"/>
-                                <include reference="rO0-8u-7kK"/>
                                 <include reference="8wc-MG-QrI"/>
                                 <include reference="bht-p5-S8B"/>
                                 <include reference="fAa-iL-xAj"/>
                                 <include reference="rEE-Uy-fCo"/>
+                                <include reference="6uF-hI-qkJ"/>
+                                <include reference="Vtz-yw-4eR"/>
+                                <include reference="hp4-KG-1oP"/>
+                                <include reference="rO0-8u-7kK"/>
                                 <include reference="WuI-pz-8jg"/>
                                 <include reference="Xj5-IX-aXC"/>
                                 <include reference="yeb-GW-tam"/>

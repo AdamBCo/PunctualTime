@@ -11,9 +11,7 @@
 #import <UIKit/UIKit.h>
 
 @interface UserLocationManager : NSObject
-
-@property CLLocation *userLocation;
-
+@property CLLocation *location;
 -(void)updateLocation;
 
 @end

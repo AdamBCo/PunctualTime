@@ -8,38 +8,30 @@
 
 #import "LocationSearchController.h"
 
-NSString *const apiURI = @"https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters";
-NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
+//NSString *const apiURI = @"https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters";
+//NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
+
+@interface LocationSearchController ()
+
+@end
 
 @implementation LocationSearchController
 
-
--(void)searchForPlacesNamed:(NSString *)search inArea:(CLLocation *)location {
+- (void)searchLocations:(NSString *)search withCompletion:(void (^)(NSArray *placemarks))completion{
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    NSMutableArray *totalPlacemarks = [NSMutableArray array];
     [geocoder geocodeAddressString:search completionHandler:^(NSArray *placemarks, NSError *error) {
-        if (!error) {
-            CLPlacemark *placemark = [placemarks firstObject];
-            [self localSearch:placemark.location];
-        } else {
-            NSLog(@"Error: %@", error);
+        for (CLPlacemark *placemark in placemarks) {
+            MKPointAnnotation *annotation = [MKPointAnnotation new];
+            annotation.coordinate = placemark.location.coordinate;
+            [totalPlacemarks addObject:annotation];
         }
+        completion(totalPlacemarks);
     }];
+
 }
 
--(void)localSearch:(CLLocation *)location {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    MKLocalSearchRequest *request = [MKLocalSearchRequest new];
-    request.naturalLanguageQuery = @"haunted";
-    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(1,1));
-    MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
-    [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-        if (!error) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            NSArray *mapItems = response.mapItems;
-            NSLog(@"%@",mapItems);
-        }
-    }];
-}
+
 
 
 //-(void)retrieveGooglePlaceInfromation:(NSString*)searchWord withCompletion:(void (^)(NSArray *))complete{
