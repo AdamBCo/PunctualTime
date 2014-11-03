@@ -31,7 +31,7 @@
     return _default;
 }
 
-- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion
+- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion // May need completion when checking for conflicts
 {
     if (!self.events)
     {
@@ -44,25 +44,24 @@
     completion();
 }
 
-- (void)removeEvent:(Event *)event withCompletion:(void (^)(void))completion // May not need completion blcok
+- (void)removeEvent:(Event *)event
 {
     [self.events removeObject:event];
     [self saveEvents];
-
-    completion();
 }
 
-- (void)refreshEventsWithCompletion:(void (^)(void))completion // Removes expired events // May not need completion block
+- (void)refreshEvents //Removes expired events
 {
-    for (Event* event in self.events)
+    NSArray *eventsToCheckForExpiration = [NSArray arrayWithArray:self.events];
+    for (Event* event in eventsToCheckForExpiration)
     {
         if ([[NSDate date] compare:event.desiredArrivalTime] == NSOrderedDescending) // Current time is after event time
         {
-            [self removeEvent:event withCompletion:^{}];
+            [self removeEvent:event];
         }
     }
 
-    completion();
+    [self.events sortUsingSelector:@selector(compareEvent:)];
 }
 
 
@@ -102,7 +101,7 @@
         [self.events addObject:event];
     }
 
-    [self refreshEventsWithCompletion:^{}];
+    [self refreshEvents];
 }
 
 

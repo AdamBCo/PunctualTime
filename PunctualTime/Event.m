@@ -19,6 +19,8 @@
 
 @implementation Event
 
+#pragma mark - Public methods
+
 - (instancetype)initWithEventName:(NSString *)name startingAddress:(NSString *)startingAddress endingAddress:(NSString *)endingAddress arrivalTime:(NSDate *)arrivalTime
 {
     if (self = [super init])
@@ -30,6 +32,11 @@
     }
 
     return self;
+}
+
+- (NSComparisonResult)compareEvent:(Event *)otherEvent
+{
+    return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
 }
 
 

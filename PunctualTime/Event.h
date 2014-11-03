@@ -21,4 +21,6 @@
                     endingAddress:(NSString *)endingAddress
                       arrivalTime:(NSDate *)arrivalTime;
 
+- (NSComparisonResult)compareEvent:(Event *)otherObject;
+
 @end
