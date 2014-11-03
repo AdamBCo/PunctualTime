@@ -69,6 +69,8 @@
     NSLog(@"Hello");
 }
 
+#pragma mark - Directions
+
 -(void)getDirections{
     MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
     [request setSource:[MKMapItem mapItemForCurrentLocation]];
@@ -104,6 +106,7 @@
     }];
 }
 
+
 - (IBAction)segmentedControl:(id)sender {
 
     switch (self.segmentedControl.selectedSegmentIndex) {
@@ -118,5 +121,6 @@
             break;
     }
 }
+
 
 @end
