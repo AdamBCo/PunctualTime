@@ -21,8 +21,26 @@
     // I instantiated the userLocationManager here, so that it's the first thing created when the application loads.
     self.userLocationManager = [UserLocationManager new];
 
-    // Link to Punctual Parse application
+    // Link to the Punctual application in Parse
     [Parse setApplicationId:@"dIzZXQNYGIGklUc2TIWyH5cClDsJyPguW3OtUdyD" clientKey:@"ADbxomNuQP0HxLH0BtkTr1j5SriBvCZcEUZEmYyE"];
+
+    // Register for remote push notifications
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) // Register for iOS 8
+    {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+
+        [application registerUserNotificationSettings:settings];
+        [application registerForRemoteNotifications];
+    }
+    else // Register for pre-iOS 8
+    {
+        [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                         UIRemoteNotificationTypeAlert |
+                                                         UIRemoteNotificationTypeSound)];
+    }
 
     return YES;
 }
@@ -50,6 +68,23 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+#pragma mark - Remote Push Notifications
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels = @[@"global"];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    // [PFPush handlePush:userInfo];
 }
 
 @end
