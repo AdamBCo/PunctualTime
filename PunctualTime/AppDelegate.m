@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
 
 @interface AppDelegate ()
 
@@ -17,8 +18,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    //I instantiated the userLocationManager here, so that it's the first thing created when the application loads.
+    // I instantiated the userLocationManager here, so that it's the first thing created when the application loads.
     self.userLocationManager = [UserLocationManager new];
+
+    // Link to Punctual Parse application
+    [Parse setApplicationId:@"dIzZXQNYGIGklUc2TIWyH5cClDsJyPguW3OtUdyD" clientKey:@"ADbxomNuQP0HxLH0BtkTr1j5SriBvCZcEUZEmYyE"];
+
     return YES;
 }
 
