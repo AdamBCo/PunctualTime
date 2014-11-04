@@ -36,9 +36,27 @@ static NSString* kUniqueID = @"UniqueID";
         self.startingAddress = startingAddress;
         self.endingAddress = endingAddress;
         self.desiredArrivalTime = arrivalTime;
+
+        CFUUIDRef uuid = CFUUIDCreate(NULL);
+        NSString *uniqueID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
+        CFRelease(uuid);
+
+        self.uniqueID = uniqueID;
     }
 
     return self;
+}
+
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID
+{
+    UILocalNotification *newNotification = [UILocalNotification new];
+    newNotification.fireDate = self.desiredArrivalTime;
+    newNotification.alertBody = [NSString stringWithFormat:@"%@: Thirty Minute Warning! Slide to schedule another", self.name];
+    newNotification.timeZone = [NSTimeZone localTimeZone];
+    newNotification.soundName = UILocalNotificationDefaultSoundName;
+    newNotification.category = categoryID;
+    newNotification.userInfo = @{@"Event": self.uniqueID};
+    [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 }
 
 - (NSComparisonResult)compareEvent:(Event *)otherEvent
