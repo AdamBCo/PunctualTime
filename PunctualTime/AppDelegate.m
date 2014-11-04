@@ -59,11 +59,62 @@
 }
 
 
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler{
-    NSLog(@"Yes there are completted notifications!");
+#pragma mark - Local notifications
 
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
+{
+    if ([identifier isEqualToString:@"FifteenMinuteAction"])
+    {
+        // Refresh ETA then set a fifteen minute local notification
+    }
+    else if ([identifier isEqualToString:@"FiveMinuteAction"])
+    {
+        // Refresh ETA then set a five minute local notification
+    }
+    else if ([identifier isEqualToString:@"ZeroMinuteAction"])
+    {
+        // Refresh ETA then set a zero minute local notification
+    }
+
+    completionHandler();
 }
 
 
+#pragma mark - Private methods
+
+- (NSSet *)createNotificationCategories
+{
+    UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    fifteenMinuteAction.identifier = @"FifteenMinuteAction";
+    fifteenMinuteAction.title = @"15 Min";
+    fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    fifteenMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    fiveMinuteAction.identifier = @"FiveMinuteAction";
+    fiveMinuteAction.title = @"5 Min";
+    fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    fiveMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    zeroMinuteAction.identifier = @"ZeroMinuteAction";
+    zeroMinuteAction.title = @"0 Min";
+    zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    zeroMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationCategory* thirtyMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    thirtyMinuteWarning.identifier = @"ThirtyMinuteWarning";
+    [thirtyMinuteWarning setActions:@[fifteenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* fifteenMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    fifteenMinuteWarning.identifier = @"FifteenMinuteWarning";
+    [fifteenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* fiveMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    fiveMinuteWarning.identifier = @"FiveMinuteWarning";
+    [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
+}
 
 @end
