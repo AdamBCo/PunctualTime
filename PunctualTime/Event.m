@@ -10,8 +10,10 @@
 #import "Constants.h"
 
 static NSString* kName = @"Name";
-static NSString* kStartingAddress = @"StartingAddress";
-static NSString* kEndingAddress = @"EndingAddress";
+static NSString* kStartingAddressLat = @"StartingAddressLat";
+static NSString* kStartingAddressLon = @"StartingAddressLon";
+static NSString* kEndingAddressLat = @"EndingAddressLat";
+static NSString* kEndingAddressLon = @"EndingAddressLon";
 static NSString* kArrivalTime = @"ArrivalTime";
 static NSString* kUniqueID = @"UniqueID";
 
@@ -93,15 +95,17 @@ static NSString* kUniqueID = @"UniqueID";
 {
     if (self = [super init])
     {
-        self.eventName = [decoder decodeObjectForKey:@"kName"];
-        CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:@"kStartingAddressLat"];
-        CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:@"kStartingAddressLong"];
+        self.eventName = [decoder decodeObjectForKey:kName];
+        self.desiredArrivalTime = [decoder decodeObjectForKey:kArrivalTime];
+        self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
+
+        CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
+        CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
         self.startingAddress = CLLocationCoordinate2DMake(startingLatitude, startingLongitude);
 
-        CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:@"kStartingAddressLat"];
-        CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:@"kEndingAddressLong"];
+        CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:kEndingAddressLat];
+        CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:kEndingAddressLon];
         self.endingAddress = CLLocationCoordinate2DMake(endingLatitude, endingLongitude);
-        self.desiredArrivalTime = [decoder decodeObjectForKey:@"kArrivalTime"];
     }
 
     return self;
@@ -109,12 +113,13 @@ static NSString* kUniqueID = @"UniqueID";
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.eventName forKey:@"kName"];
-    [encoder encodeDouble:self.startingAddress.latitude forKey:@"kStartingAddressLat"];
-    [encoder encodeDouble:self.startingAddress.longitude forKey:@"kStartingAddressLat"];
-    [encoder encodeDouble:self.endingAddress.latitude forKey:@"kEndingAddressLat"];
-    [encoder encodeDouble:self.endingAddress.longitude forKey:@"kEndingAddressLong"];
-    [encoder encodeObject:self.desiredArrivalTime forKey:@"kArrivalTime"];
+    [encoder encodeObject:self.eventName forKey:kName];
+    [encoder encodeDouble:self.startingAddress.latitude forKey:kStartingAddressLat];
+    [encoder encodeDouble:self.startingAddress.longitude forKey:kStartingAddressLon];
+    [encoder encodeDouble:self.endingAddress.latitude forKey:kEndingAddressLat];
+    [encoder encodeDouble:self.endingAddress.longitude forKey:kEndingAddressLon];
+    [encoder encodeObject:self.desiredArrivalTime forKey:kArrivalTime];
+    [encoder encodeObject:self.uniqueID forKey:kUniqueID];
 }
 
 @end
