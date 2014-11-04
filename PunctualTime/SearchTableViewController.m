@@ -17,6 +17,8 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 @property (weak, nonatomic) IBOutlet UISearchBar *searchTextField;
 @property NSMutableArray *localSearchQueries;
 @property NSMutableArray *pastSearchQueries;
+@property NSDictionary *chosenLocation;
+
 
 @end
 
@@ -27,17 +29,15 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     self.pastSearchQueries = [NSMutableArray array];
     self.localSearchQueries = [NSMutableArray array];
     self.searchTextField.delegate = self;
-
-
 }
 
+
+#pragma mark - Autocomplete SearchBar methods
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     if (![self.localSearchQueries containsObject:self.searchTextField.text]) {
         [self.localSearchQueries addObject:self.searchTextField.text];
-        NSLog(@"Added");
     }
     [self.tableView reloadData];
-    NSLog(@"There are %lu searches in array", (unsigned long)self.localSearchQueries.count);
 }
 
 - (void)searchAutocompleteLocationsWithSubstring:(NSString *)substring{
@@ -59,7 +59,6 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     }
 }
 
-#pragma mark UITextFieldDelegate methods
 
 -(BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSString *substring = [NSString stringWithString:self.searchTextField.text];
@@ -69,18 +68,15 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     return YES;
 }
 
-
-
 #pragma mark - Google API Requests
 
--(void)retrieveGooglePlaceInformation:(NSString*)searchWord withCompletion:(void (^)(NSArray *))complete{
+//Used for the Autocomplete
 
+-(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=geocode&language=en&key=%@",searchWord,apiKey]];
-
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         NSArray *results = [jSONresult valueForKey:@"predictions"];
@@ -93,6 +89,23 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 
 }
 
+//Used to find detail information pertaining to the selected location.
+
+-(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete{
+
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey]];
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSArray *results = [jSONresult valueForKey:@"result"];
+
+        complete(results);
+    }];
+    [task resume];
+    
+}
 
 #pragma mark - Table view data source
 
@@ -100,12 +113,26 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     return self.pastSearchQueries.count;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
+    NSString *placeID = [searchResult objectForKey:@"place_id"];
+    [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {
+
+        self.chosenLocation = @{ @"name" :[place valueForKey:@"name"],
+                                 @"address" :[place valueForKey:@"formatted_address"],
+                                 @"lat" :[place valueForKey:@"geometry"][@"location"][@"lat"],
+                                 @"long" :[place valueForKey:@"geometry"][@"location"][@"lng"]
+                                 };
+        NSLog(@"Selected Location: %@", self.chosenLocation);
+    }];
+
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
     cell.textLabel.text = [searchResult objectForKey:@"description"];
-    
     return cell;
 }
 
