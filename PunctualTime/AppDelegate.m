@@ -20,8 +20,14 @@
     self.userLocationManager = [UserLocationManager new];
 
     //Ask the user permission to send them Local Push LocalNotifications
-    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
-        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                                 categories:[self createNotificationCategories]];
+        [application registerUserNotificationSettings:settings];
     }
 
     return YES;
