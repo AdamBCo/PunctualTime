@@ -47,6 +47,7 @@
 - (void)removeEvent:(Event *)event
 {
     [self.events removeObject:event];
+    // Need to remove local notification
     [self saveEvents];
 }
 
@@ -62,6 +63,19 @@
     }
 
     [self.events sortUsingSelector:@selector(compareEvent:)];
+}
+
+- (Event *)findEventWithUniqueID:(NSString *)uniqueID
+{
+    for (Event* event in self.events)
+    {
+        if ([event.uniqueID isEqualToString:uniqueID])
+        {
+            return event;
+        }
+    }
+
+    return nil;
 }
 
 

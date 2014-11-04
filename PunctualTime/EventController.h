@@ -17,5 +17,6 @@
 - (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion;
 - (void)removeEvent:(Event *)event;
 - (void)refreshEvents;
+- (Event *)findEventWithUniqueID:(NSString *)uniqueID;
 
 @end
