@@ -9,13 +9,14 @@
 #import "AppDelegate.h"
 #import "Event.h"
 #import "EventController.h"
+#import "Constants.h"
 
-static NSString* kFifteenMinuteAction = @"FifteenMinuteAction";
-static NSString* kFiveMinuteAction = @"FiveMinuteAction";
-static NSString* kZeroMinuteAction = @"ZeroMinuteAction";
-static NSString* kThirtyMinuteWarning = @"ThirtyMinuteWarning";
-static NSString* kFifteenMinuteWarning = @"FifteenMinuteWarning";
-static NSString* kFiveMinuteWarning = @"FiveMinuteWarning";
+//static NSString* kFifteenMinuteAction = @"FifteenMinuteAction";
+//static NSString* kFiveMinuteAction = @"FiveMinuteAction";
+//static NSString* kZeroMinuteAction = @"ZeroMinuteAction";
+//static NSString* kThirtyMinuteWarning = @"ThirtyMinuteWarning";
+//static NSString* kFifteenMinuteWarning = @"FifteenMinuteWarning";
+//static NSString* kFiveMinuteWarning = @"FiveMinuteWarning";
 
 @interface AppDelegate ()
 
@@ -77,14 +78,23 @@ static NSString* kFiveMinuteWarning = @"FiveMinuteWarning";
     if ([identifier isEqualToString:kFifteenMinuteAction])
     {
         // Refresh ETA then set a fifteen minute local notification
+        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+        // Get ETA for event
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning];
     }
     else if ([identifier isEqualToString:kFiveMinuteAction])
     {
         // Refresh ETA then set a five minute local notification
+        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+        // Get ETA for event
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning];
     }
     else if ([identifier isEqualToString:kZeroMinuteAction])
     {
         // Refresh ETA then set a zero minute local notification
+        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+        // Get ETA for event
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:@"ZeroMinuteWarning"];
     }
 
     completionHandler();
