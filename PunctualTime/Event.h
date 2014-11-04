@@ -15,7 +15,8 @@
 @property (readonly) NSString* startingAddress;
 @property (readonly) NSString* endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
-@property (readonly) UILocalNotification* scheduledNotification;
+@property (readonly) NSString* uniqueID;
+@property NSDate* currentNotificationTime;
 // need to add property for transport type - use an enum?
 
 - (instancetype)initWithEventName:(NSString *)name

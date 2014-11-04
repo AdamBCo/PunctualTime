@@ -9,6 +9,7 @@
 #import "CreateEventViewController.h"
 #import "EventController.h"
 #import "Event.h"
+#import "Constants.h"
 
 @interface CreateEventViewController ()
 
@@ -43,14 +44,7 @@
         [weakSelf resetTextFields];
     }];
 
-    UILocalNotification *localNotification = [UILocalNotification new];
-    localNotification.fireDate = newEvent.desiredArrivalTime;
-    localNotification.alertBody = [NSString stringWithFormat:@"Alert Fired at %@", newEvent.desiredArrivalTime];
-    localNotification.timeZone = [NSTimeZone localTimeZone];
-    localNotification.soundName = UILocalNotificationDefaultSoundName;
-    localNotification.applicationIconBadgeNumber = 1;
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
-    NSLog(@"This local notification was created: %@", localNotification);
+    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
 }
 
 - (void)resetTextFields
@@ -60,10 +54,5 @@
     self.endingLocationTextField.text = @"";
     self.datePicker.date = [NSDate date];
 }
-
-
-#pragma mark - UILocalNotifications
-
-
 
 @end

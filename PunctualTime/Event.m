@@ -7,6 +7,7 @@
 //
 
 #import "Event.h"
+#import "Constants.h"
 
 static NSString* kName = @"Name";
 static NSString* kStartingAddress = @"StartingAddress";
@@ -47,15 +48,36 @@ static NSString* kUniqueID = @"UniqueID";
     return self;
 }
 
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID 
 {
     UILocalNotification *newNotification = [UILocalNotification new];
-    newNotification.fireDate = self.desiredArrivalTime;
-    newNotification.alertBody = [NSString stringWithFormat:@"%@: Thirty Minute Warning! Slide to schedule another", self.name];
+    newNotification.fireDate = self.currentNotificationTime;
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
-    newNotification.category = categoryID;
     newNotification.userInfo = @{@"Event": self.uniqueID};
+
+    NSString* minuteWarning = [NSString new];
+    if ([categoryID isEqualToString:kThirtyMinuteWarning])
+    {
+        minuteWarning = @"Thirty";
+    }
+    else if ([categoryID isEqualToString:kFifteenMinuteWarning])
+    {
+        minuteWarning = @"Fifteen";
+    }
+    else if ([categoryID isEqualToString:kFiveMinuteWarning])
+    {
+        minuteWarning = @"Five";
+    }
+    else
+    {
+        newNotification.alertBody = [NSString stringWithFormat:@"Leave Now!"];
+        [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+        return;
+    }
+
+    newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ Minute Warning! Slide to schedule another", self.name, minuteWarning];
+    newNotification.category = categoryID;
     [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 }
 
