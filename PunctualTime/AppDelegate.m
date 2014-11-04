@@ -11,13 +11,6 @@
 #import "EventController.h"
 #import "Constants.h"
 
-//static NSString* kFifteenMinuteAction = @"FifteenMinuteAction";
-//static NSString* kFiveMinuteAction = @"FiveMinuteAction";
-//static NSString* kZeroMinuteAction = @"ZeroMinuteAction";
-//static NSString* kThirtyMinuteWarning = @"ThirtyMinuteWarning";
-//static NSString* kFifteenMinuteWarning = @"FifteenMinuteWarning";
-//static NSString* kFiveMinuteWarning = @"FiveMinuteWarning";
-
 @interface AppDelegate ()
 
 @property EventController* sharedEventController;
@@ -75,26 +68,23 @@
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
-    if ([identifier isEqualToString:kFifteenMinuteAction])
+    if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
-        // Refresh ETA then set a fifteen minute local notification
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning];
     }
-    else if ([identifier isEqualToString:kFiveMinuteAction])
+    else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
-        // Refresh ETA then set a five minute local notification
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning];
     }
-    else if ([identifier isEqualToString:kZeroMinuteAction])
+    else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
-        // Refresh ETA then set a zero minute local notification
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         // Get ETA for event
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:@"ZeroMinuteWarning"];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil];
     }
 
     completionHandler();
