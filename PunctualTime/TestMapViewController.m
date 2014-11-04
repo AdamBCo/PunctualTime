@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
+#import "Event.h"
 #import <MapKit/MapKit.h>
 
 NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
@@ -24,6 +25,7 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
 @property NSArray *destinationLocations;
+@property Event *sampleEvent;
 
 @property NSDictionary *eventDestination;
 
@@ -153,7 +155,27 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 }
 
 
+//Notes from this MORNING
+
+//NSURL Components && NSURL components relative to url  (Absolute URL) Stringbyappendingpathcomponent
+//Mapkit APi, acccesss to favorite
+//Google locations contact list for API
+
+//Contacts are in C - available ilbraries
+//Carbonite API's
+
+
+//If the user pauses for a certain amount of time, then send a request
+//NSTimer reset each time the person, INVALIDATE
+//NSCache - NShipster - if call was made 5 minutes ago, delete - automatically clears out
+//NSURLSession Cacheing systems for Google API request.
+//-1 on all rows, didselectrowat index patth if 0
+
+//ns enum - list of integers, it can only be one
+//ns-option 
+
 -(void)calculateTheETAForTheEventwithCompletion:(void (^)(NSDictionary *))complete{
+
 
     CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
     NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
@@ -163,9 +185,12 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     NSString *latitude = [NSString stringWithFormat:@"%@,",[self.eventDestination objectForKey:@"lat"]];
     NSString *longitude = [NSString stringWithFormat:@"%@",[self.eventDestination objectForKey:@"long"]];
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=%@",apiAccessKey];
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
+    NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=transit"];
 
 
-    NSArray *urlStrings = [[NSArray alloc] initWithObjects:google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, nil];
+
+    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
     NSLog(@"%@",joinedString);
 
@@ -185,6 +210,8 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 
 
 }
+
+
 
 
 @end
