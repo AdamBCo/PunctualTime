@@ -9,9 +9,13 @@
 #import "TestMapViewController.h"
 #import "AppDelegate.h"
 #import "LocationSearchController.h"
+#import "SearchTableViewController.h"
 #import <MapKit/MapKit.h>
 
+NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
+
 @interface TestMapViewController ()<UISearchBarDelegate>
+@property (nonatomic, strong) AppDelegate *applicationDelegate;
 @property (weak, nonatomic) IBOutlet UISearchBar *startSearchBar;
 @property (weak, nonatomic) IBOutlet UISearchBar *destinationSearchBar;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
@@ -20,6 +24,8 @@
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
 @property NSArray *destinationLocations;
+
+@property NSDictionary *eventDestination;
 
 @property LocationSearchController *locationSearchController;
 
@@ -32,6 +38,10 @@
     self.startSearchBar.delegate = self;
     self.destinationSearchBar.delegate = self;
     self.locationSearchController = [LocationSearchController new];
+
+
+    self.applicationDelegate = [UIApplication sharedApplication].delegate;
+
 
 }
 
@@ -120,6 +130,60 @@
         default:
             break;
     }
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    self.eventDestination = @{@"Hello": @"People"};
+    SearchTableViewController *viewController = segue.destinationViewController;
+    viewController.chosenLocation = self.eventDestination;
+    NSLog(@"Choices: %@", self.eventDestination);
+}
+
+-(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue{
+    SearchTableViewController *viewController = segue.sourceViewController;
+    self.eventDestination = viewController.chosenLocation;
+    NSLog(@"Selected Event: %@",self.eventDestination);
+    NSLog(@"Chosen Location: %@", viewController.chosenLocation);
+    [self.applicationDelegate.userLocationManager updateLocation];
+    [self calculateTheETAForTheEventwithCompletion:^(NSDictionary *location) {
+        NSLog(@"HELLLLLLLLOOO");
+        NSLog(@"Location: %@", location);
+    }];
+
+}
+
+
+-(void)calculateTheETAForTheEventwithCompletion:(void (^)(NSDictionary *))complete{
+
+    CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
+    NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
+    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
+    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
+    NSString *destination = [NSString stringWithFormat: @"&destination="];
+    NSString *latitude = [NSString stringWithFormat:@"%@,",[self.eventDestination objectForKey:@"lat"]];
+    NSString *longitude = [NSString stringWithFormat:@"%@",[self.eventDestination objectForKey:@"long"]];
+    NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=%@",apiAccessKey];
+
+
+    NSArray *urlStrings = [[NSArray alloc] initWithObjects:google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, nil];
+    NSString *joinedString = [urlStrings componentsJoinedByString:@""];
+    NSLog(@"%@",joinedString);
+
+    NSURL *url = [NSURL URLWithString:joinedString];
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+
+        NSLog(@"JSON Result %@",jSONresult);
+        complete(jSONresult);
+        
+    }];
+    [task resume];
+
+
 }
 
 

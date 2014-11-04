@@ -17,7 +17,6 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 @property (weak, nonatomic) IBOutlet UISearchBar *searchTextField;
 @property NSMutableArray *localSearchQueries;
 @property NSMutableArray *pastSearchQueries;
-@property NSDictionary *chosenLocation;
 
 
 @end
@@ -123,10 +122,13 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
                                  @"lat" :[place valueForKey:@"geometry"][@"location"][@"lat"],
                                  @"long" :[place valueForKey:@"geometry"][@"location"][@"lng"]
                                  };
-        NSLog(@"Selected Location: %@", self.chosenLocation);
+        NSLog(@"Google: %@",self.chosenLocation);
+        [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
+
     }];
 
 }
+
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
