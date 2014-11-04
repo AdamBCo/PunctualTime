@@ -32,10 +32,10 @@
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
-    Event *newEvent = [[Event alloc] initWithEventName:self.nameTextField.text
-                                       startingAddress:self.startingLocationTextField.text
-                                         endingAddress:self.endingLocationTextField.text
-                                           arrivalTime:self.datePicker.date];
+//    Event *newEvent = [[Event alloc] initWithEventName:self.nameTextField.text
+//                                       startingAddress:self.startingLocationTextField.text
+//                                         endingAddress:self.endingLocationTextField.text
+//                                           arrivalTime:self.datePicker.date];
 
     __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
     [self.sharedEventController addEvent:newEvent withCompletion:
