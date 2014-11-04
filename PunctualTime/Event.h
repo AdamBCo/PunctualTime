@@ -12,16 +12,16 @@
 @interface Event : MKMapItem
 
 @property (readonly) NSString* eventName;
-@property (readonly) NSString* startingAddress;
-@property (readonly) NSString* endingAddress;
+@property (readonly) CLLocationCoordinate2D startingAddress;
+@property (readonly) CLLocationCoordinate2D endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
 @property (readonly) NSString* uniqueID;
 @property NSDate* currentNotificationTime;
 // need to add property for transport type - use an enum?
 
 - (instancetype)initWithEventName:(NSString *)name
-                  startingAddress:(NSString *)startingAddress
-                    endingAddress:(NSString *)endingAddress
+                  startingAddress:(CLLocationCoordinate2D)startingAddress
+                    endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime;
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;

@@ -19,6 +19,7 @@
 		661079181A05D1EB0096479F /* TestMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079171A05D1EB0096479F /* TestMapViewController.m */; };
 		6610791A1A05F9090096479F /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661079191A05F9090096479F /* CoreMotion.framework */; };
 		6649BF041A080367007B447B /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF031A080367007B447B /* SearchTableViewController.m */; };
+		6649BF3F1A0966EF007B447B /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* NewViewController.m */; };
 		E90100DA1A04692A00D44789 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E90100D91A04692A00D44789 /* CreateEventViewController.m */; };
 		E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB791A054E3700F56EBA /* EventController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
@@ -70,6 +71,8 @@
 		661079191A05F9090096479F /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		6649BF021A080367007B447B /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
 		6649BF031A080367007B447B /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
+		6649BF3D1A0966EF007B447B /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
+		6649BF3E1A0966EF007B447B /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
 		E90100D81A04692A00D44789 /* CreateEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateEventViewController.h; sourceTree = "<group>"; };
 		E90100D91A04692A00D44789 /* CreateEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateEventViewController.m; sourceTree = "<group>"; };
 		E90100DB1A046CEF00D44789 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -217,6 +220,8 @@
 			isa = PBXGroup;
 			children = (
 				661078EA1A044D830096479F /* Main.storyboard */,
+				6649BF3D1A0966EF007B447B /* NewViewController.h */,
+				6649BF3E1A0966EF007B447B /* NewViewController.m */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 				6649BF041A080367007B447B /* SearchTableViewController.m in Sources */,
 				661079181A05D1EB0096479F /* TestMapViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
+				6649BF3F1A0966EF007B447B /* NewViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,

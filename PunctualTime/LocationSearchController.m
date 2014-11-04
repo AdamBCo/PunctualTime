@@ -31,25 +31,4 @@
 
 }
 
-
-
-
-//-(void)retrieveGooglePlaceInfromation:(NSString*)searchWord withCompletion:(void (^)(NSArray *))complete{
-//
-//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Vict&types=geocode&language=fr&key=%@",apiKey]];
-//
-//    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
-//    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-//        NSLog(@"Data: %@", dict);
-//
-//    }];
-//
-//    [task resume];
-//
-//}
-
 @end

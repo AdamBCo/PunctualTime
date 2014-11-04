@@ -15,9 +15,6 @@
 
 @implementation UserLocationManager
 
-
-
-
 -(void)updateLocation {
     [self.userLocationManager startUpdatingLocation];
 }
