@@ -7,9 +7,19 @@
 //
 
 #import "AppDelegate.h"
-#import <Parse/Parse.h>
+#import "Event.h"
+#import "EventController.h"
+
+static NSString* kFifteenMinuteAction = @"FifteenMinuteAction";
+static NSString* kFiveMinuteAction = @"FiveMinuteAction";
+static NSString* kZeroMinuteAction = @"ZeroMinuteAction";
+static NSString* kThirtyMinuteWarning = @"ThirtyMinuteWarning";
+static NSString* kFifteenMinuteWarning = @"FifteenMinuteWarning";
+static NSString* kFiveMinuteWarning = @"FiveMinuteWarning";
 
 @interface AppDelegate ()
+
+@property EventController* sharedEventController;
 
 @end
 
@@ -18,6 +28,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
+    self.sharedEventController = [EventController sharedEventController];
 
     //Ask the user permission to send them Local Push LocalNotifications
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
@@ -63,15 +74,15 @@
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
-    if ([identifier isEqualToString:@"FifteenMinuteAction"])
+    if ([identifier isEqualToString:kFifteenMinuteAction])
     {
         // Refresh ETA then set a fifteen minute local notification
     }
-    else if ([identifier isEqualToString:@"FiveMinuteAction"])
+    else if ([identifier isEqualToString:kFiveMinuteAction])
     {
         // Refresh ETA then set a five minute local notification
     }
-    else if ([identifier isEqualToString:@"ZeroMinuteAction"])
+    else if ([identifier isEqualToString:kZeroMinuteAction])
     {
         // Refresh ETA then set a zero minute local notification
     }
@@ -82,36 +93,36 @@
 
 #pragma mark - Private methods
 
-- (NSSet *)createNotificationCategories
+- (NSSet *)createNotificationCategories // Bless this mess
 {
     UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    fifteenMinuteAction.identifier = @"FifteenMinuteAction";
+    fifteenMinuteAction.identifier = kFifteenMinuteAction;
     fifteenMinuteAction.title = @"15 Min";
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    fiveMinuteAction.identifier = @"FiveMinuteAction";
+    fiveMinuteAction.identifier = kFiveMinuteAction;
     fiveMinuteAction.title = @"5 Min";
     fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fiveMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    zeroMinuteAction.identifier = @"ZeroMinuteAction";
+    zeroMinuteAction.identifier = kZeroMinuteAction;
     zeroMinuteAction.title = @"0 Min";
     zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     zeroMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationCategory* thirtyMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    thirtyMinuteWarning.identifier = @"ThirtyMinuteWarning";
+    thirtyMinuteWarning.identifier = kThirtyMinuteWarning;
     [thirtyMinuteWarning setActions:@[fifteenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     UIMutableUserNotificationCategory* fifteenMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    fifteenMinuteWarning.identifier = @"FifteenMinuteWarning";
+    fifteenMinuteWarning.identifier = kFifteenMinuteWarning;
     [fifteenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     UIMutableUserNotificationCategory* fiveMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    fiveMinuteWarning.identifier = @"FiveMinuteWarning";
+    fiveMinuteWarning.identifier = kFiveMinuteWarning;
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
