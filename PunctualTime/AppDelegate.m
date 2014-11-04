@@ -17,23 +17,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    // I instantiated the userLocationManager here, so that it's the first thing created when the application loads.
     self.userLocationManager = [UserLocationManager new];
 
-    // Link to the Punctual application in Parse
-    [Parse setApplicationId:@"dIzZXQNYGIGklUc2TIWyH5cClDsJyPguW3OtUdyD" clientKey:@"ADbxomNuQP0HxLH0BtkTr1j5SriBvCZcEUZEmYyE"];
-
-    // Register for remote push notifications
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
-    {
-        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
-                                                        UIUserNotificationTypeBadge |
-                                                        UIUserNotificationTypeSound);
-        UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
-                                                                                 categories:[self createNotificationCategories]];
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
+    //Ask the user permission to send them Local Push LocalNotifications
+    if ([UIApplication instancesRespondToSelector:@selector(registerUserNotificationSettings:)]){
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
     }
 
     return YES;
@@ -65,60 +53,11 @@
 }
 
 
-#pragma mark - Remote Push Notifications
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler{
+    NSLog(@"Yes there are completted notifications!");
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-    // Store the deviceToken in the current installation and save it to Parse.
-    PFInstallation* currentInstallation = [PFInstallation currentInstallation];
-    [currentInstallation setDeviceTokenFromData:deviceToken];
-    currentInstallation.channels = @[@"global"];
-    [currentInstallation saveInBackground];
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    // Handle what to do when a remote push notification arrives
-    // I don't think we need to do anything here since we're going to be relying on the user's response to perform background work
-    // If we wanted to attempt an ETA refresh before the user makes a selection, we could do that with this method
-}
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
-{
-    if ([identifier isEqualToString:@"TenMinuteWarning"])
-    {
-        // Refresh ETA then set a ten minute and zero minute local notification
-    }
-    else if ([identifier isEqualToString:@"FiveMinuteWarning"])
-    {
-        // Refresh ETA then set a five minute and zero minute local notification
-    }
-
-    completionHandler();
 }
 
 
-#pragma mark - Private methods
-
-- (NSSet *)createNotificationCategories
-{
-    UIMutableUserNotificationAction* tenMinuteWarning = [[UIMutableUserNotificationAction alloc] init];
-    tenMinuteWarning.identifier = @"TenMinuteWarning";
-    tenMinuteWarning.title = @"10 Min";
-    tenMinuteWarning.activationMode = UIUserNotificationActivationModeBackground;
-    tenMinuteWarning.authenticationRequired = NO;
-
-    UIMutableUserNotificationAction* fiveMinuteWarning = [[UIMutableUserNotificationAction alloc] init];
-    fiveMinuteWarning.identifier = @"FiveMinuteWarning";
-    fiveMinuteWarning.title = @"5 Min";
-    fiveMinuteWarning.activationMode = UIUserNotificationActivationModeBackground;
-    fiveMinuteWarning.authenticationRequired = NO;
-
-    UIMutableUserNotificationCategory* thirtyMinWarning = [[UIMutableUserNotificationCategory alloc] init];
-    thirtyMinWarning.identifier = @"ThirtyMinuteWarning";
-    [thirtyMinWarning setActions:@[tenMinuteWarning, fiveMinuteWarning] forContext:UIUserNotificationActionContextDefault];
-
-    return [NSSet setWithObject:thirtyMinWarning];
-}
 
 @end
