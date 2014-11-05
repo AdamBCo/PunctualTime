@@ -102,13 +102,15 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 
 -(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=geocode&language=en&key=%@",searchWord,apiKey]];
+    NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=establishment|geocode&language=en&key=%@",searchWord,apiKey];
+    NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         NSArray *results = [jSONresult valueForKey:@"predictions"];
+        NSLog(@"Results %@",results.firstObject);
 
         NSLog(@"We got %lu locations for %@.",(unsigned long)results.count,self.substring);
         complete(results);
@@ -120,7 +122,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 -(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
 
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey]];
+    NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey];
+    NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -206,7 +209,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         }    break;
         case TableViewSectionMain: {
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
-            cell.textLabel.text = [searchResult objectForKey:@"description"];
+            cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
+            cell.detailTextLabel.text = searchResult[@"description"];
         }break;
 //        case TableVIewSectionLogo: {
 //            cell.imageView.image = [UIImage imageNamed:@"powered-by-google-on-white"];

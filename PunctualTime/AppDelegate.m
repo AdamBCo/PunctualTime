@@ -73,7 +73,10 @@
     [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
         [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory];
-        NSLog(@"New time: %@",event.currentNotificationCategory);
+
+        NSLog(@"Name: %@",event.eventName);
+        NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+        NSLog(@"Notification Category: %@",event.currentNotificationCategory);
         counter++;
     }
     NSLog(@"Events have been refreshed %d times",counter);

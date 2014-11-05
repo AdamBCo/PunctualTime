@@ -106,39 +106,54 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 #pragma mark - Private methods
 
+
 -(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    CLLocation *userLocation = appDelegate.userLocationManager.location;
+
     NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
-    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
-    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
+
+    CLLocation *userLocation = appDelegate.userLocationManager.location;
+    NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
+    NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
     NSString *destination = [NSString stringWithFormat: @"&destination="];
+
     NSString *latitude = @(self.endingAddress.latitude).stringValue;
     NSString *longitude = @(self.endingAddress.longitude).stringValue;
     NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
+
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%f",self.desiredArrivalTime.timeIntervalSince1970];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
     NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
+    NSURL *url = [NSURL URLWithString:[joinedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+    NSLog(@"URL: %@",url);
 
-    NSURL *url = [NSURL URLWithString:joinedString];
-    NSLog(@"NSString: %@",url);
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
-      {
-          NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-          NSLog(@"JSON: %@",jSONresult);
+    {
+        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSLog(@"JSON: %@",jSONresult);
 
-#warning We need a way to catch if there are no results or Null
+        
+        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"]) {
+            NSLog(@"Error: %@",error.userInfo);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No ETA times Available"
+                                                            message:@"No way"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Restart", nil];
+            [alert show];
+        } else {
+            NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
+            complete(travelTimeEpoch);
+        }
+    }];
 
-          NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
-          complete(travelTimeEpoch);
-      }];
     [task resume];
 }
 
@@ -177,5 +192,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
 }
+
+
 
 @end
