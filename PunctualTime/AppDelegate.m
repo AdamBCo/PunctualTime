@@ -24,6 +24,8 @@
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventController = [EventController sharedEventController];
 
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+
     //Ask the user permission to send them Local Push LocalNotifications
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
@@ -62,6 +64,33 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+#pragma mark - Background Refresh
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    [self.userLocationManager updateLocation];
+    [self.sharedEventController refreshEvents];
+
+    for (Event *event in self.sharedEventController.events) {
+        Event *newEvent = [[Event alloc]initWithEventName:event.name
+                                          startingAddress:self.userLocationManager.location.coordinate
+                                            endingAddress:event.endingAddress
+                                              arrivalTime:event.desiredArrivalTime
+                                       transportationType:event.transportationType
+                           ];
+        [self.sharedEventController removeEvent:event];
+        [self.sharedEventController delete:event];
+        [self.sharedEventController addEvent:newEvent withCompletion:^{
+            NSLog(@"Events have been refreshed");
+        }];
+
+    }
+
+    
+}
+
+
 
 
 #pragma mark - Local notifications
