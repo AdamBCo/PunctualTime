@@ -66,31 +66,31 @@
 }
 
 
-#pragma mark - Background Refresh
+#pragma mark - ┌∩┐(◣_◢)┌∩┐ Background Refresh ┌∩┐(◣_◢)┌∩┐
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    int counter = 0;
     [self.userLocationManager updateLocation];
     [self.sharedEventController refreshEvents];
 
     for (Event *event in self.sharedEventController.events) {
-        Event *newEvent = [[Event alloc]initWithEventName:event.name
-                                          startingAddress:self.userLocationManager.location.coordinate
-                                            endingAddress:event.endingAddress
-                                              arrivalTime:event.desiredArrivalTime
-                                       transportationType:event.transportationType
-                           ];
-        [self.sharedEventController removeEvent:event];
-        [self.sharedEventController delete:event];
-        [self.sharedEventController addEvent:newEvent withCompletion:^{
-            NSLog(@"Events have been refreshed");
+        [event calculateETAWithCompletion:^(NSNumber *travelTime) {
+            NSDate *arrivalDate = [NSDate dateWithTimeIntervalSince1970:travelTime.doubleValue];
+            Event *newEvent =[[Event alloc]initWithEventName:event.name
+                                             startingAddress:self.userLocationManager.location.coordinate
+                                               endingAddress:event.endingAddress
+                                                 arrivalTime:arrivalDate
+                                          transportationType:event.transportationType
+                            ];
+            [self.sharedEventController removeEvent:event];
+            [self.sharedEventController addEvent:newEvent withCompletion:^{
+            }];
         }];
-
+        counter++;
     }
-
-    
+    NSLog(@"Events have been refreshed %d times",counter);
+    completionHandler(UIBackgroundFetchResultNewData);
 }
-
-
 
 
 #pragma mark - Local notifications
@@ -115,7 +115,6 @@
         // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil];
     }
-
     completionHandler();
 }
 

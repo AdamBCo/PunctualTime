@@ -54,12 +54,6 @@
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType];
-    NSLog(@"Log %@",newEvent.transportationType);
-
-
-    [self.etaController calculateETAforEvent:newEvent withCompletion:^(NSDictionary *result) {
-        NSLog(@"Result: %@",result);
-    }];
 
     __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
     [self.sharedEventController addEvent:newEvent withCompletion:

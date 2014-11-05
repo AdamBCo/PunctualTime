@@ -102,7 +102,7 @@ static NSString* kUniqueID = @"UniqueID";
 }
 
 
-#pragma mark - Private methods
+#warning I MADE THIS METHOD PUBLIC SO I CAN REFRESH LOCATIONS IN THE BACKGROUND
 
 -(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete
 {
@@ -135,6 +135,8 @@ static NSString* kUniqueID = @"UniqueID";
       }];
     [task resume];
 }
+
+#pragma mark - Private methods
 
 
 #pragma mark - NSCoding

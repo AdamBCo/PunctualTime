@@ -26,5 +26,6 @@
                transportationType:(NSString *)transporation;
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
+-(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete;
 
 @end
