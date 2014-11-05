@@ -126,19 +126,19 @@
 {
     UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     fifteenMinuteAction.identifier = kFifteenMinuteAction;
-    fifteenMinuteAction.title = @"15 Min";
+    fifteenMinuteAction.title = @"T-15min";
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     fiveMinuteAction.identifier = kFiveMinuteAction;
-    fiveMinuteAction.title = @"5 Min";
+    fiveMinuteAction.title = @"T-5min";
     fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fiveMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     zeroMinuteAction.identifier = kZeroMinuteAction;
-    zeroMinuteAction.title = @"0 Min";
+    zeroMinuteAction.title = @"T-0min";
     zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     zeroMinuteAction.authenticationRequired = NO;
 

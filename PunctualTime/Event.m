@@ -8,6 +8,7 @@
 
 #import "Event.h"
 #import "Constants.h"
+#import "AppDelegate.h"
 
 static NSString* kName = @"Name";
 static NSString* kStartingAddressLat = @"StartingAddressLat";
@@ -27,6 +28,7 @@ static NSString* kUniqueID = @"UniqueID";
 @property (readwrite) NSString* uniqueID;
 
 @end
+
 
 @implementation Event
 
@@ -55,39 +57,83 @@ static NSString* kUniqueID = @"UniqueID";
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID 
 {
     UILocalNotification *newNotification = [UILocalNotification new];
-    newNotification.fireDate = self.currentNotificationTime;
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
 
-    NSString* minuteWarning = [NSString new];
-    if ([categoryID isEqualToString:kThirtyMinuteWarning])
+    [self calculateETAWithCompletion:^(NSNumber *travelTime)
     {
-        minuteWarning = @"Thirty";
-    }
-    else if ([categoryID isEqualToString:kFifteenMinuteWarning])
-    {
-        minuteWarning = @"Fifteen";
-    }
-    else if ([categoryID isEqualToString:kFiveMinuteWarning])
-    {
-        minuteWarning = @"Five";
-    }
-    else
-    {
-        newNotification.alertBody = [NSString stringWithFormat:@"Leave Now!"];
-        [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
-        return;
-    }
+        NSString* minuteWarning = [NSString new];
+        double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
+        double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
 
-    newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ Minute Warning! Slide to schedule another", self.name, minuteWarning];
-    newNotification.category = categoryID;
-    [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+        if ([categoryID isEqualToString:kThirtyMinuteWarning])
+        {
+            minuteWarning = @"Thirty";
+            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
+        }
+        else if ([categoryID isEqualToString:kFifteenMinuteWarning])
+        {
+            minuteWarning = @"Fifteen";
+            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
+        }
+        else if ([categoryID isEqualToString:kFiveMinuteWarning])
+        {
+            minuteWarning = @"Five";
+            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
+        }
+        else
+        {
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.name];
+            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
+            [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+            return;
+        }
+
+        newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.name, minuteWarning];
+        newNotification.category = categoryID;
+        [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+    }];
 }
 
 - (NSComparisonResult)compareEvent:(Event *)otherEvent
 {
     return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
+}
+
+
+#pragma mark - Private methods
+
+-(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete
+{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    CLLocation *userLocation = appDelegate.userLocationManager.location;
+    NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
+    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
+    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
+    NSString *destination = [NSString stringWithFormat: @"&destination="];
+
+    NSString *latitude = @(self.endingAddress.latitude).stringValue;
+    NSString *longitude = @(self.endingAddress.longitude).stringValue;
+    NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
+    NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
+
+    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude, apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSString *joinedString = [urlStrings componentsJoinedByString:@""];
+
+    NSURL *url = [NSURL URLWithString:joinedString];
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+      {
+          NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+
+          NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
+          complete(travelTimeEpoch);
+      }];
+    [task resume];
 }
 
 

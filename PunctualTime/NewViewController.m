@@ -13,7 +13,6 @@
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
 #import "Event.h"
-#import "ETAController.h"
 #import <MapKit/MapKit.h>
 
 @interface NewViewController () <UISearchBarDelegate>
@@ -32,7 +31,6 @@
 @property LocationInfo *locationInfo;
 
 @property EventController *sharedEventController;
-@property ETAController *etaController;
 
 @property LocationSearchController *locationSearchController;
 
@@ -46,7 +44,6 @@
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventController = [EventController sharedEventController];
-    self.etaController = [ETAController new];
 }
 
 
