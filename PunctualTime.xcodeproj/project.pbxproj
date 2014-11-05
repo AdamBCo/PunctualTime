@@ -19,7 +19,6 @@
 		661079181A05D1EB0096479F /* TestMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079171A05D1EB0096479F /* TestMapViewController.m */; };
 		6649BF041A080367007B447B /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF031A080367007B447B /* SearchTableViewController.m */; };
 		6649BF3F1A0966EF007B447B /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* NewViewController.m */; };
-		6649BF421A099C37007B447B /* ETAController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF411A099C37007B447B /* ETAController.m */; };
 		6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF441A09A3BD007B447B /* LocationInfo.m */; };
 		6649BF471A09B279007B447B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6649BF461A09B279007B447B /* Foundation.framework */; };
 		E90100DA1A04692A00D44789 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E90100D91A04692A00D44789 /* CreateEventViewController.m */; };
@@ -61,8 +60,6 @@
 		6649BF031A080367007B447B /* SearchTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewController.m; sourceTree = "<group>"; };
 		6649BF3D1A0966EF007B447B /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
 		6649BF3E1A0966EF007B447B /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
-		6649BF401A099C37007B447B /* ETAController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETAController.h; sourceTree = "<group>"; };
-		6649BF411A099C37007B447B /* ETAController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ETAController.m; sourceTree = "<group>"; };
 		6649BF431A09A3BD007B447B /* LocationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfo.h; sourceTree = "<group>"; };
 		6649BF441A09A3BD007B447B /* LocationInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfo.m; sourceTree = "<group>"; };
 		6649BF461A09B279007B447B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -189,8 +186,6 @@
 				E9ACBB791A054E3700F56EBA /* EventController.m */,
 				661079131A057A7A0096479F /* LocationSearchController.h */,
 				661079141A057A7A0096479F /* LocationSearchController.m */,
-				6649BF401A099C37007B447B /* ETAController.h */,
-				6649BF411A099C37007B447B /* ETAController.m */,
 			);
 			name = "Data Controllers";
 			sourceTree = "<group>";
@@ -330,7 +325,6 @@
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
 				6649BF3F1A0966EF007B447B /* NewViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
-				6649BF421A099C37007B447B /* ETAController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
 				E90100DA1A04692A00D44789 /* CreateEventViewController.m in Sources */,

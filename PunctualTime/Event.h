@@ -18,7 +18,6 @@
 @property (readonly) NSString* uniqueID;
 @property NSString *transportationType;
 @property NSDate* currentNotificationTime;
-// need to add property for transport type - use an enum?
 
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress

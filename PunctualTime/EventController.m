@@ -20,7 +20,7 @@
 
 + (EventController *)sharedEventController // Returns persistent instance
 {
-    static EventController *_default = nil;
+    static EventController* _default = nil;
 
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^(void)
@@ -53,7 +53,7 @@
 
 - (void)refreshEvents //Removes expired events
 {
-    NSArray *eventsToCheckForExpiration = [NSArray arrayWithArray:self.events];
+    NSArray* eventsToCheckForExpiration = [NSArray arrayWithArray:self.events];
     for (Event* event in eventsToCheckForExpiration)
     {
         if ([[NSDate date] compare:event.desiredArrivalTime] == NSOrderedDescending) // Current time is after event time
@@ -83,16 +83,16 @@
 
 - (NSURL *)documentsDirectory
 {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *files = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    NSArray* files = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
 
     return files.firstObject;
 }
 
 - (void)saveEvents
 {
-    NSURL *plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
-    NSMutableArray *dataToSave = [NSMutableArray array];
+    NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
+    NSMutableArray* dataToSave = [NSMutableArray array];
 
     for (Event* event in self.events)
     {
@@ -105,9 +105,9 @@
 
 - (void)loadEvents
 {
-    NSURL *plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
+    NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
     self.events = [NSMutableArray array];
-    NSArray *savedData = [NSArray arrayWithContentsOfURL:plist];
+    NSArray* savedData = [NSArray arrayWithContentsOfURL:plist];
 
     for (NSData* data in savedData)
     {
