@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 The Timers. All rights reserved.
 //
 
-#import "RootViewController.h"
+#import "EventTableViewController.h"
 #import "EventController.h"
 #import "Event.h"
 
-@interface RootViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property EventController *sharedEventController;
@@ -18,7 +18,7 @@
 @end
 
 
-@implementation RootViewController
+@implementation EventTableViewController
 - (IBAction)onDoneButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:^{
         //
