@@ -19,7 +19,9 @@
 
 
 @implementation EventTableViewController
-- (IBAction)onDoneButtonPressed:(id)sender {
+
+- (IBAction)onDoneButtonPressed:(id)sender
+{
     [self dismissViewControllerAnimated:YES completion:^{
         //
     }];
@@ -31,7 +33,6 @@
 {
     [super viewDidLoad];
     self.sharedEventController = [EventController sharedEventController];
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -57,10 +58,10 @@
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     cell.textLabel.text = event.eventName;
-//    NSString *formattedArrivalDate = [NSDateFormatter localizedStringFromDate:event.desiredArrivalTime
-//                                                                    dateStyle:NSDateFormatterMediumStyle
-//                                                                    timeStyle:NSDateFormatterShortStyle];
-//    cell.detailTextLabel.text = [NSString stringWithFormat:@"From: %@  To: %@  By: %@", event.startingAddress, event.endingAddress, formattedArrivalDate];
+    NSString *formattedArrivalDate = [NSDateFormatter localizedStringFromDate:event.desiredArrivalTime
+                                                                    dateStyle:NSDateFormatterMediumStyle
+                                                                    timeStyle:NSDateFormatterShortStyle];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Arrive: %@", formattedArrivalDate];
 
     return cell;
 }
