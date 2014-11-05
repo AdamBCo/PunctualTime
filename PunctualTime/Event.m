@@ -87,13 +87,13 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         }
         else
         {
-            newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.name];
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
             newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
             return;
         }
 
-        newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.name, minuteWarning];
+        newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
         newNotification.category = categoryID;
         [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
     }];

@@ -185,10 +185,10 @@
 			children = (
 				661078E71A044D830096479F /* EventTableViewController.h */,
 				661078E81A044D830096479F /* EventTableViewController.m */,
-				6649BF021A080367007B447B /* SearchTableViewController.h */,
-				6649BF031A080367007B447B /* SearchTableViewController.m */,
 				6649BF3D1A0966EF007B447B /* CreateEventViewController.h */,
 				6649BF3E1A0966EF007B447B /* CreateEventViewController.m */,
+				6649BF021A080367007B447B /* SearchTableViewController.h */,
+				6649BF031A080367007B447B /* SearchTableViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";

@@ -67,7 +67,7 @@
                                     <constraint firstAttribute="height" constant="30" id="EJH-mr-SBp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="EJH-mr-SBp"/>

@@ -68,7 +68,8 @@
 
 #pragma mark - ┌∩┐(◣_◢)┌∩┐ Background Refresh ┌∩┐(◣_◢)┌∩┐
 
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
     int counter = 0;
     [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
@@ -91,21 +92,19 @@
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning];
     }
     else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning];
     }
     else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        // Get ETA for event
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil];
     }
+    
     completionHandler();
 }
 
