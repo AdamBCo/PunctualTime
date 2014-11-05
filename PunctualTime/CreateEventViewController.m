@@ -15,43 +15,45 @@
 #import "Event.h"
 #import <MapKit/MapKit.h>
 
+static NSString* SEG_ZERO = @"driving";
+static NSString* SEG_ONE = @"walking";
+static NSString* SEG_TW0 = @"bicycling";
+static NSString* SEG_THREE = @"transit";
+
 @interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate>
-@property (nonatomic, strong) AppDelegate *applicationDelegate;
+
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
-
-
+@property AppDelegate *applicationDelegate;
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
 @property NSArray *destinationLocations;
 @property NSString *transportationType;
-
 @property LocationInfo *locationInfo;
-
 @property EventController *sharedEventController;
-
 @property LocationSearchController *locationSearchController;
 
 @end
 
+
 @implementation CreateEventViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventController = [EventController sharedEventController];
     self.nameTextField.delegate = self;
+    self.transportationType = SEG_ZERO;
 }
 
-
-
-- (IBAction)onSaveEventButtonPressed:(id)sender {
-
+- (IBAction)onSaveEventButtonPressed:(id)sender
+{
     Event *newEvent = [[Event alloc] initWithEventName:self.nameTextField.text
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
@@ -67,7 +69,8 @@
     [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
     return YES;
 }
@@ -83,18 +86,19 @@
 
 - (IBAction)segmentedControl:(id)sender {
 
-    switch (self.segmentedControl.selectedSegmentIndex) {
+    switch (self.segmentedControl.selectedSegmentIndex)
+    {
         case 0:
-            self.transportationType = @"driving";
+            self.transportationType = SEG_ZERO;
             break;
         case 1:
-            self.transportationType = @"walking";
+            self.transportationType = SEG_ONE;
             break;
         case 2:
-            self.transportationType = @"bicycling";
+            self.transportationType = SEG_TW0;
             break;
         case 3:
-            self.transportationType = @"transit";
+            self.transportationType = SEG_THREE;
             break;
 
         default:
@@ -103,7 +107,15 @@
 }
 
 
--(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue{
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [self.nameTextField resignFirstResponder];
+}
+
+-(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue
+{
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
