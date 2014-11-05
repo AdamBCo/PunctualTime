@@ -20,6 +20,7 @@
 @property NSString *transportationType;
 
 
+
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
                     endingAddress:(CLLocationCoordinate2D)endingAddress
@@ -27,5 +28,6 @@
                transportationType:(NSString *)transporation;
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
+
 
 @end

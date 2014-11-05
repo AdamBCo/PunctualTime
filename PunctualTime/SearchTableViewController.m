@@ -25,7 +25,6 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 typedef NS_ENUM(NSUInteger, TableViewSection){
     TableViewSectionStatic,
     TableViewSectionMain,
-//    TableVIewSectionLogo,
 
     TableViewSectionCount
 
@@ -47,6 +46,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 -(void)viewWillAppear:(BOOL)animated{
     [self.applicationDelegate.userLocationManager updateLocation];
+    [self.searchTextField becomeFirstResponder];
 }
 
 
@@ -205,6 +205,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
     switch (indexPath.section) {
         case TableViewSectionStatic: {
+            cell.imageView.image = [UIImage imageNamed:@"cursor6"];
             cell.textLabel.text = @"My Current Location";
         }    break;
         case TableViewSectionMain: {
@@ -212,10 +213,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
         }break;
-//        case TableVIewSectionLogo: {
-//            cell.imageView.image = [UIImage imageNamed:@"powered-by-google-on-white"];
-//
-//        }
 
         default:
             break;

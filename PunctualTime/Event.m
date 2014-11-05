@@ -116,6 +116,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     CLLocation *userLocation = appDelegate.userLocationManager.location;
     NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
     NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
+    NSString *startingLocation = [NSString stringWithFormat: @"%@,%@",currentLatitude,currentLongitude];
     NSString *destination = [NSString stringWithFormat: @"&destination="];
 
     NSString *latitude = @(self.endingAddress.latitude).stringValue;
@@ -126,7 +127,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%f",self.desiredArrivalTime.timeIntervalSince1970];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
-    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSArray *urlStrings = @[google, startingLocation, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
     NSURL *url = [NSURL URLWithString:[joinedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSLog(@"URL: %@",url);
@@ -150,6 +151,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
             [alert show];
         } else {
             NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
+
             complete(travelTimeEpoch);
         }
     }];
@@ -175,6 +177,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:kEndingAddressLat];
         CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:kEndingAddressLon];
         self.endingAddress = CLLocationCoordinate2DMake(endingLatitude, endingLongitude);
+
     }
 
     return self;
@@ -191,6 +194,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
+
 }
 
 
