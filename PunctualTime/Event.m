@@ -68,7 +68,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
-    BOOL notificationWasSnoozed = [self.currentNotificationCategory isEqualToString:categoryID];
+    BOOL notificationWasSnoozed = ![self.currentNotificationCategory isEqualToString:categoryID];
     self.currentNotificationCategory = categoryID;
 
     [self calculateETAWithCompletion:^(NSNumber* travelTime, NSError* error)
@@ -185,8 +185,10 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
                 NSDictionary* userInfo = @{@"error": jsonResult[@"status"]};
                 NSError* newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
                 complete(nil, newError);
+                return;
             }
             complete(nil, error);
+            return;
         }
         else
         {

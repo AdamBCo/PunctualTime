@@ -68,6 +68,7 @@ static NSString* SEG_THREE = @"transit";
         if (error)
         {
             NSLog(@"Error making notification: %@", error.userInfo);
+            [self makeAlert];
         }
         else
         {
