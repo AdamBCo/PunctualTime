@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 The Timers. All rights reserved.
 //
 
-#import "NewViewController.h"
+#import "CreateEventViewController.h"
 #import "EventController.h"
 #import "AppDelegate.h"
 #import "Constants.h"
@@ -15,7 +15,7 @@
 #import "Event.h"
 #import <MapKit/MapKit.h>
 
-@interface NewViewController () <UISearchBarDelegate, UITextFieldDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) AppDelegate *applicationDelegate;
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -37,7 +37,7 @@
 
 @end
 
-@implementation NewViewController
+@implementation CreateEventViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

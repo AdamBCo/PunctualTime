@@ -2,13 +2,14 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OVE-4x-icw">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Create Event-->
         <scene sceneID="gZD-AP-Ik5">
             <objects>
-                <viewController id="NNb-Hq-cvw" customClass="NewViewController" sceneMemberID="viewController">
+                <viewController id="NNb-Hq-cvw" customClass="CreateEventViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YMX-VA-2I1"/>
                         <viewControllerLayoutGuide type="bottom" id="LOd-Yk-LvC"/>
@@ -166,15 +167,18 @@
                             <mask key="constraints">
                                 <exclude reference="FiK-MD-LhK"/>
                                 <exclude reference="bS2-dJ-Te8"/>
-                                <exclude reference="CKB-Wp-iT8"/>
-                                <exclude reference="KNO-Bk-aKf"/>
-                                <exclude reference="aJ1-bc-GR0"/>
+                                <exclude reference="7Mw-jG-gUN"/>
+                                <exclude reference="wvl-Sg-ShI"/>
                                 <exclude reference="3m6-tn-wt7"/>
                                 <exclude reference="7nN-WX-W2D"/>
                                 <exclude reference="eoU-5A-ulR"/>
                                 <exclude reference="f6L-We-sJ6"/>
-                                <exclude reference="7Mw-jG-gUN"/>
-                                <exclude reference="wvl-Sg-ShI"/>
+                                <exclude reference="GD9-zo-EGT"/>
+                                <exclude reference="ZkW-YE-dpn"/>
+                                <exclude reference="f6K-t7-9Sv"/>
+                                <exclude reference="CKB-Wp-iT8"/>
+                                <exclude reference="KNO-Bk-aKf"/>
+                                <exclude reference="aJ1-bc-GR0"/>
                                 <exclude reference="BzU-0F-Rn3"/>
                                 <exclude reference="Cq7-sc-9qd"/>
                                 <exclude reference="ueH-Tl-fCS"/>
@@ -183,9 +187,6 @@
                                 <exclude reference="kBK-Nn-Wyr"/>
                                 <exclude reference="wZ5-aZ-2DW"/>
                                 <exclude reference="y23-IJ-7AI"/>
-                                <exclude reference="GD9-zo-EGT"/>
-                                <exclude reference="ZkW-YE-dpn"/>
-                                <exclude reference="f6K-t7-9Sv"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -201,15 +202,18 @@
                             <mask key="constraints">
                                 <include reference="FiK-MD-LhK"/>
                                 <include reference="bS2-dJ-Te8"/>
-                                <include reference="CKB-Wp-iT8"/>
-                                <include reference="KNO-Bk-aKf"/>
-                                <include reference="aJ1-bc-GR0"/>
+                                <include reference="7Mw-jG-gUN"/>
+                                <include reference="wvl-Sg-ShI"/>
                                 <include reference="3m6-tn-wt7"/>
                                 <include reference="7nN-WX-W2D"/>
                                 <include reference="eoU-5A-ulR"/>
                                 <include reference="f6L-We-sJ6"/>
-                                <include reference="7Mw-jG-gUN"/>
-                                <include reference="wvl-Sg-ShI"/>
+                                <include reference="GD9-zo-EGT"/>
+                                <include reference="ZkW-YE-dpn"/>
+                                <include reference="f6K-t7-9Sv"/>
+                                <include reference="CKB-Wp-iT8"/>
+                                <include reference="KNO-Bk-aKf"/>
+                                <include reference="aJ1-bc-GR0"/>
                                 <include reference="BzU-0F-Rn3"/>
                                 <include reference="Cq7-sc-9qd"/>
                                 <include reference="ueH-Tl-fCS"/>
@@ -218,9 +222,6 @@
                                 <include reference="kBK-Nn-Wyr"/>
                                 <include reference="wZ5-aZ-2DW"/>
                                 <include reference="y23-IJ-7AI"/>
-                                <include reference="GD9-zo-EGT"/>
-                                <include reference="ZkW-YE-dpn"/>
-                                <include reference="f6K-t7-9Sv"/>
                             </mask>
                         </variation>
                     </view>
