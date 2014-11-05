@@ -73,15 +73,23 @@
     int counter = 0;
     [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
-        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory];
+        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:
+         ^{
+            if (counter-1 == self.sharedEventController.events.count)
+            {
+                NSLog(@"Name: %@",event.eventName);
+                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
+                NSLog(@"Events have been refreshed %d times",counter+1);
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+        }];
 
         NSLog(@"Name: %@",event.eventName);
         NSLog(@"Time to go off: %@",event.desiredArrivalTime);
         NSLog(@"Notification Category: %@",event.currentNotificationCategory);
         counter++;
     }
-    NSLog(@"Events have been refreshed %d times",counter);
-    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 
@@ -92,20 +100,24 @@
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^{
+            completionHandler();
+        }];
     }
     else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^{
+            completionHandler();
+        }];
     }
     else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^{
+            completionHandler();
+        }];
     }
-    
-    completionHandler();
 }
 
 

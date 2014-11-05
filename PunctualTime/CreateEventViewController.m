@@ -59,13 +59,13 @@ static NSString* SEG_THREE = @"transit";
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType];
-    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
 
-    __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
-    [self.sharedEventController addEvent:newEvent withCompletion:
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:
      ^{
-         [weakSelf resetTextFields];
-     }];
+        [weakSelf.sharedEventController addEvent:newEvent];
+        [weakSelf resetTextFields];
+    }];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField

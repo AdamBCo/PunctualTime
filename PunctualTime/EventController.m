@@ -31,7 +31,7 @@
     return _default;
 }
 
-- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion // May need completion when checking for conflicts
+- (void)addEvent:(Event *)event
 {
     if (!self.events)
     {
@@ -40,8 +40,6 @@
 
     [self.events addObject:event];
     [self saveEvents];
-
-    completion();
 }
 
 - (void)removeEvent:(Event *)event

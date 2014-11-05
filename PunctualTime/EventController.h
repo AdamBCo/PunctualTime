@@ -14,7 +14,7 @@
 @property (readonly) NSMutableArray* events;
 
 + (EventController *)sharedEventController;
-- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion;
+- (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
 - (void)refreshEvents;
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID;

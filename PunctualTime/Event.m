@@ -56,7 +56,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     return self;
 }
 
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID 
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(void))complete
 {
     UILocalNotification *newNotification = [UILocalNotification new];
     newNotification.timeZone = [NSTimeZone localTimeZone];
@@ -90,12 +90,16 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
             newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
             newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+
+            complete();
             return;
         }
 
         newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
         newNotification.category = categoryID;
         [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+
+        complete();
     }];
 }
 
@@ -116,6 +120,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     CLLocation *userLocation = appDelegate.userLocationManager.location;
     NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
     NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
+    NSString *originCoord = [NSString stringWithFormat:@"%@,%@", currentLatitude, currentLongitude];
     NSString *destination = [NSString stringWithFormat: @"&destination="];
 
     NSString *latitude = @(self.endingAddress.latitude).stringValue;
@@ -123,10 +128,11 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
 
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%f",self.desiredArrivalTime.timeIntervalSince1970];
+    int arrivalInt = self.desiredArrivalTime.timeIntervalSince1970;
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%d",arrivalInt];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
-    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSArray *urlStrings = @[google, originCoord, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
     NSURL *url = [NSURL URLWithString:[joinedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSLog(@"URL: %@",url);
@@ -140,7 +146,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         NSLog(@"JSON: %@",jSONresult);
 
         
-        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"]) {
+        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]) {
             NSLog(@"Error: %@",error.userInfo);
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No ETA times Available"
                                                             message:@"No way"

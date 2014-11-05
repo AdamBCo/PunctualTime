@@ -25,7 +25,7 @@
                     endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime
                transportationType:(NSString *)transporation;
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(void))complete;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
 
 @end
