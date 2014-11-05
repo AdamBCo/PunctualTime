@@ -23,11 +23,16 @@
 
     NSString *latitude = @(event.endingAddress.latitude).stringValue;
     NSString *longitude = @(event.endingAddress.longitude).stringValue;
+    NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
+
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
+
+    int arrival = [event.desiredArrivalTime timeIntervalSince1970];
+
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%d",arrival];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",event.transportationType];
 
-    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
     NSLog(@"%@",joinedString);
 
@@ -37,8 +42,6 @@
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-        NSLog(@"JSON Result %@",jSONresult);
         complete(jSONresult);
 
     }];

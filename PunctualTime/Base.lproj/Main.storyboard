@@ -205,18 +205,6 @@
                                     <segue destination="giN-hc-f5u" kind="show" identifier="BackToTheMapSegue" id="lw0-Ho-x9Y"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N7V-Nv-yjm">
-                                <rect key="frame" x="-61" y="-14" width="123" height="29"/>
-                                <segments>
-                                    <segment title="Walking"/>
-                                    <segment title="Automobile"/>
-                                    <segment title=""/>
-                                    <segment title=""/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentedControl:" destination="NNb-Hq-cvw" eventType="valueChanged" id="7HL-7G-uNd"/>
-                                </connections>
-                            </segmentedControl>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="En9-Ht-BfC">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </mapView>
@@ -237,6 +225,18 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N7V-Nv-yjm">
+                                <rect key="frame" x="-61" y="-14" width="123" height="29"/>
+                                <segments>
+                                    <segment title="Walking"/>
+                                    <segment title="Automobile"/>
+                                    <segment title=""/>
+                                    <segment title=""/>
+                                </segments>
+                                <connections>
+                                    <action selector="segmentedControl:" destination="NNb-Hq-cvw" eventType="valueChanged" id="7HL-7G-uNd"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -263,11 +263,11 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="WUP-5h-hpk"/>
-                                <exclude reference="N7V-Nv-yjm"/>
                                 <exclude reference="En9-Ht-BfC"/>
                                 <exclude reference="V7d-VK-aA1"/>
                                 <exclude reference="vc6-WF-Ogl"/>
                                 <exclude reference="VKd-vA-XE5"/>
+                                <exclude reference="N7V-Nv-yjm"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="4te-e2-qid"/>
@@ -294,11 +294,11 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="WUP-5h-hpk"/>
-                                <include reference="N7V-Nv-yjm"/>
                                 <include reference="En9-Ht-BfC"/>
                                 <include reference="V7d-VK-aA1"/>
                                 <include reference="vc6-WF-Ogl"/>
                                 <include reference="VKd-vA-XE5"/>
+                                <include reference="N7V-Nv-yjm"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="4te-e2-qid"/>
