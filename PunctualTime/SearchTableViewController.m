@@ -9,30 +9,28 @@
 #import "SearchTableViewController.h"
 #import "AppDelegate.h"
 
-NSString *const apiURI = @"https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters";
-NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 
 @interface SearchTableViewController () <UISearchBarDelegate>
-
-
 @property (weak, nonatomic) IBOutlet UISearchBar *searchTextField;
 @property NSMutableArray *localSearchQueries;
 @property NSMutableArray *pastSearchQueries;
 @property AppDelegate *applicationDelegate;
-
 @property NSTimer *autoCompleteTimer;
 @property NSString *substring;
 
-
 @end
 
-typedef enum {
-    TableViewSectionStatic = 1,
+NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
+
+typedef NS_ENUM(NSUInteger, TableViewSection){
+    TableViewSectionStatic,
     TableViewSectionMain,
+    TableVIewSectionLogo,
 
     TableViewSectionCount
 
-} Sections;
+};
+
 
 @implementation SearchTableViewController
 
@@ -42,6 +40,7 @@ typedef enum {
     self.localSearchQueries = [NSMutableArray array];
     self.searchTextField.delegate = self;
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
+    self.locationInfo = [LocationInfo new];
 
 }
 
@@ -118,7 +117,7 @@ typedef enum {
 
 }
 
--(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete{
+-(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
 
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -151,6 +150,9 @@ typedef enum {
         case TableViewSectionMain:
             return self.pastSearchQueries.count;
             break;
+        case TableVIewSectionLogo:
+            return 1;
+            break;
     }
 
     return 0;
@@ -163,32 +165,32 @@ typedef enum {
 
     switch (indexPath.section) {
         case TableViewSectionStatic: {
-            self.chosenLocation = @{ @"name" :@"Current Location",
-                                     @"address" :@"Current Address",
-                                     @"lat" : currentLatitude,
-                                     @"long" :currentLongitude
-                                     };
+            self.locationInfo.name = @"Current Name";
+            self.locationInfo.address = @"Current Address";
+            self.locationInfo.locationCoordinates = CLLocationCoordinate2DMake(currentLatitude.doubleValue, currentLongitude.doubleValue);
+            [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
+
 
         }    break;
         case TableViewSectionMain: {
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             NSString *placeID = [searchResult objectForKey:@"place_id"];
             [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {
+                        NSLog(@"Place %@", place);
+                self.locationInfo.name = [place valueForKey:@"name"];
+                self.locationInfo.address = [place valueForKey:@"formatted_address"];
+                NSString *latitude = [NSString stringWithFormat:@"%@,",[place valueForKey:@"geometry"][@"location"][@"lat"]];
+                NSString *longitude = [NSString stringWithFormat:@"%@",[place valueForKey:@"geometry"][@"location"][@"lng"]];
+                self.locationInfo.locationCoordinates = CLLocationCoordinate2DMake(latitude.doubleValue, longitude.doubleValue);
 
-                self.chosenLocation = @{ @"name" :[place valueForKey:@"name"],
-                                         @"address" :[place valueForKey:@"formatted_address"],
-                                         @"lat" :[place valueForKey:@"geometry"][@"location"][@"lat"],
-                                         @"long" :[place valueForKey:@"geometry"][@"location"][@"lng"]
-                                         };
-                NSLog(@"Google: %@",self.chosenLocation);
-                
+                NSLog(@"Location:%@",self.locationInfo);
+                [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
             }];
         }break;
 
         default:
             break;
     }
-    [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
 }
 
 
@@ -204,25 +206,29 @@ typedef enum {
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult objectForKey:@"description"];
         }break;
+        case TableVIewSectionLogo: {
+            cell.imageView.image = [UIImage imageNamed:@"powered-by-google-on-white"];
+
+        }
 
         default:
             break;
     }
     return cell;
 }
-
-
+//
+//
 //- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
 //
-////    UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
-////    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
-////    imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-////    imageView.frame = CGRectMake(110,10,100,12);
-////    [footerView addSubview:imageView];
-////
-////    self.tableView.tableFooterView = footerView;
-////
-////    return footerView;
+//    UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
+//    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
+//    imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+//    imageView.frame = CGRectMake(110,10,100,12);
+//    [footerView addSubview:imageView];
+//
+//    self.tableView.tableFooterView = footerView;
+//
+//    return footerView;
 //
 //}
 

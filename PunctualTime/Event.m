@@ -15,6 +15,7 @@ static NSString* kStartingAddressLon = @"StartingAddressLon";
 static NSString* kEndingAddressLat = @"EndingAddressLat";
 static NSString* kEndingAddressLon = @"EndingAddressLon";
 static NSString* kArrivalTime = @"ArrivalTime";
+static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
 
 @interface Event () <NSCoding>
@@ -31,7 +32,7 @@ static NSString* kUniqueID = @"UniqueID";
 
 #pragma mark - Public methods
 
-- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime
+- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation
 {
     if (self = [super init])
     {
@@ -39,6 +40,7 @@ static NSString* kUniqueID = @"UniqueID";
         self.startingAddress = startingAddress;
         self.endingAddress = endingAddress;
         self.desiredArrivalTime = arrivalTime;
+        self.transportationType = transporation;
 
         CFUUIDRef uuid = CFUUIDCreate(NULL);
         NSString *uniqueID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
@@ -97,6 +99,7 @@ static NSString* kUniqueID = @"UniqueID";
     {
         self.eventName = [decoder decodeObjectForKey:kName];
         self.desiredArrivalTime = [decoder decodeObjectForKey:kArrivalTime];
+        self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
 
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
@@ -119,6 +122,7 @@ static NSString* kUniqueID = @"UniqueID";
     [encoder encodeDouble:self.endingAddress.latitude forKey:kEndingAddressLat];
     [encoder encodeDouble:self.endingAddress.longitude forKey:kEndingAddressLon];
     [encoder encodeObject:self.desiredArrivalTime forKey:kArrivalTime];
+    [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
 }
 

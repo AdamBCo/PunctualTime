@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LocationInfo.h"
+
 
 @interface SearchTableViewController : UITableViewController
 
-@property NSDictionary *chosenLocation;
+@property LocationInfo *locationInfo;
 
 @end

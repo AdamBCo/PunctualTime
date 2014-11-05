@@ -31,21 +31,21 @@
     self.sharedEventController = [EventController sharedEventController];
 }
 
-- (IBAction)onSaveEventButtonPressed:(id)sender
-{
+//- (IBAction)onSaveEventButtonPressed:(id)sender
+//{
 //    Event *newEvent = [[Event alloc] initWithEventName:self.nameTextField.text
 //                                       startingAddress:self.startingLocationTextField.text
 //                                         endingAddress:self.endingLocationTextField.text
 //                                           arrivalTime:self.datePicker.date];
 
-    __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
-    [self.sharedEventController addEvent:newEvent withCompletion:
-    ^{
-        [weakSelf resetTextFields];
-    }];
-
-    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
-}
+//    __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
+//    [self.sharedEventController addEvent:newEvent withCompletion:
+//    ^{
+//        [weakSelf resetTextFields];
+//    }];
+//
+//    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
+//}
 
 - (void)resetTextFields
 {

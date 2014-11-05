@@ -13,7 +13,6 @@
 #import "Event.h"
 #import <MapKit/MapKit.h>
 
-NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 
 @interface TestMapViewController ()<UISearchBarDelegate>
 @property (nonatomic, strong) AppDelegate *applicationDelegate;
@@ -40,7 +39,6 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     self.startSearchBar.delegate = self;
     self.destinationSearchBar.delegate = self;
     self.locationSearchController = [LocationSearchController new];
-
 
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
 
@@ -134,25 +132,25 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
     }
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    self.eventDestination = @{@"Hello": @"People"};
-    SearchTableViewController *viewController = segue.destinationViewController;
-    viewController.chosenLocation = self.eventDestination;
-    NSLog(@"Choices: %@", self.eventDestination);
-}
-
--(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue{
-    SearchTableViewController *viewController = segue.sourceViewController;
-    self.eventDestination = viewController.chosenLocation;
-    NSLog(@"Selected Event: %@",self.eventDestination);
-    NSLog(@"Chosen Location: %@", viewController.chosenLocation);
-    [self.applicationDelegate.userLocationManager updateLocation];
-    [self calculateTheETAForTheEventwithCompletion:^(NSDictionary *location) {
-        NSLog(@"HELLLLLLLLOOO");
-        NSLog(@"Location: %@", location);
-    }];
-
-}
+//-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+//    self.eventDestination = @{@"Hello": @"People"};
+//    SearchTableViewController *viewController = segue.destinationViewController;
+//    viewController.chosenLocation = self.eventDestination;
+//    NSLog(@"Choices: %@", self.eventDestination);
+//}
+//
+//-(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue{
+//    SearchTableViewController *viewController = segue.sourceViewController;
+//    self.eventDestination = viewController.chosenLocation;
+//    NSLog(@"Selected Event: %@",self.eventDestination);
+//    NSLog(@"Chosen Location: %@", viewController.chosenLocation);
+//    [self.applicationDelegate.userLocationManager updateLocation];
+//    [self calculateTheETAForTheEventwithCompletion:^(NSDictionary *location) {
+//        NSLog(@"HELLLLLLLLOOO");
+//        NSLog(@"Location: %@", location);
+//    }];
+//
+//}
 
 
 //Notes from this MORNING
@@ -174,42 +172,42 @@ NSString *const apiAccessKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 //ns enum - list of integers, it can only be one
 //ns-option 
 
--(void)calculateTheETAForTheEventwithCompletion:(void (^)(NSDictionary *))complete{
-
-
-    CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
-    NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
-    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
-    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
-    NSString *destination = [NSString stringWithFormat: @"&destination="];
-    NSString *latitude = [NSString stringWithFormat:@"%@,",[self.eventDestination objectForKey:@"lat"]];
-    NSString *longitude = [NSString stringWithFormat:@"%@",[self.eventDestination objectForKey:@"long"]];
-    NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=%@",apiAccessKey];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
-    NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=transit"];
-
-
-
-    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, arrivalTime, modeOfTransportation];
-    NSString *joinedString = [urlStrings componentsJoinedByString:@""];
-    NSLog(@"%@",joinedString);
-
-    NSURL *url = [NSURL URLWithString:joinedString];
-    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-
-
-        NSLog(@"JSON Result %@",jSONresult);
-        complete(jSONresult);
-        
-    }];
-    [task resume];
-
-
-}
+//-(void)calculateTheETAForTheEventwithCompletion:(void (^)(NSDictionary *))complete{
+//
+//
+//    CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
+//    NSString *google = @"https://maps.googleapis.com/maps/api/directions/json?origin=";
+//    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
+//    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
+//    NSString *destination = [NSString stringWithFormat: @"&destination="];
+//    NSString *latitude = [NSString stringWithFormat:@"%@,",[self.eventDestination objectForKey:@"lat"]];
+//    NSString *longitude = [NSString stringWithFormat:@"%@",[self.eventDestination objectForKey:@"long"]];
+//    NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=%@",apiAccessKey];
+//    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
+//    NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=transit"];
+//
+//
+//
+//    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude,apiAccessKeyURL, arrivalTime, modeOfTransportation];
+//    NSString *joinedString = [urlStrings componentsJoinedByString:@""];
+//    NSLog(@"%@",joinedString);
+//
+//    NSURL *url = [NSURL URLWithString:joinedString];
+//    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+//    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+//
+//
+//        NSLog(@"JSON Result %@",jSONresult);
+//        complete(jSONresult);
+//        
+//    }];
+//    [task resume];
+//
+//
+//}
 
 
 

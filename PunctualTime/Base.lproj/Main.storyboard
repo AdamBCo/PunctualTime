@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="EXa-Df-8Er">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="OVE-4x-icw">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
@@ -72,9 +72,6 @@
                                 <state key="normal" title="Search View Controller">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="giN-hc-f5u" kind="show" identifier="Segue" id="Yt8-e7-3Yt"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -183,6 +180,7 @@
                         <viewControllerLayoutGuide type="bottom" id="LOd-Yk-LvC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="FGA-MB-bzh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-5h-hpk">
@@ -203,6 +201,9 @@
                                         <include reference="V7K-OZ-eaF"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <segue destination="giN-hc-f5u" kind="show" identifier="BackToTheMapSegue" id="lw0-Ho-x9Y"/>
+                                </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N7V-Nv-yjm">
                                 <rect key="frame" x="-61" y="-14" width="123" height="29"/>
@@ -269,15 +270,12 @@
                                 <exclude reference="VKd-vA-XE5"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="LU8-ZM-LaW"/>
                                 <exclude reference="4te-e2-qid"/>
                                 <exclude reference="MV4-dI-yFf"/>
                                 <exclude reference="ZGw-VX-0DF"/>
                                 <exclude reference="hdb-oh-INx"/>
                                 <exclude reference="pZe-q1-RIx"/>
-                                <exclude reference="9Jx-Yn-uNx"/>
-                                <exclude reference="CDR-e9-Mqb"/>
-                                <exclude reference="m9Y-OQ-gHG"/>
+                                <exclude reference="LU8-ZM-LaW"/>
                                 <exclude reference="Dwm-YM-FNH"/>
                                 <exclude reference="T5t-mx-rY7"/>
                                 <exclude reference="bnm-YE-ZnP"/>
@@ -285,6 +283,9 @@
                                 <exclude reference="iJb-wu-CMN"/>
                                 <exclude reference="i36-mK-GN4"/>
                                 <exclude reference="ufD-q9-NR5"/>
+                                <exclude reference="9Jx-Yn-uNx"/>
+                                <exclude reference="CDR-e9-Mqb"/>
+                                <exclude reference="m9Y-OQ-gHG"/>
                                 <exclude reference="Ayf-Hk-xJc"/>
                                 <exclude reference="r9J-5Y-eKc"/>
                                 <exclude reference="y6p-kN-h5u"/>
@@ -300,15 +301,12 @@
                                 <include reference="VKd-vA-XE5"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="LU8-ZM-LaW"/>
                                 <include reference="4te-e2-qid"/>
                                 <include reference="MV4-dI-yFf"/>
                                 <include reference="ZGw-VX-0DF"/>
                                 <include reference="hdb-oh-INx"/>
                                 <include reference="pZe-q1-RIx"/>
-                                <include reference="9Jx-Yn-uNx"/>
-                                <include reference="CDR-e9-Mqb"/>
-                                <include reference="m9Y-OQ-gHG"/>
+                                <include reference="LU8-ZM-LaW"/>
                                 <include reference="Dwm-YM-FNH"/>
                                 <include reference="T5t-mx-rY7"/>
                                 <include reference="bnm-YE-ZnP"/>
@@ -316,6 +314,9 @@
                                 <include reference="iJb-wu-CMN"/>
                                 <include reference="i36-mK-GN4"/>
                                 <include reference="ufD-q9-NR5"/>
+                                <include reference="9Jx-Yn-uNx"/>
+                                <include reference="CDR-e9-Mqb"/>
+                                <include reference="m9Y-OQ-gHG"/>
                                 <include reference="Ayf-Hk-xJc"/>
                                 <include reference="r9J-5Y-eKc"/>
                                 <include reference="y6p-kN-h5u"/>
@@ -339,7 +340,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="znh-Vy-2nQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3049.5" y="-1108"/>
+            <point key="canvasLocation" x="3228" y="-1236"/>
         </scene>
         <!--Search Table View Controller-->
         <scene sceneID="S7A-ya-uSR">
@@ -389,13 +390,13 @@
                     </tableView>
                     <connections>
                         <outlet property="searchTextField" destination="TKE-Q4-GHx" id="E4d-Si-n3a"/>
-                        <segue destination="Uqu-r7-ZTt" kind="unwind" identifier="BackToTheMapSegue" unwindAction="unwindFromSearchTableViewController:" id="uXv-Xn-n4I"/>
+                        <segue destination="Uqu-r7-ZTt" kind="unwind" identifier="BackToTheMapSegue" unwindAction="unwindFromSearchTableViewController:" id="5BK-S8-LkY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gfF-Zi-0JQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Uqu-r7-ZTt" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2439" y="-383"/>
+            <point key="canvasLocation" x="4005" y="-1236"/>
         </scene>
         <!--Events-->
         <scene sceneID="ufC-wZ-h7g">
@@ -690,7 +691,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R9a-wN-ERP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2131.5" y="-1108"/>
+            <point key="canvasLocation" x="2527.5" y="-1221"/>
         </scene>
     </scenes>
 </document>

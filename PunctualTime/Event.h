@@ -16,13 +16,15 @@
 @property (readonly) CLLocationCoordinate2D endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
 @property (readonly) NSString* uniqueID;
+@property NSString *transportationType;
 @property NSDate* currentNotificationTime;
 // need to add property for transport type - use an enum?
 
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
                     endingAddress:(CLLocationCoordinate2D)endingAddress
-                      arrivalTime:(NSDate *)arrivalTime;
+                      arrivalTime:(NSDate *)arrivalTime
+               transportationType:(NSString *)transporation;
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
 
