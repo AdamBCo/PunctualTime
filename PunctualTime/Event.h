@@ -17,6 +17,7 @@
 @property (readonly) NSDate* desiredArrivalTime;
 @property (readonly) NSDate* lastNotificationDate;
 @property (readonly) NSString* lastNotificationText;
+@property (readonly) NSNumber* lastTravelTime;
 @property (readonly) NSString* uniqueID;
 @property (readonly) NSString* currentNotificationCategory;
 @property NSString *transportationType;

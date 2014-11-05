@@ -18,6 +18,7 @@ static NSString* kEndingAddressLon = @"EndingAddressLon";
 static NSString* kArrivalTime = @"ArrivalTime";
 static NSString* kLastNotificationDate = @"LastNotificationDate";
 static NSString* kLastNotificationText = @"LastNotificationText";
+static NSString* kLastTravelTime = @"LastTravelTime";
 static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
@@ -30,6 +31,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 @property (readwrite) NSDate* desiredArrivalTime;
 @property (readwrite) NSDate* lastNotificationDate;
 @property (readwrite) NSString* lastNotificationText;
+@property (readwrite) NSNumber* lastTravelTime;
 @property (readwrite) NSString* uniqueID;
 @property (readwrite) NSString* currentNotificationCategory;
 
@@ -62,16 +64,22 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete
 {
-    UILocalNotification *newNotification = [UILocalNotification new];
+    UILocalNotification* newNotification = [UILocalNotification new];
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
+    BOOL notificationWasSnoozed = [self.currentNotificationCategory isEqualToString:categoryID];
     self.currentNotificationCategory = categoryID;
 
     [self calculateETAWithCompletion:^(NSNumber* travelTime, NSError* error)
     {
-        if (!error)
+        if (!error || notificationWasSnoozed)
         {
+            if (notificationWasSnoozed && error) // Couldn't get new ETA, so create new notification from last ETA result
+            {
+                travelTime = self.lastTravelTime;
+            }
+
             NSString* minuteWarning = [NSString new];
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
             double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
@@ -109,9 +117,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
             complete(nil);
         }
-        else
+        else  // There was a problem getting a new ETA so recreate the last notification
         {
-            if (self.lastNotificationDate) // There was a problem getting a new ETA so recreate the last notification
+            if (self.lastNotificationDate)
             {
                 newNotification.alertBody = self.lastNotificationText;
                 newNotification.category = categoryID;
@@ -201,6 +209,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.desiredArrivalTime = [decoder decodeObjectForKey:kArrivalTime];
         self.lastNotificationDate = [decoder decodeObjectForKey:kLastNotificationDate];
         self.lastNotificationText = [decoder decodeObjectForKey:kLastNotificationText];
+        self.lastTravelTime = [decoder decodeObjectForKey:kLastTravelTime];
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
@@ -225,6 +234,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeObject:self.desiredArrivalTime forKey:kArrivalTime];
     [encoder encodeObject:self.lastNotificationDate forKey:kLastNotificationDate];
     [encoder encodeObject:self.lastNotificationText forKey:kLastNotificationText];
+    [encoder encodeObject:self.lastTravelTime forKey:kLastTravelTime];
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];

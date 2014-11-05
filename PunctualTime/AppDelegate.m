@@ -73,9 +73,13 @@
     int counter = 0;
     [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
-        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:
-         ^{
-            if (counter-1 == self.sharedEventController.events.count)
+        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Background Fetch error: %@", error.userInfo);
+            }
+            if (counter-1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
             {
                 NSLog(@"Name: %@",event.eventName);
                 NSLog(@"Time to go off: %@",event.desiredArrivalTime);
@@ -100,21 +104,36 @@
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^{
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^{
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
         Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^{
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
             completionHandler();
         }];
     }
