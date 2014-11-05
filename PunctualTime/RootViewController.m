@@ -19,6 +19,11 @@
 
 
 @implementation RootViewController
+- (IBAction)onDoneButtonPressed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:^{
+        //
+    }];
+}
 
 #pragma mark - View lifecycle
 

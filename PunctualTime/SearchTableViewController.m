@@ -25,7 +25,7 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 typedef NS_ENUM(NSUInteger, TableViewSection){
     TableViewSectionStatic,
     TableViewSectionMain,
-    TableVIewSectionLogo,
+//    TableVIewSectionLogo,
 
     TableViewSectionCount
 
@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     self.searchTextField.delegate = self;
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.locationInfo = [LocationInfo new];
+    [self createFooterViewForTable];
 
 }
 
@@ -150,9 +151,9 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         case TableViewSectionMain:
             return self.pastSearchQueries.count;
             break;
-        case TableVIewSectionLogo:
-            return 1;
-            break;
+//        case TableVIewSectionLogo:
+//            return 1;
+//            break;
     }
 
     return 0;
@@ -187,6 +188,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
             }];
         }break;
+//        case TableVIewSectionLogo:
+//            break;
 
         default:
             break;
@@ -200,37 +203,32 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     switch (indexPath.section) {
         case TableViewSectionStatic: {
             cell.textLabel.text = @"My Current Location";
-            cell.backgroundColor = [UIColor redColor];
         }    break;
         case TableViewSectionMain: {
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult objectForKey:@"description"];
         }break;
-        case TableVIewSectionLogo: {
-            cell.imageView.image = [UIImage imageNamed:@"powered-by-google-on-white"];
-
-        }
+//        case TableVIewSectionLogo: {
+//            cell.imageView.image = [UIImage imageNamed:@"powered-by-google-on-white"];
+//
+//        }
 
         default:
             break;
     }
     return cell;
 }
-//
-//
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-//
-//    UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
-//    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
-//    imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-//    imageView.frame = CGRectMake(110,10,100,12);
-//    [footerView addSubview:imageView];
-//
-//    self.tableView.tableFooterView = footerView;
-//
-//    return footerView;
-//
-//}
+
+
+- (void)createFooterViewForTable{
+    UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
+    imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    imageView.frame = CGRectMake(110,10,100,12);
+    [footerView addSubview:imageView];
+    self.tableView.tableFooterView = footerView;
+}
+
 
 
 

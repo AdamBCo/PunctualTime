@@ -16,8 +16,9 @@
 @property (readonly) CLLocationCoordinate2D endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
 @property (readonly) NSString* uniqueID;
+@property (readonly) NSString* currentNotificationCategory;
 @property NSString *transportationType;
-@property NSDate* currentNotificationTime;
+
 
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
@@ -26,6 +27,5 @@
                transportationType:(NSString *)transporation;
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
--(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete;
 
 @end

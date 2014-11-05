@@ -15,13 +15,14 @@
 #import "Event.h"
 #import <MapKit/MapKit.h>
 
-@interface NewViewController () <UISearchBarDelegate>
+@interface NewViewController () <UISearchBarDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) AppDelegate *applicationDelegate;
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
-@property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-@property (weak, nonatomic) IBOutlet UILabel *directionsTextView;
+@property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *addressLabel;
+
 
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
@@ -44,7 +45,9 @@
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventController = [EventController sharedEventController];
+    self.nameTextField.delegate = self;
 }
+
 
 
 - (IBAction)onSaveEventButtonPressed:(id)sender {
@@ -64,11 +67,18 @@
     [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 - (void)resetTextFields
 {
     self.nameTextField.text = @"";
     self.datePicker.date = [NSDate date];
+    self.locationNameLabel.text = @"";
+    self.addressLabel.text = @"";
 }
 
 - (IBAction)segmentedControl:(id)sender {
@@ -97,6 +107,8 @@
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
+    self.locationNameLabel.text = self.locationInfo.name;
+    self.addressLabel.text = self.locationInfo.address;
 }
 
 @end

@@ -70,22 +70,10 @@
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     int counter = 0;
-    [self.userLocationManager updateLocation];
-    [self.sharedEventController refreshEvents];
-
+    [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
-        [event calculateETAWithCompletion:^(NSNumber *travelTime) {
-            NSDate *arrivalDate = [NSDate dateWithTimeIntervalSince1970:travelTime.doubleValue];
-            Event *newEvent =[[Event alloc]initWithEventName:event.name
-                                             startingAddress:self.userLocationManager.location.coordinate
-                                               endingAddress:event.endingAddress
-                                                 arrivalTime:arrivalDate
-                                          transportationType:event.transportationType
-                            ];
-            [self.sharedEventController removeEvent:event];
-            [self.sharedEventController addEvent:newEvent withCompletion:^{
-            }];
-        }];
+        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory];
+        NSLog(@"New time: %@",event.currentNotificationCategory);
         counter++;
     }
     NSLog(@"Events have been refreshed %d times",counter);

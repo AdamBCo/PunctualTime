@@ -18,6 +18,7 @@ static NSString* kEndingAddressLon = @"EndingAddressLon";
 static NSString* kArrivalTime = @"ArrivalTime";
 static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
+static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 @interface Event () <NSCoding>
 
@@ -26,6 +27,7 @@ static NSString* kUniqueID = @"UniqueID";
 @property (readwrite) CLLocationCoordinate2D endingAddress;
 @property (readwrite) NSDate* desiredArrivalTime;
 @property (readwrite) NSString* uniqueID;
+@property (readwrite) NSString* currentNotificationCategory;
 
 @end
 
@@ -60,6 +62,7 @@ static NSString* kUniqueID = @"UniqueID";
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
+    self.currentNotificationCategory = categoryID;
 
     [self calculateETAWithCompletion:^(NSNumber *travelTime)
     {
@@ -101,8 +104,7 @@ static NSString* kUniqueID = @"UniqueID";
     return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
 }
 
-
-#warning I MADE THIS METHOD PUBLIC SO I CAN REFRESH LOCATIONS IN THE BACKGROUND
+#pragma mark - Private methods
 
 -(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete
 {
@@ -112,31 +114,33 @@ static NSString* kUniqueID = @"UniqueID";
     NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
     NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
     NSString *destination = [NSString stringWithFormat: @"&destination="];
-
     NSString *latitude = @(self.endingAddress.latitude).stringValue;
     NSString *longitude = @(self.endingAddress.longitude).stringValue;
+    NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
     NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=1415133552"];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
-    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, latitude, longitude, apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSArray *urlStrings = @[google, currentLatitude, currentLongitude, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
 
     NSURL *url = [NSURL URLWithString:joinedString];
+    NSLog(@"NSString: %@",url);
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration:defaultConfigObject delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
       {
           NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+          NSLog(@"JSON: %@",jSONresult);
+
+#warning We need a way to catch if there are no results or Null
 
           NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
           complete(travelTimeEpoch);
       }];
     [task resume];
 }
-
-#pragma mark - Private methods
 
 
 #pragma mark - NSCoding
@@ -149,11 +153,10 @@ static NSString* kUniqueID = @"UniqueID";
         self.desiredArrivalTime = [decoder decodeObjectForKey:kArrivalTime];
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
-
+        self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
         CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
         self.startingAddress = CLLocationCoordinate2DMake(startingLatitude, startingLongitude);
-
         CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:kEndingAddressLat];
         CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:kEndingAddressLon];
         self.endingAddress = CLLocationCoordinate2DMake(endingLatitude, endingLongitude);
@@ -172,6 +175,7 @@ static NSString* kUniqueID = @"UniqueID";
     [encoder encodeObject:self.desiredArrivalTime forKey:kArrivalTime];
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
+    [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
 }
 
 @end
