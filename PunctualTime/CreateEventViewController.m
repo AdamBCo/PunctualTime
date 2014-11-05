@@ -41,6 +41,8 @@ static NSString* SEG_THREE = @"transit";
 
 @implementation CreateEventViewController
 
+#pragma mark - Private Methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -61,10 +63,17 @@ static NSString* SEG_THREE = @"transit";
                                     transportationType:self.transportationType];
 
     __unsafe_unretained typeof(self) weakSelf = self;
-    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:
-     ^{
-        [weakSelf.sharedEventController addEvent:newEvent];
-        [weakSelf resetTextFields];
+    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:^(NSError* error)
+    {
+        if (error)
+        {
+            NSLog(@"Error making notification: %@", error.userInfo);
+        }
+        else
+        {
+            [weakSelf.sharedEventController addEvent:newEvent];
+            [weakSelf resetTextFields];
+        }
     }];
 }
 
@@ -103,6 +112,22 @@ static NSString* SEG_THREE = @"transit";
         default:
             break;
     }
+}
+
+- (void)makeAlert
+{
+    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"Event not created, sorry!"
+                                                                       message:@"There was a network problem or the selected destination and transportation are incompatible. Please try again."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK"
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction *action) {
+                                                            self.locationInfo = nil;
+                                                            self.locationNameLabel.text = @"";
+                                                            self.addressLabel.text = @"";
+                                                        }];
+    [alertView addAction:alertAction];
+    [self presentViewController:alertView animated:YES completion:^{}];
 }
 
 
