@@ -73,15 +73,27 @@
     int counter = 0;
     [application cancelAllLocalNotifications];
     for (Event *event in self.sharedEventController.events) {
-        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory];
+        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Background Fetch error: %@", error.userInfo);
+            }
+            if (counter-1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
+            {
+                NSLog(@"Name: %@",event.eventName);
+                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
+                NSLog(@"Events have been refreshed %d times",counter+1);
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+        }];
 
         NSLog(@"Name: %@",event.eventName);
         NSLog(@"Time to go off: %@",event.desiredArrivalTime);
         NSLog(@"Notification Category: %@",event.currentNotificationCategory);
         counter++;
     }
-    NSLog(@"Events have been refreshed %d times",counter);
-    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 
@@ -89,23 +101,49 @@
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
+    Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+
+    for (UILocalNotification* notification in [UIApplication sharedApplication].scheduledLocalNotifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:schedulingEvent.uniqueID])
+        {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification - iOS 8 bug?
+        }
+    }
+
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
+            completionHandler();
+        }];
     }
     else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
+            completionHandler();
+        }];
     }
     else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil];
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
+        {
+            if (error) // This shouldn't ever happen
+            {
+                NSLog(@"Error snoozing: %@", error.userInfo);
+            }
+            completionHandler();
+        }];
     }
-    
-    completionHandler();
 }
 
 

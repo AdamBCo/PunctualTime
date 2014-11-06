@@ -16,6 +16,9 @@ static NSString* kStartingAddressLon = @"StartingAddressLon";
 static NSString* kEndingAddressLat = @"EndingAddressLat";
 static NSString* kEndingAddressLon = @"EndingAddressLon";
 static NSString* kArrivalTime = @"ArrivalTime";
+static NSString* kLastNotificationDate = @"LastNotificationDate";
+static NSString* kLastNotificationText = @"LastNotificationText";
+static NSString* kLastTravelTime = @"LastTravelTime";
 static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
@@ -26,6 +29,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 @property (readwrite) CLLocationCoordinate2D startingAddress;
 @property (readwrite) CLLocationCoordinate2D endingAddress;
 @property (readwrite) NSDate* desiredArrivalTime;
+@property (readwrite) NSDate* lastNotificationDate;
+@property (readwrite) NSString* lastNotificationText;
+@property (readwrite) NSNumber* lastTravelTime;
 @property (readwrite) NSString* uniqueID;
 @property (readwrite) NSString* currentNotificationCategory;
 
@@ -56,46 +62,77 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     return self;
 }
 
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID 
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete
 {
-    UILocalNotification *newNotification = [UILocalNotification new];
+    UILocalNotification* newNotification = [UILocalNotification new];
     newNotification.timeZone = [NSTimeZone localTimeZone];
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
+    BOOL notificationWasSnoozed = ![self.currentNotificationCategory isEqualToString:categoryID];
     self.currentNotificationCategory = categoryID;
 
-    [self calculateETAWithCompletion:^(NSNumber *travelTime)
+    [self calculateETAWithCompletion:^(NSNumber* travelTime, NSError* error)
     {
-        NSString* minuteWarning = [NSString new];
-        double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
-        double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
+        if (!error || notificationWasSnoozed)
+        {
+            if (notificationWasSnoozed && error) // Couldn't get new ETA, so create new notification from last ETA result
+            {
+                travelTime = self.lastTravelTime;
+            }
 
-        if ([categoryID isEqualToString:kThirtyMinuteWarning])
-        {
-            minuteWarning = @"Thirty";
-            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
-        }
-        else if ([categoryID isEqualToString:kFifteenMinuteWarning])
-        {
-            minuteWarning = @"Fifteen";
-            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
-        }
-        else if ([categoryID isEqualToString:kFiveMinuteWarning])
-        {
-            minuteWarning = @"Five";
-            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
-        }
-        else
-        {
-            newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
-            newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
+            NSString* minuteWarning = [NSString new];
+            double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
+            double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
+
+            if ([categoryID isEqualToString:kThirtyMinuteWarning])
+            {
+                minuteWarning = @"Thirty";
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
+            }
+            else if ([categoryID isEqualToString:kFifteenMinuteWarning])
+            {
+                minuteWarning = @"Fifteen";
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
+            }
+            else if ([categoryID isEqualToString:kFiveMinuteWarning])
+            {
+                minuteWarning = @"Five";
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
+            }
+            else
+            {
+                newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
+                self.lastNotificationDate = newNotification.fireDate;
+                [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+
+                complete(nil);
+                return;
+            }
+
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
+            newNotification.category = categoryID;
+            self.lastNotificationDate = newNotification.fireDate;
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
-            return;
-        }
 
-        newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
-        newNotification.category = categoryID;
-        [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+            complete(nil);
+        }
+        else  // There was a problem getting a new ETA so recreate the last notification
+        {
+            if (self.lastNotificationDate)
+            {
+                newNotification.alertBody = self.lastNotificationText;
+                newNotification.category = categoryID;
+                newNotification.fireDate = self.lastNotificationDate;
+                [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
+
+                complete(nil);
+            }
+            else // Can't recreate the notification, likely because this is the first
+            {
+                complete(error);
+            }
+        }
     }];
 }
 
@@ -104,10 +141,10 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
 }
 
+
 #pragma mark - Private methods
 
-
--(void)calculateETAWithCompletion:(void (^)(NSNumber *travelTime))complete
+-(void)calculateETAWithCompletion:(void (^)(NSNumber* travelTime, NSError* error))complete
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
 
@@ -116,7 +153,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     CLLocation *userLocation = appDelegate.userLocationManager.location;
     NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
     NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
-    NSString *startingLocation = [NSString stringWithFormat: @"%@,%@",currentLatitude,currentLongitude];
+    NSString *originCoord = [NSString stringWithFormat:@"%@,%@", currentLatitude, currentLongitude];
     NSString *destination = [NSString stringWithFormat: @"&destination="];
 
     NSString *latitude = @(self.endingAddress.latitude).stringValue;
@@ -124,10 +161,11 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
 
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%.f",self.desiredArrivalTime.timeIntervalSince1970];
+    int arrivalInt = self.desiredArrivalTime.timeIntervalSince1970;
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%d",arrivalInt];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
-    NSArray *urlStrings = @[google, startingLocation, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
+    NSArray *urlStrings = @[google, originCoord, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];
     NSString *joinedString = [urlStrings componentsJoinedByString:@""];
     NSURL *url = [NSURL URLWithString:[joinedString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSLog(@"URL: %@",url);
@@ -137,22 +175,25 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
     {
-        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        NSLog(@"JSON: %@",jSONresult);
+        NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+        //NSLog(@"JSON: %@",jsonResult);
 
-        
-        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"]) {
-            NSLog(@"Error: %@",error.userInfo);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No ETA times Available"
-                                                            message:@"No way"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Cancel"
-                                                  otherButtonTitles:@"Restart", nil];
-            [alert show];
-        } else {
-            NSNumber *travelTimeEpoch = [[[[[[jSONresult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
-
-            complete(travelTimeEpoch);
+        if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] || [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"])
+        {
+            if (!error)
+            {
+                NSDictionary* userInfo = @{@"error": jsonResult[@"status"]};
+                NSError* newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                complete(nil, newError);
+                return;
+            }
+            complete(nil, error);
+            return;
+        }
+        else
+        {
+            NSNumber *travelTimeEpoch = [[[[[[jsonResult objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"] objectAtIndex:0] objectForKey:@"duration"] objectForKey:@"value"];
+            complete(travelTimeEpoch, nil);
         }
     }];
 
@@ -168,6 +209,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     {
         self.eventName = [decoder decodeObjectForKey:kName];
         self.desiredArrivalTime = [decoder decodeObjectForKey:kArrivalTime];
+        self.lastNotificationDate = [decoder decodeObjectForKey:kLastNotificationDate];
+        self.lastNotificationText = [decoder decodeObjectForKey:kLastNotificationText];
+        self.lastTravelTime = [decoder decodeObjectForKey:kLastTravelTime];
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
@@ -191,6 +235,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeDouble:self.endingAddress.latitude forKey:kEndingAddressLat];
     [encoder encodeDouble:self.endingAddress.longitude forKey:kEndingAddressLon];
     [encoder encodeObject:self.desiredArrivalTime forKey:kArrivalTime];
+    [encoder encodeObject:self.lastNotificationDate forKey:kLastNotificationDate];
+    [encoder encodeObject:self.lastNotificationText forKey:kLastNotificationText];
+    [encoder encodeObject:self.lastTravelTime forKey:kLastTravelTime];
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];

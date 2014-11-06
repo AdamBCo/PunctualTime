@@ -31,7 +31,7 @@
     return _default;
 }
 
-- (void)addEvent:(Event *)event withCompletion:(void (^)(void))completion // May need completion when checking for conflicts
+- (void)addEvent:(Event *)event
 {
     if (!self.events)
     {
@@ -40,14 +40,19 @@
 
     [self.events addObject:event];
     [self saveEvents];
-
-    completion();
 }
 
 - (void)removeEvent:(Event *)event
 {
+    NSArray* notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification* notification in notifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
+        {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
     [self.events removeObject:event];
-    // Need to remove local notification
     [self saveEvents];
 }
 

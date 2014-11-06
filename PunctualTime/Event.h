@@ -9,12 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface Event : MKMapItem
+@interface Event : NSObject
 
 @property (readonly) NSString* eventName;
 @property (readonly) CLLocationCoordinate2D startingAddress;
 @property (readonly) CLLocationCoordinate2D endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
+@property (readonly) NSDate* lastNotificationDate;
+@property (readonly) NSString* lastNotificationText;
+@property (readonly) NSNumber* lastTravelTime;
 @property (readonly) NSString* uniqueID;
 @property (readonly) NSString* currentNotificationCategory;
 @property NSString *transportationType;
@@ -26,7 +29,7 @@
                     endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime
                transportationType:(NSString *)transporation;
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID;
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
 
 

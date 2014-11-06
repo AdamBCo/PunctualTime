@@ -41,6 +41,8 @@ static NSString* SEG_THREE = @"transit";
 
 @implementation CreateEventViewController
 
+#pragma mark - Private Methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -59,13 +61,21 @@ static NSString* SEG_THREE = @"transit";
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType];
-    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning];
 
-    __unsafe_unretained typeof(self) weakSelf = self; // Using this in the block to prevent a retain cycle
-    [self.sharedEventController addEvent:newEvent withCompletion:
-     ^{
-         [weakSelf resetTextFields];
-     }];
+    __unsafe_unretained typeof(self) weakSelf = self;
+    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:^(NSError* error)
+    {
+        if (error)
+        {
+            NSLog(@"Error making notification: %@", error.userInfo);
+            [self makeAlert];
+        }
+        else
+        {
+            [weakSelf.sharedEventController addEvent:newEvent];
+            [weakSelf resetTextFields];
+        }
+    }];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -103,6 +113,22 @@ static NSString* SEG_THREE = @"transit";
         default:
             break;
     }
+}
+
+- (void)makeAlert
+{
+    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"Event not created, sorry!"
+                                                                       message:@"There was a network problem or the selected destination and transportation are incompatible. Please try again."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK"
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction *action) {
+                                                            self.locationInfo = nil;
+                                                            self.locationNameLabel.text = @"";
+                                                            self.addressLabel.text = @"";
+                                                        }];
+    [alertView addAction:alertAction];
+    [self presentViewController:alertView animated:YES completion:^{}];
 }
 
 
