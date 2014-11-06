@@ -110,7 +110,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         NSArray *results = [jSONresult valueForKey:@"predictions"];
-        NSLog(@"Results %@",results.firstObject);
+        //NSLog(@"Results %@",results.firstObject);
 
         NSLog(@"We got %lu locations for %@.",(unsigned long)results.count,self.substring);
         complete(results);
@@ -180,7 +180,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             NSString *placeID = [searchResult objectForKey:@"place_id"];
             [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {
-                        NSLog(@"Place %@", place);
+                        //NSLog(@"Place %@", place);
                 self.locationInfo.name = [place valueForKey:@"name"];
                 self.locationInfo.address = [place valueForKey:@"formatted_address"];
                 NSString *latitude = [NSString stringWithFormat:@"%@,",[place valueForKey:@"geometry"][@"location"][@"lat"]];

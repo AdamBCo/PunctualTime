@@ -176,7 +176,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
     {
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-        NSLog(@"JSON: %@",jsonResult);
+        //NSLog(@"JSON: %@",jsonResult);
 
         if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] || [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"])
         {

@@ -21,7 +21,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    //[TestFlight takeOff:@"93ee4647-8019-408f-a7a0-d53f46f54df8"];
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventController = [EventController sharedEventController];
 
