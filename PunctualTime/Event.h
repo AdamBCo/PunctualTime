@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface Event : MKMapItem
+@interface Event : NSObject
 
 @property (readonly) NSString* eventName;
 @property (readonly) CLLocationCoordinate2D startingAddress;
