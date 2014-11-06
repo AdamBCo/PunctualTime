@@ -101,9 +101,18 @@
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
+    Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+
+    for (UILocalNotification* notification in [UIApplication sharedApplication].scheduledLocalNotifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:schedulingEvent.uniqueID])
+        {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification - iOS 8 bug?
+        }
+    }
+
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
@@ -115,7 +124,6 @@
     }
     else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
@@ -127,7 +135,6 @@
     }
     else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
