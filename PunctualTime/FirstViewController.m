@@ -17,7 +17,6 @@
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
 
-
 @end
 
 @implementation FirstViewController
@@ -28,59 +27,37 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+
     self.sharedEventController = [EventController sharedEventController];
     [self.sharedEventController refreshEvents];
+    self.selectedEvent = self.sharedEventController.events.firstObject;
 
-
-    NSDate *startDate = [NSDate date];
-
-    NSDate *destinationDate = self.selectedEvent.desiredArrivalTime;
-    NSLog(@"Count: %lu ",(unsigned long)self.sharedEventController.events.count);
-
-
-
-    NSLog(@"Seconds --------> %f",[destinationDate timeIntervalSinceDate: startDate]);
-
-    NSLog(@"EventOne: %@",self.selectedEvent.desiredArrivalTime);
-    NSLog(@"Current Time: %@",[NSDate date]);
-    NSLog(@"Current Time Two: %@",[NSDate date]);
-
-
-
-    self.eventNameLabel.text = self.selectedEvent.name;
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
-                                   selector:@selector(negativeOneSecond)
+                                   selector:@selector(updateCounter)
                                    userInfo:nil
                                     repeats:YES];
 }
 
--(void)negativeOneSecond{
-    int value = ([self.timeTillEventTimer intValue] - 1);
-    NSLog(@"Hello %d",value);
-    self.timeTillEventTimer = [NSNumber numberWithInt:value];
 
-    self.timeTillEvent.text = [NSString stringWithFormat:@"%d",value];
+- (void)updateCounter{
 
+    NSDate *startDate = [NSDate date];
+    NSDate *destinationDate = self.selectedEvent.desiredArrivalTime;
+    int seconds = [destinationDate timeIntervalSinceDate: startDate];
+
+    if(seconds > 0 ){
+        seconds -- ;
+        int hours = (seconds / 3600);
+        int minutes = (seconds % 3600) / 60;
+        seconds = (seconds %3600) % 60;
+        self.eventNameLabel.text = self.selectedEvent.eventName;
+        self.timeTillEvent.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    }
+    else{
+        NSLog(@"hello people");
+    }
 }
-
-
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

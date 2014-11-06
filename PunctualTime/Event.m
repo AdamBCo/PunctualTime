@@ -124,7 +124,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     NSString *destinationCoord = [NSString stringWithFormat:@"%@,%@",latitude,longitude];
 
     NSString *apiAccessKeyURL = [NSString stringWithFormat:@"&waypoints=optimize:true&key=AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg"];
-    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%f",self.desiredArrivalTime.timeIntervalSince1970];
+    NSString *arrivalTime = [NSString stringWithFormat:@"&arrival_time=%.f",self.desiredArrivalTime.timeIntervalSince1970];
     NSString *modeOfTransportation = [NSString stringWithFormat:@"&mode=%@",self.transportationType];
 
     NSArray *urlStrings = @[google, startingLocation, destination, destinationCoord, apiAccessKeyURL, arrivalTime, modeOfTransportation];

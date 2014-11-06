@@ -8,9 +8,6 @@
 
 #import "LocationSearchController.h"
 
-//NSString *const apiURI = @"https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters";
-//NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
-
 @interface LocationSearchController ()
 
 @end

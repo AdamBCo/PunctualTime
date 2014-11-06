@@ -191,8 +191,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
             }];
         }break;
-//        case TableVIewSectionLogo:
-//            break;
 
         default:
             break;
