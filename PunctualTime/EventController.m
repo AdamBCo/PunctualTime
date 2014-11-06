@@ -44,8 +44,15 @@
 
 - (void)removeEvent:(Event *)event
 {
+    NSArray* notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification* notification in notifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
+        {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
     [self.events removeObject:event];
-    // Need to remove local notification
     [self saveEvents];
 }
 
