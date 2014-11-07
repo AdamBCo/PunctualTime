@@ -66,33 +66,41 @@
 }
 
 
-#pragma mark - ┌∩┐(◣_◢)┌∩┐ Background Refresh ┌∩┐(◣_◢)┌∩┐
+#pragma mark - Background Refresh
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     int counter = 0;
     [application cancelAllLocalNotifications];
-    for (Event *event in self.sharedEventController.events) {
-        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
+    if (self.sharedEventController.events.count > 0)
+    {
+        for (Event *event in self.sharedEventController.events)
         {
-            if (error) // This shouldn't ever happen
+            [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
             {
-                NSLog(@"Background Fetch error: %@", error.userInfo);
-            }
-            if (counter-1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
-            {
-                NSLog(@"Name: %@",event.eventName);
-                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-                NSLog(@"Events have been refreshed %d times",counter+1);
-                completionHandler(UIBackgroundFetchResultNewData);
-            }
-        }];
+                if (error) // This shouldn't ever happen
+                {
+                    NSLog(@"Background Fetch error: %@", error.userInfo);
+                }
+                if (counter+1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
+                {
+                    NSLog(@"Name: %@",event.eventName);
+                    NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+                    NSLog(@"Notification Category: %@",event.currentNotificationCategory);
+                    NSLog(@"Events have been refreshed %d times",counter+1);
+                    completionHandler(UIBackgroundFetchResultNewData);
+                }
+            }];
 
-        NSLog(@"Name: %@",event.eventName);
-        NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-        NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-        counter++;
+            NSLog(@"Name: %@",event.eventName);
+            NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+            NSLog(@"Notification Category: %@",event.currentNotificationCategory);
+            counter++;
+        }
+    }
+    else
+    {
+        completionHandler(UIBackgroundFetchResultNoData);
     }
 }
 
