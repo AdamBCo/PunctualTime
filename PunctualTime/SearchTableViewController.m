@@ -206,6 +206,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             cell.imageView.image = [UIImage imageNamed:@"cursor6"];
             cell.textLabel.text = @"My Current Location";
         }    break;
+
         case TableViewSectionMain: {
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];

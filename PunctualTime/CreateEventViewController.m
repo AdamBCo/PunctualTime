@@ -36,6 +36,11 @@ static NSString* SEG_THREE = @"transit";
 @property EventController *sharedEventController;
 @property LocationSearchController *locationSearchController;
 
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property MKPointAnnotation *mapAnnotation;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+
 @end
 
 
@@ -52,7 +57,52 @@ static NSString* SEG_THREE = @"transit";
     self.sharedEventController = [EventController sharedEventController];
     self.nameTextField.delegate = self;
     self.transportationType = SEG_ZERO;
+
+//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, [[UIScreen mainScreen] applicationFrame].size.height)];
+//    imageView.image = [UIImage imageNamed:@"blur"];
+//    [self.scrollView addSubview:imageView];
+
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
+    blurView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height)+400);
+    [self.scrollView addSubview:blurView];
+
+
+
 }
+
+-(void)viewWillAppear:(BOOL)animated{
+
+    [super viewWillAppear:animated];
+
+    if (self.locationInfo.name.length > 0) {
+        MKPointAnnotation *point = [MKPointAnnotation new];
+        point.coordinate = self.locationInfo.locationCoordinates;
+        [self.mapView addAnnotation:point];
+
+        MKCoordinateRegion mapRegion;
+        mapRegion.center = self.locationInfo.locationCoordinates;
+        mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
+        [self.mapView setRegion:mapRegion animated: NO];
+
+
+    } else {
+        self.mapView.frame = 
+    }
+
+    self.view.backgroundColor = [UIColor redColor];
+    [UIView animateWithDuration:100
+                          delay:0.5
+                        options: UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         self.view.backgroundColor = [UIColor greenColor];
+    } completion:^(BOOL finished)
+     {
+         NSLog(@"Hello");
+     }];
+
+}
+
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
@@ -63,6 +113,7 @@ static NSString* SEG_THREE = @"transit";
                                     transportationType:self.transportationType];
 
     __unsafe_unretained typeof(self) weakSelf = self;
+
     [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:^(NSError* error)
     {
         if (error)
