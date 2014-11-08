@@ -17,15 +17,16 @@ NSString *const SIAlertViewDidDismissNotification = @"SIAlertViewDidDismissNotif
 
 #define DEBUG_LAYOUT 0
 
-#define MESSAGE_MIN_LINE_COUNT 3
+#define MESSAGE_MIN_LINE_COUNT 2
 #define MESSAGE_MAX_LINE_COUNT 5
 #define GAP 10
 #define CANCEL_BUTTON_PADDING_TOP 5
 #define CONTENT_PADDING_LEFT 10
-#define CONTENT_PADDING_TOP 12
+#define CONTENT_PADDING_TOP 10
 #define CONTENT_PADDING_BOTTOM 10
 #define BUTTON_HEIGHT 44
-#define CONTAINER_WIDTH 300
+//#define CONTAINER_WIDTH 350
+static NSUInteger CONTAINER_WIDTH;
 
 const UIWindowLevel UIWindowLevelSIAlert = 1996.0;  // don't overlap system's alert
 const UIWindowLevel UIWindowLevelSIAlertBackground = 1985.0; // below the alert window
@@ -97,7 +98,6 @@ static SIAlertView *__si_alert_current_view;
 
 - (void)drawRect:(CGRect)rect
 {
-    //TODO: creating background styles
     CGContextRef context = UIGraphicsGetCurrentContext();
     switch (self.style) {
         case SIAlertViewBackgroundStyleGradient:
@@ -242,7 +242,10 @@ static SIAlertView *__si_alert_current_view;
 {
     if (self != [SIAlertView class])
         return;
-    
+
+    CONTAINER_WIDTH = [[UIApplication sharedApplication].windows[0] size].width;
+
+#pragma mark TODO:setting appearance properties
     SIAlertView *appearance = [self appearance];
     appearance.viewBackgroundColor = [UIColor whiteColor];
     appearance.titleColor = [UIColor blackColor];
@@ -318,6 +321,7 @@ static SIAlertView *__si_alert_current_view;
                                                                              andStyle:[SIAlertView currentAlertView].backgroundStyle];
         [__si_alert_background_window makeKeyAndVisible];
         __si_alert_background_window.alpha = 0;
+#pragma mark - TODO show background window
         [UIView animateWithDuration:0.3
                          animations:^{
                              __si_alert_background_window.alpha = 1;
@@ -332,6 +336,7 @@ static SIAlertView *__si_alert_current_view;
         __si_alert_background_window = nil;
         return;
     }
+#pragma mark - TODO: hiding background window
     [UIView animateWithDuration:0.3
                      animations:^{
                          __si_alert_background_window.alpha = 0;
@@ -375,7 +380,6 @@ static SIAlertView *__si_alert_current_view;
     
     self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
 #ifdef __IPHONE_7_0
-#pragma mark Setting window tint
     if ([self.oldKeyWindow respondsToSelector:@selector(setTintAdjustmentMode:)]) { // for iOS 7
         self.oldTintAdjustmentMode = self.oldKeyWindow.tintAdjustmentMode;
         self.oldKeyWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
@@ -573,6 +577,7 @@ static SIAlertView *__si_alert_current_view;
             break;
         case SIAlertViewTransitionStyleFade:
         {
+#pragma mark - TODO fade animation
             self.containerView.alpha = 0;
             [UIView animateWithDuration:0.3
                              animations:^{
@@ -588,13 +593,24 @@ static SIAlertView *__si_alert_current_view;
         case SIAlertViewTransitionStyleBounce:
         {
             CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-            animation.values = @[@(0.01), @(1.2), @(0.9), @(1)];
-            animation.keyTimes = @[@(0), @(0.4), @(0.6), @(1)];
+            animation.values = @[@(0.01), @(1)]; //@(1.2), @(0.9), Old center values
+            animation.keyTimes = @[@(0), @(1)]; //@(0.4), @(0.6), Old center keytimes
             animation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear], [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear], [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-            animation.duration = 0.5;
+            animation.duration = 0.2;
             animation.delegate = self;
             [animation setValue:completion forKey:@"handler"];
             [self.containerView.layer addAnimation:animation forKey:@"bouce"];
+
+            self.containerView.alpha = 0;
+            [UIView animateWithDuration:0.4
+                             animations:^{
+                                 self.containerView.alpha = 1;
+                             }
+                             completion:^(BOOL finished) {
+                                 if (completion) {
+                                     completion();
+                                 }
+                             }];
         }
             break;
         case SIAlertViewTransitionStyleDropDown:
@@ -668,15 +684,27 @@ static SIAlertView *__si_alert_current_view;
         case SIAlertViewTransitionStyleBounce:
         {
             CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-            animation.values = @[@(1), @(1.2), @(0.01)];
-            animation.keyTimes = @[@(0), @(0.4), @(1)];
+            animation.values = @[@(1), @(0.01)]; // @(1.2), Old center value
+            animation.keyTimes = @[@(0), @(1)]; // @(0.4), Old center keyTime
             animation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut], [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
-            animation.duration = 0.35;
+            animation.duration = 0.3;
             animation.delegate = self;
             [animation setValue:completion forKey:@"handler"];
             [self.containerView.layer addAnimation:animation forKey:@"bounce"];
             
             self.containerView.transform = CGAffineTransformMakeScale(0.01, 0.01);
+
+            {
+                [UIView animateWithDuration:0.15
+                                 animations:^{
+                                     self.containerView.alpha = 0;
+                                 }
+                                 completion:^(BOOL finished) {
+                                     if (completion) {
+                                         completion();
+                                     }
+                                 }];
+            }
         }
             break;
         case SIAlertViewTransitionStyleDropDown:
@@ -731,7 +759,7 @@ static SIAlertView *__si_alert_current_view;
 #if DEBUG_LAYOUT
     NSLog(@"%@, %@", self, NSStringFromSelector(_cmd));
 #endif
-    
+#pragma mark - TODO: alert sizing?
     CGFloat height = [self preferredHeight];
     CGFloat left = (self.bounds.size.width - CONTAINER_WIDTH) * 0.5;
     CGFloat top = (self.bounds.size.height - height) * 0.5;
@@ -976,6 +1004,7 @@ static SIAlertView *__si_alert_current_view;
 
 - (UIButton *)buttonForItemIndex:(NSUInteger)index
 {
+#pragma mark - TODO button setup
     SIAlertItem *item = self.items[index];
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.tag = index;

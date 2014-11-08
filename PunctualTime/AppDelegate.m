@@ -114,14 +114,14 @@
     if (application.applicationState == UIApplicationStateActive)
     {
         SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Notification Received"
-                                                         andMessage:@"Check Notification Center"];
-        alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
-        alertView.buttonsListStyle = SIAlertViewButtonsListStyleRows;
+                                                         andMessage:@"Choose a snooze time"];
         alertView.cornerRadius = 0.0;
         alertView.shadowRadius = 0.0;
+        alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
+        alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
 
         [alertView addButtonWithTitle:@"Snooze1"
-                                 type:SIAlertViewButtonTypeDefault
+                                 type:SIAlertViewButtonTypeCancel
                               handler:^(SIAlertView *alert) {
                                   NSLog(@"Button1 Clicked");
                               }];
@@ -130,9 +130,6 @@
                               handler:^(SIAlertView *alert) {
                                   NSLog(@"Button2 Clicked");
                               }];
-
-        alertView.transitionStyle = SIAlertViewTransitionStyleFade;
-        
         [alertView show];
     }
 }
