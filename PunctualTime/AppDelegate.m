@@ -10,10 +10,13 @@
 #import "Event.h"
 #import "EventController.h"
 #import "Constants.h"
+#import "SIAlertView.h"
 
 @interface AppDelegate ()
 
 @property EventController* sharedEventController;
+@property UIWindow* notificationWindow;
+@property UIVisualEffectView* blurView;
 
 @end
 
@@ -71,7 +74,8 @@
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     int counter = 0;
-    [application cancelAllLocalNotifications];
+    [application cancelAllLocalNotifications]; // We're going to recreate them
+
     if (self.sharedEventController.events.count > 0)
     {
         for (Event *event in self.sharedEventController.events)
@@ -82,19 +86,17 @@
                 {
                     NSLog(@"Background Fetch error: %@", error.userInfo);
                 }
+
+                NSLog(@"Name: %@",event.eventName);
+                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
+                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
+
                 if (counter+1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
                 {
-                    NSLog(@"Name: %@",event.eventName);
-                    NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-                    NSLog(@"Notification Category: %@",event.currentNotificationCategory);
                     NSLog(@"Events have been refreshed %d times",counter+1);
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }];
-
-            NSLog(@"Name: %@",event.eventName);
-            NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-            NSLog(@"Notification Category: %@",event.currentNotificationCategory);
             counter++;
         }
     }
@@ -107,6 +109,34 @@
 
 #pragma mark - Local notifications
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if (application.applicationState == UIApplicationStateActive)
+    {
+        SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Notification Received"
+                                                         andMessage:@"Check Notification Center"];
+        alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
+        alertView.buttonsListStyle = SIAlertViewButtonsListStyleRows;
+        alertView.cornerRadius = 0.0;
+        alertView.shadowRadius = 0.0;
+
+        [alertView addButtonWithTitle:@"Snooze1"
+                                 type:SIAlertViewButtonTypeDefault
+                              handler:^(SIAlertView *alert) {
+                                  NSLog(@"Button1 Clicked");
+                              }];
+        [alertView addButtonWithTitle:@"Snooze2"
+                                 type:SIAlertViewButtonTypeCancel
+                              handler:^(SIAlertView *alert) {
+                                  NSLog(@"Button2 Clicked");
+                              }];
+
+        alertView.transitionStyle = SIAlertViewTransitionStyleFade;
+        
+        [alertView show];
+    }
+}
+
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
     Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
@@ -115,7 +145,7 @@
     {
         if ([notification.userInfo[@"Event"] isEqualToString:schedulingEvent.uniqueID])
         {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification - iOS 8 bug?
+            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
         }
     }
 

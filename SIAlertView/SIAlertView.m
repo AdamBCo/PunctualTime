@@ -97,6 +97,7 @@ static SIAlertView *__si_alert_current_view;
 
 - (void)drawRect:(CGRect)rect
 {
+    //TODO: creating background styles
     CGContextRef context = UIGraphicsGetCurrentContext();
     switch (self.style) {
         case SIAlertViewBackgroundStyleGradient:
@@ -109,7 +110,7 @@ static SIAlertView *__si_alert_current_view;
             CGColorSpaceRelease(colorSpace);
             
             CGPoint center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
-            CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height) ;
+            CGFloat radius = MIN(self.bounds.size.width, self.bounds.size.height);
             CGContextDrawRadialGradient (context, gradient, center, 0, center, radius, kCGGradientDrawsAfterEndLocation);
             CGGradientRelease(gradient);
             break;
@@ -118,6 +119,13 @@ static SIAlertView *__si_alert_current_view;
         {
             [[UIColor colorWithWhite:0 alpha:0.5] set];
             CGContextFillRect(context, self.bounds);
+            break;
+        }
+        case SIAlertViewBackgroundStyleBlur:
+        {
+            UIVisualEffectView* blurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+            blurView.frame = self.frame;
+            [self addSubview:blurView];
             break;
         }
     }
@@ -367,6 +375,7 @@ static SIAlertView *__si_alert_current_view;
     
     self.oldKeyWindow = [[UIApplication sharedApplication] keyWindow];
 #ifdef __IPHONE_7_0
+#pragma mark Setting window tint
     if ([self.oldKeyWindow respondsToSelector:@selector(setTintAdjustmentMode:)]) { // for iOS 7
         self.oldTintAdjustmentMode = self.oldKeyWindow.tintAdjustmentMode;
         self.oldKeyWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
