@@ -20,7 +20,7 @@ static NSString* SEG_ONE = @"walking";
 static NSString* SEG_TW0 = @"bicycling";
 static NSString* SEG_THREE = @"transit";
 
-@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -40,6 +40,13 @@ static NSString* SEG_THREE = @"transit";
 @property MKPointAnnotation *mapAnnotation;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property BOOL isMapExpanded;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
+
+@property UIView *blackView;
+
 
 @end
 
@@ -55,21 +62,25 @@ static NSString* SEG_THREE = @"transit";
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventController = [EventController sharedEventController];
-    self.nameTextField.delegate = self;
+    self.textView.delegate = self;
     self.transportationType = SEG_ZERO;
 
-//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, [[UIScreen mainScreen] applicationFrame].size.height)];
-//    imageView.image = [UIImage imageNamed:@"blur"];
-//    [self.scrollView addSubview:imageView];
 
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
     blurView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height)+400);
-    [self.scrollView addSubview:blurView];
+    [self.view addSubview:blurView];
 
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
 
+    self.blackView = [[UIView alloc] init];
+    self.blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    self.blackView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height));
+    [self.blackView addGestureRecognizer:tap];
 
 }
+
+
 
 -(void)viewWillAppear:(BOOL)animated{
 
@@ -84,10 +95,13 @@ static NSString* SEG_THREE = @"transit";
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
         [self.mapView setRegion:mapRegion animated: NO];
+        self.isMapExpanded = YES;
+        [self expandMap];
 
 
-    } else {
-        self.mapView.frame = 
+    } else if (self.locationInfo.name.length == 0) {
+        self.isMapExpanded = NO;
+        [self expandMap];
     }
 
     self.view.backgroundColor = [UIColor redColor];
@@ -100,6 +114,49 @@ static NSString* SEG_THREE = @"transit";
      {
          NSLog(@"Hello");
      }];
+
+}
+
+- (void) expandMap{
+    [UIView animateWithDuration:1.0
+                          delay:0.2
+                        options:UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         if(self.isMapExpanded == YES){
+                             self.mapViewHeightConstraint.constant = 115;
+                             [self.view layoutIfNeeded];
+
+                         }
+                         else if(self.isMapExpanded == NO){
+                             self.mapViewHeightConstraint.constant = 0;
+
+                         }
+                     }
+                     completion:nil];
+}
+
+
+
+-(void)textViewDidBeginEditing:(UITextView *)textView{
+        [UIView animateWithDuration:1.0
+                              delay:0.2
+                            options:UIViewAnimationOptionAllowUserInteraction
+                         animations:^{
+
+                                [self.scrollView addSubview:self.blackView];
+                                [self.blackView addSubview:self.textView];
+                                self.textView.backgroundColor = [UIColor whiteColor];
+                                 self.scrollView.scrollEnabled = NO;
+                                [self.view layoutIfNeeded];
+
+                         }
+                         completion:nil];
+}
+
+-(void)dismissKeyboard {
+    [self.textView resignFirstResponder];
+    [self.blackView removeFromSuperview];
+    [self.view layoutIfNeeded];
 
 }
 
