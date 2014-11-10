@@ -128,6 +128,12 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         NSString* firstButtonNewCategory;
         NSString* secondButtonText;
         NSString* inertButtonText;
+        if ([notification.category isEqualToString:SIXTY_MINUTE_WARNING])
+        {
+            firstButtonText = THIRTY_MINUTE_BUTTON;
+            firstButtonNewCategory = THIRTY_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
         if ([notification.category isEqualToString:THIRTY_MINUTE_WARNING])
         {
             firstButtonText = FIFTEEN_MINUTE_BUTTON;
@@ -206,6 +212,17 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
 
+    if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
+    {
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
+         {
+             if (error) // This shouldn't ever happen
+             {
+                 NSLog(@"Error snoozing: %@", error.userInfo);
+             }
+             completionHandler();
+         }];
+    }
     if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
     {
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error)
