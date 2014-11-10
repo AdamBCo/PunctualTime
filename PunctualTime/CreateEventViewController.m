@@ -35,6 +35,7 @@ static NSString* SEG_THREE = @"transit";
 @property LocationInfo *locationInfo;
 @property EventController *sharedEventController;
 @property LocationSearchController *locationSearchController;
+@property NSString* initialNotificationCategory;
 
 @end
 
@@ -62,8 +63,7 @@ static NSString* SEG_THREE = @"transit";
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType];
 
-    __unsafe_unretained typeof(self) weakSelf = self;
-    [newEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
+    [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
     {
         if (error)
         {
@@ -72,8 +72,8 @@ static NSString* SEG_THREE = @"transit";
         }
         else
         {
-            [weakSelf.sharedEventController addEvent:newEvent];
-            [weakSelf resetTextFields];
+            [self.sharedEventController addEvent:newEvent];
+            [self resetTextFields];
         }
     }];
 }
@@ -111,6 +111,32 @@ static NSString* SEG_THREE = @"transit";
             break;
 
         default:
+            break;
+    }
+}
+
+#warning hook up notification buttons from storyboard and set tags appropriately
+- (IBAction)onNotificationButtonPressed:(UIButton *)button
+{
+    switch (button.tag)
+    {
+        case 0:
+            self.initialNotificationCategory = SIXTY_MINUTE_WARNING;
+            break;
+        case 1:
+            self.initialNotificationCategory = THIRTY_MINUTE_WARNING;
+            break;
+        case 2:
+            self.initialNotificationCategory = FIFTEEN_MINUTE_WARNING;
+            break;
+        case 3:
+            self.initialNotificationCategory = TEN_MINUTE_WARNING;
+            break;
+        case 4:
+            self.initialNotificationCategory = FIVE_MINUTE_WARNING;
+            break;
+        default:
+            self.initialNotificationCategory = nil; // Zero minute warning
             break;
     }
 }
