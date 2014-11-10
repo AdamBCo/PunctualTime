@@ -124,16 +124,19 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
         // Setup the buttons to be used in the custom notification
         NSString* firstButtonText;
+        NSString* firstButtonNewCategory;
         NSString* secondButtonText;
         NSString* inertButtonText;
         if ([notification.category isEqualToString:kThirtyMinuteWarning])
         {
             firstButtonText = FIFTEEN_MINUTE_BUTTON;
+            firstButtonNewCategory = kFifteenMinuteWarning;
             secondButtonText = ZERO_MINUTE_BUTTON;
         }
         else if ([notification.category isEqualToString:kFifteenMinuteWarning])
         {
             firstButtonText = FIVE_MINUTE_BUTTON;
+            firstButtonNewCategory = kFiveMinuteWarning;
             secondButtonText = ZERO_MINUTE_BUTTON;
         }
         else if ([notification.category isEqualToString:kFiveMinuteWarning])
@@ -153,42 +156,42 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
         alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
 
-        if (firstButtonText) // This button will always create a new notification
+        if (firstButtonText) // This button will always create a new notification with a category
         {
             [alertView addButtonWithTitle:firstButtonText
-                                     type:SIAlertViewButtonTypeCancel
+                                     type:SIAlertViewButtonTypeDefault
                                   handler:^(SIAlertView *alert) {
-                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:notification.category completion:^(NSError* error)
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:firstButtonNewCategory completion:^(NSError* error)
                                        {
                                            if (error) // This shouldn't ever happen
                                            {
                                                NSLog(@"Error snoozing: %@", error.userInfo);
                                            }
-                                           [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
                                        }];
+                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
-        if (secondButtonText) // This button will always create a new notification
+        if (secondButtonText) // This button will always create a new notification without a category
         {
             [alertView addButtonWithTitle:secondButtonText
-                                     type:SIAlertViewButtonTypeCancel
+                                     type:SIAlertViewButtonTypeDefault
                                   handler:^(SIAlertView *alert) {
-                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:notification.category completion:^(NSError* error)
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
                                        {
                                            if (error) // This shouldn't ever happen
                                            {
                                                NSLog(@"Error snoozing: %@", error.userInfo);
                                            }
-                                           [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
                                        }];
+                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
         if (inertButtonText) // This button will never create a new notification
         {
             [alertView addButtonWithTitle:inertButtonText
-                                     type:SIAlertViewButtonTypeDestructive
+                                     type:SIAlertViewButtonTypeCancel
                                   handler:^(SIAlertView *alert){
-                                      [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
+                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
         
@@ -200,7 +203,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 {
     Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
 
-    [self cancelNotifcationForEvent:schedulingEvent]; // Dismiss the notification on action tapped - iOS 8 bug?
+    [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
 
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
@@ -273,17 +276,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
-}
-
-- (void)cancelNotifcationForEvent:(Event *)event
-{
-    for (UILocalNotification* notification in [UIApplication sharedApplication].scheduledLocalNotifications)
-    {
-        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
-        {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification];
-        }
-    }
 }
 
 @end
