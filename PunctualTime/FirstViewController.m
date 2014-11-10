@@ -56,7 +56,7 @@
         self.timeTillEvent.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
     }
     else{
-        NSLog(@"hello people");
+//        NSLog(@"hello people");
     }
 }
 
