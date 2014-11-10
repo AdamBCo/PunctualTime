@@ -12,6 +12,7 @@
 #import "Constants.h"
 #import "SIAlertView.h"
 
+static NSString* THIRTY_MINUTE_BUTTON = @"T-30min";
 static NSString* FIFTEEN_MINUTE_BUTTON = @"T-15min";
 static NSString* FIVE_MINUTE_BUTTON = @"T-5min";
 static NSString* ZERO_MINUTE_BUTTON = @"T-0min";
@@ -245,37 +246,47 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (NSSet *)createNotificationCategories
 {
-    UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    UIMutableUserNotificationAction* thirtyMinuteAction = [UIMutableUserNotificationAction new];
+    thirtyMinuteAction.identifier = THIRTY_MINUTE_ACTION;
+    thirtyMinuteAction.title = THIRTY_MINUTE_BUTTON;
+    thirtyMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    thirtyMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationAction* fifteenMinuteAction = [UIMutableUserNotificationAction new];
     fifteenMinuteAction.identifier = FIFTEEN_MINUTE_ACTION;
     fifteenMinuteAction.title = FIFTEEN_MINUTE_BUTTON;
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    UIMutableUserNotificationAction* fiveMinuteAction = [UIMutableUserNotificationAction new];
     fiveMinuteAction.identifier = FIVE_MINUTE_ACTION;
     fiveMinuteAction.title = FIVE_MINUTE_BUTTON;
     fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fiveMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
+    UIMutableUserNotificationAction* zeroMinuteAction = [UIMutableUserNotificationAction new];
     zeroMinuteAction.identifier = ZERO_MINUTE_ACTION;
     zeroMinuteAction.title = ZERO_MINUTE_BUTTON;
     zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     zeroMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationCategory* thirtyMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    UIMutableUserNotificationCategory* sixtyMinuteWarning = [UIMutableUserNotificationCategory new];
+    sixtyMinuteWarning.identifier = SIXTY_MINUTE_WARNING;
+    [sixtyMinuteWarning setActions:@[thirtyMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* thirtyMinuteWarning = [UIMutableUserNotificationCategory new];
     thirtyMinuteWarning.identifier = THIRTY_MINUTE_WARNING;
     [thirtyMinuteWarning setActions:@[fifteenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    UIMutableUserNotificationCategory* fifteenMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    UIMutableUserNotificationCategory* fifteenMinuteWarning = [UIMutableUserNotificationCategory new];
     fifteenMinuteWarning.identifier = FIFTEEN_MINUTE_WARNING;
     [fifteenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    UIMutableUserNotificationCategory* fiveMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
+    UIMutableUserNotificationCategory* fiveMinuteWarning = [UIMutableUserNotificationCategory new];
     fiveMinuteWarning.identifier = FIVE_MINUTE_WARNING;
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
+    return [NSSet setWithObjects:sixtyMinuteWarning, thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
 }
 
 @end
