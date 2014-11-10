@@ -167,8 +167,8 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                            {
                                                NSLog(@"Error snoozing: %@", error.userInfo);
                                            }
+                                           [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
-                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
         if (secondButtonText) // This button will always create a new notification without a category
@@ -182,15 +182,15 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                            {
                                                NSLog(@"Error snoozing: %@", error.userInfo);
                                            }
+                                           [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
-                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
         if (inertButtonText) // This button will never create a new notification
         {
             [alertView addButtonWithTitle:inertButtonText
                                      type:SIAlertViewButtonTypeCancel
-                                  handler:^(SIAlertView *alert){
+                                  handler:^(SIAlertView *alert) {
                                       [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
