@@ -14,6 +14,7 @@
 
 static NSString* THIRTY_MINUTE_BUTTON = @"T-30min";
 static NSString* FIFTEEN_MINUTE_BUTTON = @"T-15min";
+static NSString* TEN_MINUTE_BUTTON = @"T-10min";
 static NSString* FIVE_MINUTE_BUTTON = @"T-5min";
 static NSString* ZERO_MINUTE_BUTTON = @"T-0min";
 static NSString* STOP_BUTTON = @"Stop reminders";
@@ -134,13 +135,19 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
             firstButtonNewCategory = THIRTY_MINUTE_WARNING;
             secondButtonText = ZERO_MINUTE_BUTTON;
         }
-        if ([notification.category isEqualToString:THIRTY_MINUTE_WARNING])
+        else if ([notification.category isEqualToString:THIRTY_MINUTE_WARNING])
         {
             firstButtonText = FIFTEEN_MINUTE_BUTTON;
             firstButtonNewCategory = FIFTEEN_MINUTE_WARNING;
             secondButtonText = ZERO_MINUTE_BUTTON;
         }
         else if ([notification.category isEqualToString:FIFTEEN_MINUTE_WARNING])
+        {
+            firstButtonText = TEN_MINUTE_BUTTON;
+            firstButtonNewCategory = TEN_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:TEN_MINUTE_WARNING])
         {
             firstButtonText = FIVE_MINUTE_BUTTON;
             firstButtonNewCategory = FIVE_MINUTE_WARNING;
@@ -157,6 +164,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         }
 
         // Create the custom notification to present to the user
+#warning need to remove "slide.." text from message body
         SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Hey!"
                                                          andMessage:notification.alertBody];
 
@@ -212,7 +220,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
 
-    if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
+    if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a thirty minute local notification
     {
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
          {
@@ -223,7 +231,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
              completionHandler();
          }];
     }
-    if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
+    else if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
     {
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error)
         {
@@ -233,6 +241,17 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
             }
             completionHandler();
         }];
+    }
+    else if ([identifier isEqualToString:TEN_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
+    {
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error)
+         {
+             if (error) // This shouldn't ever happen
+             {
+                 NSLog(@"Error snoozing: %@", error.userInfo);
+             }
+             completionHandler();
+         }];
     }
     else if ([identifier isEqualToString:FIVE_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
@@ -275,6 +294,12 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
+    UIMutableUserNotificationAction* tenMinuteAction = [UIMutableUserNotificationAction new];
+    tenMinuteAction.identifier = TEN_MINUTE_ACTION;
+    tenMinuteAction.title = TEN_MINUTE_BUTTON;
+    tenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    tenMinuteAction.authenticationRequired = NO;
+
     UIMutableUserNotificationAction* fiveMinuteAction = [UIMutableUserNotificationAction new];
     fiveMinuteAction.identifier = FIVE_MINUTE_ACTION;
     fiveMinuteAction.title = FIVE_MINUTE_BUTTON;
@@ -297,13 +322,17 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     UIMutableUserNotificationCategory* fifteenMinuteWarning = [UIMutableUserNotificationCategory new];
     fifteenMinuteWarning.identifier = FIFTEEN_MINUTE_WARNING;
-    [fifteenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+    [fifteenMinuteWarning setActions:@[tenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* tenMinuteWarning = [UIMutableUserNotificationCategory new];
+    tenMinuteWarning.identifier = TEN_MINUTE_WARNING;
+    [tenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     UIMutableUserNotificationCategory* fiveMinuteWarning = [UIMutableUserNotificationCategory new];
     fiveMinuteWarning.identifier = FIVE_MINUTE_WARNING;
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    return [NSSet setWithObjects:sixtyMinuteWarning, thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
+    return [NSSet setWithObjects:sixtyMinuteWarning, thirtyMinuteWarning, fifteenMinuteWarning, tenMinuteWarning, fiveMinuteWarning, nil];
 }
 
 @end
