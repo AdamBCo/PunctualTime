@@ -75,7 +75,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     {
         if (!error || notificationWasSnoozed)
         {
-            if (notificationWasSnoozed && error) // Couldn't get new ETA, so create new notification from last ETA result
+            if (notificationWasSnoozed && error) // Couldn't get new travel time, so create new notification from last travel time result
             {
                 travelTime = self.lastTravelTime;
             }
@@ -110,14 +110,14 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
                 return;
             }
 
-            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to snooze", self.eventName, minuteWarning];
             newNotification.category = categoryID;
             self.lastNotificationDate = newNotification.fireDate;
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
             complete(nil);
         }
-        else  // There was a problem getting a new ETA so recreate the last notification
+        else  // There was a problem getting a new travel time so recreate the previously schedueled notification
         {
             if (self.lastNotificationDate)
             {

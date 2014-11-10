@@ -12,6 +12,12 @@
 #import "Constants.h"
 #import "SIAlertView.h"
 
+static NSString* FIFTEEN_MINUTE_BUTTON = @"T-15min";
+static NSString* FIVE_MINUTE_BUTTON = @"T-5min";
+static NSString* ZERO_MINUTE_BUTTON = @"T-0min";
+static NSString* STOP_BUTTON = @"Stop reminders";
+static NSString* FINAL_BUTTON = @"I'm leaving!";
+
 @interface AppDelegate ()
 
 @property EventController* sharedEventController;
@@ -111,25 +117,81 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    if (application.applicationState == UIApplicationStateActive)
+    if (application.applicationState == UIApplicationStateActive) // The app is in the foreground, so recreate the notification
     {
-        SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Notification Received"
-                                                         andMessage:@"Choose a snooze time"];
+        // Get the Event object that scheduled the notification
+        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+
+        // Setup the buttons to be used in the custom notification
+        NSString* firstButtonText;
+        NSString* secondButtonText;
+        NSString* inertButtonText;
+        if ([notification.category isEqualToString:kThirtyMinuteWarning])
+        {
+            firstButtonText = FIFTEEN_MINUTE_BUTTON;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:kFifteenMinuteWarning])
+        {
+            firstButtonText = FIVE_MINUTE_BUTTON;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:kFiveMinuteWarning])
+        {
+            firstButtonText = ZERO_MINUTE_BUTTON;
+            inertButtonText = STOP_BUTTON;
+        }
+        else // This is the final warning
+        {
+            inertButtonText = FINAL_BUTTON;
+        }
+
+        // Create the custom notification to present to the user
+        SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Hey!"
+                                                         andMessage:notification.alertBody];
         alertView.cornerRadius = 0.0;
         alertView.shadowRadius = 0.0;
         alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
         alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
 
-        [alertView addButtonWithTitle:@"Snooze1"
-                                 type:SIAlertViewButtonTypeCancel
-                              handler:^(SIAlertView *alert) {
-                                  NSLog(@"Button1 Clicked");
-                              }];
-        [alertView addButtonWithTitle:@"Snooze2"
-                                 type:SIAlertViewButtonTypeCancel
-                              handler:^(SIAlertView *alert) {
-                                  NSLog(@"Button2 Clicked");
-                              }];
+        if (firstButtonText) // This button will always create a new notification
+        {
+            [alertView addButtonWithTitle:firstButtonText
+                                     type:SIAlertViewButtonTypeCancel
+                                  handler:^(SIAlertView *alert) {
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:notification.category completion:^(NSError* error)
+                                       {
+                                           if (error) // This shouldn't ever happen
+                                           {
+                                               NSLog(@"Error snoozing: %@", error.userInfo);
+                                           }
+                                           [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
+                                       }];
+                                  }];
+        }
+        if (secondButtonText) // This button will always create a new notification
+        {
+            [alertView addButtonWithTitle:secondButtonText
+                                     type:SIAlertViewButtonTypeCancel
+                                  handler:^(SIAlertView *alert) {
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:notification.category completion:^(NSError* error)
+                                       {
+                                           if (error) // This shouldn't ever happen
+                                           {
+                                               NSLog(@"Error snoozing: %@", error.userInfo);
+                                           }
+                                           [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
+                                       }];
+                                  }];
+        }
+        if (inertButtonText) // This button will never create a new notification
+        {
+            [alertView addButtonWithTitle:inertButtonText
+                                     type:SIAlertViewButtonTypeDestructive
+                                  handler:^(SIAlertView *alert){
+                                      [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
+                                  }];
+        }
         [alertView show];
     }
 }
@@ -138,13 +200,7 @@
 {
     Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
 
-    for (UILocalNotification* notification in [UIApplication sharedApplication].scheduledLocalNotifications)
-    {
-        if ([notification.userInfo[@"Event"] isEqualToString:schedulingEvent.uniqueID])
-        {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
-        }
-    }
+    [self cancelNotifcationForEvent:schedulingEvent]; // Dismiss the notification on action tapped - iOS 8 bug?
 
     if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
     {
@@ -184,23 +240,23 @@
 
 #pragma mark - Private methods
 
-- (NSSet *)createNotificationCategories // Bless this mess
+- (NSSet *)createNotificationCategories
 {
     UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     fifteenMinuteAction.identifier = kFifteenMinuteAction;
-    fifteenMinuteAction.title = @"T-15min";
+    fifteenMinuteAction.title = FIFTEEN_MINUTE_BUTTON;
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     fiveMinuteAction.identifier = kFiveMinuteAction;
-    fiveMinuteAction.title = @"T-5min";
+    fiveMinuteAction.title = FIVE_MINUTE_BUTTON;
     fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fiveMinuteAction.authenticationRequired = NO;
 
     UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
     zeroMinuteAction.identifier = kZeroMinuteAction;
-    zeroMinuteAction.title = @"T-0min";
+    zeroMinuteAction.title = ZERO_MINUTE_BUTTON;
     zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     zeroMinuteAction.authenticationRequired = NO;
 
@@ -217,6 +273,17 @@
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
+}
+
+- (void)cancelNotifcationForEvent:(Event *)event
+{
+    for (UILocalNotification* notification in [UIApplication sharedApplication].scheduledLocalNotifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
+        {
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+        }
+    }
 }
 
 @end
