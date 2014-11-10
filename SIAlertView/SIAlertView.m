@@ -256,8 +256,8 @@ static SIAlertView *__si_alert_current_view;
     appearance.buttonColor = [UIColor colorWithWhite:0.4 alpha:1];
     appearance.cancelButtonColor = [UIColor colorWithWhite:0.3 alpha:1];
     appearance.destructiveButtonColor = [UIColor whiteColor];
-    appearance.cornerRadius = 2;
-    appearance.shadowRadius = 8;
+    appearance.cornerRadius = 0;
+    appearance.shadowRadius = 0;
 }
 
 - (id)init
@@ -383,7 +383,7 @@ static SIAlertView *__si_alert_current_view;
 //    if ([self.oldKeyWindow respondsToSelector:@selector(setTintAdjustmentMode:)]) { // for iOS 7
 //        self.oldTintAdjustmentMode = self.oldKeyWindow.tintAdjustmentMode;
 //        self.oldKeyWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
-    }
+//    }
 #endif
 
     if (![[SIAlertView sharedQueue] containsObject:self]) {
