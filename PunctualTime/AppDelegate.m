@@ -164,10 +164,8 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         }
 
         // Create the custom notification to present to the user
-#warning need to remove "slide.." text from message body
         SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Hey!"
-                                                         andMessage:notification.alertBody];
-
+                                                         andMessage:[self correctedMessageBodyFromString:notification.alertBody]];
         alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
         alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
 
@@ -333,6 +331,24 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
     return [NSSet setWithObjects:sixtyMinuteWarning, thirtyMinuteWarning, fifteenMinuteWarning, tenMinuteWarning, fiveMinuteWarning, nil];
+}
+
+- (NSString *)correctedMessageBodyFromString:(NSString*)oldMessageBody
+{
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    if (!error)
+    {
+        NSString* newMessageBody = [regex stringByReplacingMatchesInString:oldMessageBody
+                                                                   options:0
+                                                                     range:NSMakeRange(0, oldMessageBody.length)
+                                                              withTemplate:@"Snooze?"];
+        return newMessageBody;
+    }
+
+    return @"";
 }
 
 @end

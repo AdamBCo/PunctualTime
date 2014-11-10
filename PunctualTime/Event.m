@@ -120,7 +120,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
                 return;
             }
 
-            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to snooze", self.eventName, minuteWarning];
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! %@", self.eventName, minuteWarning, NOTIFICATION_TRAILING_TEXT];
             newNotification.category = categoryID;
             self.lastNotificationDate = newNotification.fireDate;
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
