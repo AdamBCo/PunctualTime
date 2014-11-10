@@ -192,10 +192,10 @@
 		E910C8201A0D4E7700CDD64D /* SIAlertView */ = {
 			isa = PBXGroup;
 			children = (
-				E910C8221A0D4E7700CDD64D /* SIAlertView.h */,
-				E910C8231A0D4E7700CDD64D /* SIAlertView.m */,
-				E910C8241A0D4E7700CDD64D /* UIWindow+SIUtils.h */,
-				E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */,
+				E99132691A1148D5005FF9BA /* SIAlertView.h */,
+				E991326A1A1148D5005FF9BA /* SIAlertView.m */,
+				E991326B1A1148D5005FF9BA /* UIWindow+SIUtils.h */,
+				E991326C1A1148D5005FF9BA /* UIWindow+SIUtils.m */,
 			);
 			name = SIAlertView;
 			path = ../SIAlertView;
@@ -363,7 +363,7 @@
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
 				661078E91A044D830096479F /* EventTableViewController.m in Sources */,
-				E910C8271A0D4E7700CDD64D /* SIAlertView.m in Sources */,
+				E991326D1A1148D5005FF9BA /* SIAlertView.m in Sources */,
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,
 				66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */,
 				6649BF041A080367007B447B /* SearchTableViewController.m in Sources */,
@@ -374,7 +374,7 @@
 				6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
-				E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */,
+				E991326E1A1148D5005FF9BA /* UIWindow+SIUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
