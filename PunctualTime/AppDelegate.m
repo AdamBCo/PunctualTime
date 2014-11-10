@@ -149,8 +149,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         // Create the custom notification to present to the user
         SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Hey!"
                                                          andMessage:notification.alertBody];
-        alertView.cornerRadius = 0.0;
-        alertView.shadowRadius = 0.0;
+
         alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
         alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
 
@@ -192,6 +191,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                       [self cancelNotifcationForEvent:schedulingEvent]; // dismiss from notification center
                                   }];
         }
+        
         [alertView show];
     }
 }
