@@ -102,6 +102,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 
 -(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
+    //Add error handling
     NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=establishment|geocode&language=en&key=%@",searchWord,apiKey];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -110,18 +111,27 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         NSArray *results = [jSONresult valueForKey:@"predictions"];
-        //NSLog(@"Results %@",results.firstObject);
 
-        NSLog(@"We got %lu locations for %@.",(unsigned long)results.count,self.substring);
-        complete(results);
-
+        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
+            if (!error){
+                NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
+                NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                complete(@[@"API Error", newError]);
+                return;
+            }
+            complete(@[@"Actual Error", error]);
+            return;
+        }else{
+            complete(results);
+        }
     }];
+    
     [task resume];
 
 }
 
 -(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
-
+    //Add error handling
     NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -131,11 +141,23 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         NSArray *results = [jSONresult valueForKey:@"result"];
 
-        complete(results);
+        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
+            if (!error){
+                NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
+                NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                complete(@[@"API Error", newError]);
+                return;
+            }
+            complete(@[@"Actual Error", error]);
+            return;
+        }else{
+            complete(results);
+        }
     }];
+
     [task resume];
-    
 }
+
 
 
 
@@ -154,9 +176,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         case TableViewSectionMain:
             return self.pastSearchQueries.count;
             break;
-//        case TableVIewSectionLogo:
-//            return 1;
-//            break;
     }
 
     return 0;
@@ -177,6 +196,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
         }    break;
         case TableViewSectionMain: {
+            //this is where it broke
             NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
             NSString *placeID = [searchResult objectForKey:@"place_id"];
             [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {

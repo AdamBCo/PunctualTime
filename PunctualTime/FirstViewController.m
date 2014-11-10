@@ -9,6 +9,7 @@
 #import "FirstViewController.h"
 #import "EventController.h"
 #import "Event.h"
+#import "CircularTimer.h"
 
 @interface FirstViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
@@ -16,6 +17,8 @@
 @property EventController *sharedEventController;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
+@property CircularTimer *cirularTimer;
+
 
 @end
 
@@ -32,6 +35,21 @@
     [self.sharedEventController refreshEvents];
     self.selectedEvent = self.sharedEventController.events.firstObject;
 
+    self.cirularTimer = [[CircularTimer alloc]initWithPosition:CGPointMake(60.0f, 130.0f)
+                                                        radius:100.0
+                                                internalRadius:90.0
+                                             circleStrokeColor:[UIColor greenColor]
+                                       activeCircleStrokeColor:[UIColor redColor]
+                                                   initialDate:[NSDate date]
+                                                     finalDate:[[NSDate date]dateByAddingTimeInterval:100]
+                                                 startCallback:^{
+                                                     NSLog(@"We are good!");
+                                                 } endCallback:^{
+                                                     NSLog(@"Hello Chicago");
+                                                 }];
+
+    [self.view addSubview:self.cirularTimer];
+
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
@@ -44,7 +62,7 @@
 - (void)updateCounter{
 
     NSDate *startDate = [NSDate date];
-    NSDate *destinationDate = self.selectedEvent.desiredArrivalTime;
+    NSDate *destinationDate = [[NSDate date]dateByAddingTimeInterval:100]; //self.selectedEvent.desiredArrivalTime;
     int seconds = [destinationDate timeIntervalSinceDate: startDate];
 
     if(seconds > 0 ){

@@ -20,6 +20,7 @@ static NSString* SEG_ONE = @"walking";
 static NSString* SEG_TW0 = @"bicycling";
 static NSString* SEG_THREE = @"transit";
 
+
 @interface CreateEventViewController () <UISearchBarDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
@@ -40,12 +41,14 @@ static NSString* SEG_THREE = @"transit";
 @property MKPointAnnotation *mapAnnotation;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
+@property UITextView *animatedTextView;
 @property BOOL isMapExpanded;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
 
 @property UIView *blackView;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 
 
 @end
@@ -66,10 +69,17 @@ static NSString* SEG_THREE = @"transit";
     self.transportationType = SEG_ZERO;
 
 
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
     UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
+
+    UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:effect];
+    UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+    [vibrancyEffectView setFrame:blurView.bounds];
+
     blurView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height)+400);
-    [self.view addSubview:blurView];
+    [self.backgroundImage addSubview:blurView];
+    [blurView.contentView addSubview:vibrancyEffectView];
+
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
 
@@ -77,6 +87,13 @@ static NSString* SEG_THREE = @"transit";
     self.blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
     self.blackView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height));
     [self.blackView addGestureRecognizer:tap];
+
+
+    self.animatedTextView = [UITextView new];
+    self.animatedTextView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, 96);
+    [self.animatedTextView setFont:[UIFont systemFontOfSize:32]];
+    self.animatedTextView.backgroundColor = [UIColor whiteColor];
+    self.animatedTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 20, 20);
 
 }
 
@@ -86,19 +103,93 @@ static NSString* SEG_THREE = @"transit";
 
     [super viewWillAppear:animated];
 
-    if (self.locationInfo.name.length > 0) {
-        MKPointAnnotation *point = [MKPointAnnotation new];
-        point.coordinate = self.locationInfo.locationCoordinates;
-        [self.mapView addAnnotation:point];
+    
 
+//    self.backgroundImage.animationImages = [NSArray arrayWithObjects:
+//                                            [UIImage imageNamed:@"frame_001"],
+//                                            [UIImage imageNamed:@"frame_002"],
+//                                            [UIImage imageNamed:@"frame_003"],
+//                                            [UIImage imageNamed:@"frame_004"],
+//                                            [UIImage imageNamed:@"frame_005"],
+//                                            [UIImage imageNamed:@"frame_006"],
+//                                            [UIImage imageNamed:@"frame_007"],
+//                                            [UIImage imageNamed:@"frame_008"],
+//                                            [UIImage imageNamed:@"frame_009"],
+//                                            [UIImage imageNamed:@"frame_010"],
+//                                            [UIImage imageNamed:@"frame_011"],
+//                                            [UIImage imageNamed:@"frame_012"],
+//                                            [UIImage imageNamed:@"frame_013"],
+//                                            [UIImage imageNamed:@"frame_014"],
+//                                            [UIImage imageNamed:@"frame_015"],
+//                                            [UIImage imageNamed:@"frame_016"],
+//                                            [UIImage imageNamed:@"frame_017"],
+//                                            [UIImage imageNamed:@"frame_018"],
+//                                            [UIImage imageNamed:@"frame_019"],
+//                                            [UIImage imageNamed:@"frame_020"],
+//                                            [UIImage imageNamed:@"frame_021"],
+//                                            [UIImage imageNamed:@"frame_022"],
+//                                            [UIImage imageNamed:@"frame_023"],
+//                                            [UIImage imageNamed:@"frame_024"],
+//                                            [UIImage imageNamed:@"frame_025"],
+//                                            [UIImage imageNamed:@"frame_026"],
+//                                            [UIImage imageNamed:@"frame_027"],
+//                                            [UIImage imageNamed:@"frame_028"],
+//                                            [UIImage imageNamed:@"frame_029"],
+//                                            [UIImage imageNamed:@"frame_030"],
+//                                            [UIImage imageNamed:@"frame_031"],
+//                                            [UIImage imageNamed:@"frame_032"],
+//                                            [UIImage imageNamed:@"frame_033"],
+//                                            [UIImage imageNamed:@"frame_034"],
+//                                            [UIImage imageNamed:@"frame_035"],
+//                                            [UIImage imageNamed:@"frame_036"],
+//                                            [UIImage imageNamed:@"frame_037"],
+//                                            [UIImage imageNamed:@"frame_038"],
+//                                            [UIImage imageNamed:@"frame_039"],
+//                                            [UIImage imageNamed:@"frame_040"],
+//                                            [UIImage imageNamed:@"frame_041"],
+//                                            [UIImage imageNamed:@"frame_042"],
+//                                            [UIImage imageNamed:@"frame_043"],
+//                                            [UIImage imageNamed:@"frame_044"],
+//                                            [UIImage imageNamed:@"frame_045"],
+//                                            [UIImage imageNamed:@"frame_046"],
+//                                            [UIImage imageNamed:@"frame_047"],
+//                                            [UIImage imageNamed:@"frame_048"],
+//                                            [UIImage imageNamed:@"frame_049"],
+//                                            [UIImage imageNamed:@"frame_050"],
+//                                            [UIImage imageNamed:@"frame_051"],
+//                                            [UIImage imageNamed:@"frame_052"],
+//                                            [UIImage imageNamed:@"frame_053"],
+//                                            [UIImage imageNamed:@"frame_054"],
+//                                            [UIImage imageNamed:@"frame_055"],
+//                                            [UIImage imageNamed:@"frame_056"],
+//                                            [UIImage imageNamed:@"frame_057"],
+//                                            [UIImage imageNamed:@"frame_058"],
+//                                            [UIImage imageNamed:@"frame_059"],
+//                                            [UIImage imageNamed:@"frame_060"],
+//                                            [UIImage imageNamed:@"frame_061"],
+//                                            [UIImage imageNamed:@"frame_062"],
+//                                            [UIImage imageNamed:@"frame_063"],
+//                                            [UIImage imageNamed:@"frame_064"],
+//                                            [UIImage imageNamed:@"frame_065"],
+//                                            [UIImage imageNamed:@"frame_066"],
+//                                            [UIImage imageNamed:@"frame_067"],
+//                                            [UIImage imageNamed:@"frame_068"],
+//                                            [UIImage imageNamed:@"frame_069"],
+//                                            [UIImage imageNamed:@"frame_070"],
+//                                            nil];
+//    self.backgroundImage.animationDuration = 1.0f;
+//    self.backgroundImage.animationRepeatCount = 0;
+//    [self.backgroundImage startAnimating];
+
+
+
+    if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
         [self.mapView setRegion:mapRegion animated: NO];
         self.isMapExpanded = YES;
         [self expandMap];
-
-
     } else if (self.locationInfo.name.length == 0) {
         self.isMapExpanded = NO;
         [self expandMap];
@@ -117,6 +208,7 @@ static NSString* SEG_THREE = @"transit";
 
 }
 
+
 - (void) expandMap{
     [UIView animateWithDuration:1.0
                           delay:0.2
@@ -132,31 +224,50 @@ static NSString* SEG_THREE = @"transit";
 
                          }
                      }
-                     completion:nil];
+                     completion:^(BOOL finished){
+                         if(self.isMapExpanded == YES){
+                             MKPointAnnotation *point = [MKPointAnnotation new];
+                             point.coordinate = self.locationInfo.locationCoordinates;
+                             [self.mapView addAnnotation:point];
+                         }
+                         nil;
+                     }];
 }
 
 
 
 -(void)textViewDidBeginEditing:(UITextView *)textView{
-        [UIView animateWithDuration:1.0
-                              delay:0.2
-                            options:UIViewAnimationOptionAllowUserInteraction
+
+    self.animatedTextView.alpha = 0;
+
+        [UIView animateWithDuration:0.5
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-
-                                [self.scrollView addSubview:self.blackView];
-                                [self.blackView addSubview:self.textView];
-                                self.textView.backgroundColor = [UIColor whiteColor];
-                                 self.scrollView.scrollEnabled = NO;
-                                [self.view layoutIfNeeded];
-
+                             [self.scrollView addSubview:self.blackView];
+                             [self.blackView addSubview:self.animatedTextView];
+                             self.animatedTextView.text = self.textView.text;
+                             self.animatedTextView.textAlignment = NSTextAlignmentCenter;
+                             self.animatedTextView.alpha = 1;
+                             self.blackView.alpha = 1.0;
                          }
-                         completion:nil];
+                         completion:^(BOOL finished){
+                             NSLog(@"GOOGLE");
+                         }];
 }
 
 -(void)dismissKeyboard {
-    [self.textView resignFirstResponder];
-    [self.blackView removeFromSuperview];
-    [self.view layoutIfNeeded];
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         [self.textView resignFirstResponder];
+                         self.blackView.alpha = 0;
+                         self.navigationController.navigationBar.alpha = 1;
+                     }
+                     completion:^(BOOL finished){
+                         [self.blackView removeFromSuperview];
+                     }];
 
 }
 

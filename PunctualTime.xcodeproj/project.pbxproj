@@ -21,6 +21,7 @@
 		6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* CreateEventViewController.m */; };
 		6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF441A09A3BD007B447B /* LocationInfo.m */; };
 		6649BF471A09B279007B447B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6649BF461A09B279007B447B /* Foundation.framework */; };
+		6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED411A1070BC007C5D90 /* CircularTimer.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB791A054E3700F56EBA /* EventController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
@@ -63,6 +64,8 @@
 		6649BF431A09A3BD007B447B /* LocationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfo.h; sourceTree = "<group>"; };
 		6649BF441A09A3BD007B447B /* LocationInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfo.m; sourceTree = "<group>"; };
 		6649BF461A09B279007B447B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6660ED401A1070BC007C5D90 /* CircularTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularTimer.h; sourceTree = "<group>"; };
+		6660ED411A1070BC007C5D90 /* CircularTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularTimer.m; sourceTree = "<group>"; };
 		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E9ACBB781A054E3700F56EBA /* EventController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventController.h; sourceTree = "<group>"; };
@@ -119,6 +122,8 @@
 				661078E41A044D830096479F /* AppDelegate.h */,
 				661078E51A044D830096479F /* AppDelegate.m */,
 				E9BECF311A0983CF006ABCF9 /* Constants.h */,
+				6660ED401A1070BC007C5D90 /* CircularTimer.h */,
+				6660ED411A1070BC007C5D90 /* CircularTimer.m */,
 				E9ACBB7C1A054E7400F56EBA /* View Controllers */,
 				E9ACBB7B1A054E6000F56EBA /* Data Controllers */,
 				E9D79C371A046E1D00C9D65F /* Model */,
@@ -334,6 +339,7 @@
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
+				6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
 			);
