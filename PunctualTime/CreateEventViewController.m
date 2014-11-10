@@ -63,7 +63,7 @@ static NSString* SEG_THREE = @"transit";
                                     transportationType:self.transportationType];
 
     __unsafe_unretained typeof(self) weakSelf = self;
-    [newEvent makeLocalNotificationWithCategoryIdentifier:kThirtyMinuteWarning completion:^(NSError* error)
+    [newEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
     {
         if (error)
         {

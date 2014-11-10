@@ -84,17 +84,17 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
             double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
 
-            if ([categoryID isEqualToString:kThirtyMinuteWarning])
+            if ([categoryID isEqualToString:THIRTY_MINUTE_WARNING])
             {
                 minuteWarning = @"Thirty";
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
             }
-            else if ([categoryID isEqualToString:kFifteenMinuteWarning])
+            else if ([categoryID isEqualToString:FIFTEEN_MINUTE_WARNING])
             {
                 minuteWarning = @"Fifteen";
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
             }
-            else if ([categoryID isEqualToString:kFiveMinuteWarning])
+            else if ([categoryID isEqualToString:FIVE_MINUTE_WARNING])
             {
                 minuteWarning = @"Five";
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
