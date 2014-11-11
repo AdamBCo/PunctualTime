@@ -368,7 +368,7 @@ static NSString* SEG_THREE = @"transit";
     switch (errorCode)
     {
         case PTEventCreationErrorCodeImpossibleEvent:
-            alertTitle = @"Too late!";
+            alertTitle = @"You're late!";
             alertMessage = [NSString stringWithFormat:@"You needed to leave %@ minutes ago. Get going!", userInfo[@"overdue_amount"]];
             break;
         default:
