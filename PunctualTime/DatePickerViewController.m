@@ -7,8 +7,16 @@
 //
 
 #import "DatePickerViewController.h"
+#import "MinutesViewController.h"
+#import "HourViewController.h"
 
-@interface DatePickerViewController () <UIGestureRecognizerDelegate>
+#define DOTTED_LINE_HEIGHT 1.
+
+@interface DatePickerViewController () <UIGestureRecognizerDelegate, MinuteViewDelegate>
+
+@property NSString *theValue;
+@property MinutesViewController *minutesViewController;
+
 
 @end
 
@@ -16,38 +24,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
+    self.minutesViewController = [MinutesViewController new];
+    self.minutesViewController.delegate = self;
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint firstTouch = [touch locationInView:self.view];
-
-    NSLog(@" CHECKING CGPOINT %@", NSStringFromCGPoint(firstTouch));
 }
 
 
--(IBAction)pan:(UIPanGestureRecognizer *)gesture {
-
-
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        CGPoint point = [gesture translationInView:gesture.view];
-        NSLog(@"The Point: %f, %f",point.x,point.y);
-//        NSLog(@"You toched here: %@",point);
-//        NSLog(@"At this speed: %@",yVelocity);
-
-    } else if (gesture.state == UIGestureRecognizerStateChanged){
-
-    } else if (gesture.state == UIGestureRecognizerStateEnded ||
-               gesture.state == UIGestureRecognizerStateFailed ||
-               gesture.state == UIGestureRecognizerStateCancelled){
-
-    }
+-(void)minuteSelected:(NSString *)string{
+    self.theValue = string;
+    NSLog(@"We got it: %@",self.theValue);
 }
 
 

@@ -21,11 +21,13 @@
 		6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* CreateEventViewController.m */; };
 		6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF441A09A3BD007B447B /* LocationInfo.m */; };
 		6649BF471A09B279007B447B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6649BF461A09B279007B447B /* Foundation.framework */; };
+		6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED411A1070BC007C5D90 /* CircularTimer.m */; };
+		6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED4D1A11B553007C5D90 /* HourViewController.m */; };
+		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
+		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E910C8271A0D4E7700CDD64D /* SIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = E910C8231A0D4E7700CDD64D /* SIAlertView.m */; };
 		E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */; };
-		6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED411A1070BC007C5D90 /* CircularTimer.m */; };
-		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB791A054E3700F56EBA /* EventController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
@@ -67,15 +69,19 @@
 		6649BF431A09A3BD007B447B /* LocationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationInfo.h; sourceTree = "<group>"; };
 		6649BF441A09A3BD007B447B /* LocationInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationInfo.m; sourceTree = "<group>"; };
 		6649BF461A09B279007B447B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6660ED401A1070BC007C5D90 /* CircularTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularTimer.h; sourceTree = "<group>"; };
+		6660ED411A1070BC007C5D90 /* CircularTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularTimer.m; sourceTree = "<group>"; };
+		6660ED4C1A11B553007C5D90 /* HourViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HourViewController.h; sourceTree = "<group>"; };
+		6660ED4D1A11B553007C5D90 /* HourViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HourViewController.m; sourceTree = "<group>"; };
+		6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinutesViewController.h; sourceTree = "<group>"; };
+		6660ED501A11B7DD007C5D90 /* MinutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinutesViewController.m; sourceTree = "<group>"; };
+		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
+		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E910C8221A0D4E7700CDD64D /* SIAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SIAlertView.h; sourceTree = "<group>"; };
 		E910C8231A0D4E7700CDD64D /* SIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SIAlertView.m; sourceTree = "<group>"; };
 		E910C8241A0D4E7700CDD64D /* UIWindow+SIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+SIUtils.h"; sourceTree = "<group>"; };
 		E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
-		6660ED401A1070BC007C5D90 /* CircularTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularTimer.h; sourceTree = "<group>"; };
-		6660ED411A1070BC007C5D90 /* CircularTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularTimer.m; sourceTree = "<group>"; };
-		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
-		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E9ACBB781A054E3700F56EBA /* EventController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventController.h; sourceTree = "<group>"; };
 		E9ACBB791A054E3700F56EBA /* EventController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventController.m; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
@@ -205,6 +211,10 @@
 			isa = PBXGroup;
 			children = (
 				661078EA1A044D830096479F /* Main.storyboard */,
+				6660ED4C1A11B553007C5D90 /* HourViewController.h */,
+				6660ED4D1A11B553007C5D90 /* HourViewController.m */,
+				6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */,
+				6660ED501A11B7DD007C5D90 /* MinutesViewController.m */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -372,7 +382,9 @@
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */,
+				6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
+				6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */,
 				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
 				E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */,
 			);
