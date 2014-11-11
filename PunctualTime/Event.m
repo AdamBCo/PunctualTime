@@ -69,6 +69,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
     BOOL notificationWasSnoozed = ![self.currentNotificationCategory isEqualToString:categoryID];
+    BOOL isNewEvent = self.currentNotificationCategory == nil ? YES : NO;
     self.currentNotificationCategory = categoryID;
 
     [self calculateETAWithCompletion:^(NSNumber* travelTime, NSError* error)
@@ -82,6 +83,20 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
             NSString* minuteWarning = [NSString new];
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
+
+            if ([NSDate date].timeIntervalSince1970 > leaveTime) // Current time is after leave time
+            {
+                if (isNewEvent) // This is a new event so notify the user it's too late to make it on time
+                {
+                    NSDictionary* userInfo = @{@"overdue_amount": @(([NSDate date].timeIntervalSince1970 - leaveTime) * 60).stringValue};
+                    NSError* newError = [NSError errorWithDomain:@"Event Creation Error"
+                                                            code:PTEventCreationErrorCodeImpossibleEvent
+                                                        userInfo:userInfo];
+                    complete(newError);
+                    return;
+                }
+            }
+
             double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
 
             if ([categoryID isEqualToString:SIXTY_MINUTE_WARNING])
@@ -193,7 +208,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
             if (!error)
             {
                 NSDictionary* userInfo = @{@"error": jsonResult[@"status"]};
-                NSError* newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                NSError* newError = [NSError errorWithDomain:@"API Error"
+                                                        code:PTEventCreationErrorCodeAPIError
+                                                    userInfo:userInfo];
                 complete(nil, newError);
                 return;
             }
