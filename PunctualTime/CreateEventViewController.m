@@ -13,6 +13,7 @@
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
 #import "Event.h"
+#import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 
 static NSString* SEG_ZERO = @"driving";
@@ -286,7 +287,7 @@ static NSString* SEG_THREE = @"transit";
         if (error)
         {
             NSLog(@"Error making notification: %@", error.userInfo);
-            [self makeAlert];
+            [self makeAlertForErrorCode:error.code errorUserInfo:error.userInfo];
         }
         else
         {
@@ -359,10 +360,25 @@ static NSString* SEG_THREE = @"transit";
     }
 }
 
-- (void)makeAlert
+- (void)makeAlertForErrorCode:(PTEventCreationErrorCode)errorCode errorUserInfo:(NSDictionary *)userInfo
 {
-    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"Event not created, sorry!"
-                                                                       message:@"There was a network problem or the selected destination and transportation are incompatible. Please try again."
+    NSString* alertTitle;
+    NSString* alertMessage;
+
+    switch (errorCode)
+    {
+        case PTEventCreationErrorCodeImpossibleEvent:
+            alertTitle = @"Too late!";
+            alertMessage = [NSString stringWithFormat:@"You needed to leave %@ minutes ago. Get going!", userInfo[@"overdue_amount"]];
+            break;
+        default:
+            alertTitle = @"Dangit...";
+            alertMessage = @"There was a network problem or the selected destination and transportation are incompatible. Please try again.";
+            break;
+    }
+
+    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:alertTitle
+                                                                       message:alertMessage
                                                                 preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK"
                                                           style:UIAlertActionStyleDefault
