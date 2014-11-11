@@ -22,3 +22,9 @@
 
 // Notification body trailing string
 #define NOTIFICATION_TRAILING_TEXT (@"Slide to snooze")
+
+// Event creation error codes
+typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
+    PTEventCreationErrorCodeAPIError = 0,
+    PTEventCreationErrorCodeImpossibleEvent
+};
