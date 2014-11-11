@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "Event.h"
 
-@interface EventController : NSObject
+@interface EventManager : NSObject
 
 @property (readonly) NSMutableArray* events;
 
-+ (EventController *)sharedEventController;
++ (EventManager *)sharedEventManager;
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
 - (void)refreshEvents;

@@ -7,7 +7,7 @@
 //
 
 #import "CreateEventViewController.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "LocationSearchController.h"
@@ -34,7 +34,7 @@ static NSString* SEG_THREE = @"transit";
 @property NSArray *destinationLocations;
 @property NSString *transportationType;
 @property LocationInfo *locationInfo;
-@property EventController *sharedEventController;
+@property EventManager *sharedEventController;
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
 
@@ -65,7 +65,7 @@ static NSString* SEG_THREE = @"transit";
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventController = [EventManager sharedEventManager];
     self.textView.delegate = self;
     self.transportationType = SEG_ZERO;
 

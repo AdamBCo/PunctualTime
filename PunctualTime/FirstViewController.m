@@ -7,14 +7,14 @@
 //
 
 #import "FirstViewController.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "Event.h"
 #import "CircularTimer.h"
 
 @interface FirstViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
-@property EventController *sharedEventController;
+@property EventManager *sharedEventController;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
@@ -31,7 +31,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventController = [EventManager sharedEventManager];
     [self.sharedEventController refreshEvents];
     self.selectedEvent = self.sharedEventController.events.firstObject;
 

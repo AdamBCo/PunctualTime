@@ -6,26 +6,26 @@
 //  Copyright (c) 2014 The Timers. All rights reserved.
 //
 
-#import "EventController.h"
+#import "EventManager.h"
 
-@interface EventController ()
+@interface EventManager ()
 
 @property (readwrite) NSMutableArray* events;
 
 @end
 
-@implementation EventController
+@implementation EventManager
 
 #pragma mark - Public methods
 
-+ (EventController *)sharedEventController // Returns persistent instance
++ (EventManager *)sharedEventManager // Returns persistent instance
 {
-    static EventController* _default = nil;
+    static EventManager* _default = nil;
 
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^(void)
                   {
-                      _default = [[EventController alloc] init];
+                      _default = [[EventManager alloc] init];
                   });
 
     return _default;

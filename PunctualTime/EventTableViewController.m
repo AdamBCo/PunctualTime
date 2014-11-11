@@ -7,13 +7,13 @@
 //
 
 #import "EventTableViewController.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "Event.h"
 
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property EventController *sharedEventController;
+@property EventManager *sharedEventController;
 
 @end
 
@@ -32,7 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventController = [EventManager sharedEventManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated

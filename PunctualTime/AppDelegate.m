@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Event.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "Constants.h"
 #import "SIAlertView.h"
 
@@ -22,7 +22,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @interface AppDelegate ()
 
-@property EventController* sharedEventController;
+@property EventManager* sharedEventController;
 @property UIWindow* notificationWindow;
 @property UIVisualEffectView* blurView;
 
@@ -33,7 +33,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventController = [EventManager sharedEventManager];
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
