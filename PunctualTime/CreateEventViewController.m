@@ -377,18 +377,18 @@ static NSString* SEG_THREE = @"transit";
             break;
     }
 
-    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:alertTitle
-                                                                       message:alertMessage
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK"
-                                                          style:UIAlertActionStyleDefault
-                                                        handler:^(UIAlertAction *action) {
-                                                            self.locationInfo = nil;
-                                                            self.locationNameLabel.text = @"";
-                                                            self.addressLabel.text = @"";
-                                                        }];
-    [alertView addAction:alertAction];
-    [self presentViewController:alertView animated:YES completion:^{}];
+    SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:alertTitle andMessage:alertMessage];
+    alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
+    alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
+
+    [alertView addButtonWithTitle:@"OK"
+                             type:SIAlertViewButtonTypeDefault
+                          handler:^(SIAlertView *alertView) {
+                              self.locationInfo = nil;
+                              self.locationNameLabel.text = @"";
+                              self.addressLabel.text = @"";
+                          }];
+    [alertView show];
 }
 
 
