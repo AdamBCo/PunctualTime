@@ -16,6 +16,9 @@
 		661078FD1A044D830096479F /* PunctualTimeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 661078FC1A044D830096479F /* PunctualTimeTests.m */; };
 		6610790A1A04642E0096479F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661079091A04642E0096479F /* CoreLocation.framework */; };
 		661079151A057A7A0096479F /* LocationSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661079141A057A7A0096479F /* LocationSearchController.m */; };
+		6616C6731A12FB1600D8C872 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6616C6721A12FB1600D8C872 /* CFNetwork.framework */; };
+		6616C6751A12FB2300D8C872 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6616C6741A12FB2300D8C872 /* CoreGraphics.framework */; };
+		6616C6791A12FE3200D8C872 /* ModesOfTransportationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */; };
 		664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664978541A0ACCF90081EA43 /* FirstViewController.m */; };
 		6649BF041A080367007B447B /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF031A080367007B447B /* SearchTableViewController.m */; };
 		6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* CreateEventViewController.m */; };
@@ -60,6 +63,11 @@
 		661079091A04642E0096479F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		661079131A057A7A0096479F /* LocationSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSearchController.h; sourceTree = "<group>"; };
 		661079141A057A7A0096479F /* LocationSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSearchController.m; sourceTree = "<group>"; };
+		6616C6701A12F99000D8C872 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Reveal.framework; sourceTree = "<group>"; };
+		6616C6721A12FB1600D8C872 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		6616C6741A12FB2300D8C872 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModesOfTransportationViewController.h; sourceTree = "<group>"; };
+		6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModesOfTransportationViewController.m; sourceTree = "<group>"; };
 		664978531A0ACCF90081EA43 /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		664978541A0ACCF90081EA43 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		6649BF021A080367007B447B /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
@@ -96,6 +104,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6616C6751A12FB2300D8C872 /* CoreGraphics.framework in Frameworks */,
+				6616C6731A12FB1600D8C872 /* CFNetwork.framework in Frameworks */,
 				E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */,
 				6649BF471A09B279007B447B /* Foundation.framework in Frameworks */,
 				6610790A1A04642E0096479F /* CoreLocation.framework in Frameworks */,
@@ -115,6 +125,7 @@
 		661078D41A044D830096479F = {
 			isa = PBXGroup;
 			children = (
+				6616C6701A12F99000D8C872 /* Reveal.framework */,
 				661078DF1A044D830096479F /* PunctualTime */,
 				661078F91A044D830096479F /* PunctualTimeTests */,
 				661078DE1A044D830096479F /* Products */,
@@ -177,9 +188,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		6616C6761A12FDB800D8C872 /* Custom Date Picker */ = {
+			isa = PBXGroup;
+			children = (
+				66AEFC381A0EF91900DE871B /* DatePickerViewController.h */,
+				66AEFC391A0EF91900DE871B /* DatePickerViewController.m */,
+				6660ED4C1A11B553007C5D90 /* HourViewController.h */,
+				6660ED4D1A11B553007C5D90 /* HourViewController.m */,
+				6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */,
+				6660ED501A11B7DD007C5D90 /* MinutesViewController.m */,
+			);
+			name = "Custom Date Picker";
+			sourceTree = "<group>";
+		};
 		E90100DD1A046D2E00D44789 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6616C6741A12FB2300D8C872 /* CoreGraphics.framework */,
+				6616C6721A12FB1600D8C872 /* CFNetwork.framework */,
 				E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */,
 				6649BF461A09B279007B447B /* Foundation.framework */,
 				661079091A04642E0096479F /* CoreLocation.framework */,
@@ -211,10 +237,9 @@
 			isa = PBXGroup;
 			children = (
 				661078EA1A044D830096479F /* Main.storyboard */,
-				6660ED4C1A11B553007C5D90 /* HourViewController.h */,
-				6660ED4D1A11B553007C5D90 /* HourViewController.m */,
-				6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */,
-				6660ED501A11B7DD007C5D90 /* MinutesViewController.m */,
+				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
+				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
+				6616C6761A12FDB800D8C872 /* Custom Date Picker */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -243,8 +268,6 @@
 				6649BF031A080367007B447B /* SearchTableViewController.m */,
 				664978531A0ACCF90081EA43 /* FirstViewController.h */,
 				664978541A0ACCF90081EA43 /* FirstViewController.m */,
-				66AEFC381A0EF91900DE871B /* DatePickerViewController.h */,
-				66AEFC391A0EF91900DE871B /* DatePickerViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -370,6 +393,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6616C6791A12FE3200D8C872 /* ModesOfTransportationViewController.m in Sources */,
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
 				661078E91A044D830096479F /* EventTableViewController.m in Sources */,
@@ -513,8 +537,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = PunctualTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lz",
+					"-framework",
+					Reveal,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -526,6 +560,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = PunctualTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

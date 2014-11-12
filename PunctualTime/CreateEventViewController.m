@@ -14,16 +14,11 @@
 #import "SearchTableViewController.h"
 #import "Event.h"
 #import <MapKit/MapKit.h>
+#import "ModesOfTransportationViewController.h"
 
-static NSString* SEG_ZERO = @"driving";
-static NSString* SEG_ONE = @"walking";
-static NSString* SEG_TW0 = @"bicycling";
-static NSString* SEG_THREE = @"transit";
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate>
 
-
-@interface CreateEventViewController () <UISearchBarDelegate, UITextViewDelegate>
-
-@property (strong, nonatomic) IBOutlet UITextField *nameTextField;
+@property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
 @property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
@@ -40,7 +35,6 @@ static NSString* SEG_THREE = @"transit";
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UITextView *textView;
 @property UITextView *animatedTextView;
 @property BOOL isMapExpanded;
 @property BOOL isDatePickerExpanded;
@@ -49,7 +43,6 @@ static NSString* SEG_THREE = @"transit";
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
 
 @property UIView *blackView;
-@property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 
 
@@ -67,37 +60,28 @@ static NSString* SEG_THREE = @"transit";
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventController = [EventController sharedEventController];
-    self.textView.delegate = self;
-    self.transportationType = SEG_ZERO;
+    self.titleTextField.delegate = self;
+    self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
+
     self.isDatePickerExpanded = NO;
+    self.datePickerHeightConstraint.constant = 0;
+    self.datePicker.alpha = 0;
 
 
-    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
-    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
 
-    UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:effect];
-    UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-    [vibrancyEffectView setFrame:blurView.bounds];
-
-    blurView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height)+400);
-    [self.backgroundImage addSubview:blurView];
-    [blurView.contentView addSubview:vibrancyEffectView];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+//    self.blackView = [[UIView alloc] init];
+//    self.blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+//    self.blackView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height));
+//    [self.blackView addGestureRecognizer:tap];
 
 
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-
-    self.blackView = [[UIView alloc] init];
-    self.blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-    self.blackView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height));
-    [self.blackView addGestureRecognizer:tap];
-
-
-    self.animatedTextView = [UITextView new];
-    self.animatedTextView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, 96);
-    [self.animatedTextView setFont:[UIFont systemFontOfSize:32]];
-    self.animatedTextView.backgroundColor = [UIColor whiteColor];
-    self.animatedTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 20, 20);
+//    self.animatedTextView = [UITextView new];
+//    self.animatedTextView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, 96);
+//    [self.animatedTextView setFont:[UIFont systemFontOfSize:32]];
+//    self.animatedTextView.backgroundColor = [UIColor whiteColor];
+//    self.animatedTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 20, 20);
 
 }
 
@@ -106,13 +90,13 @@ static NSString* SEG_THREE = @"transit";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-    [self expandDatePicker];
 
 
     if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
+        
         [self.mapView setRegion:mapRegion animated: NO];
         self.isMapExpanded = YES;
         [self expandMap];
@@ -131,24 +115,23 @@ static NSString* SEG_THREE = @"transit";
 
 -(void)expandDatePicker {
 
-    [UIView animateWithDuration:1.0
-                          delay:0.2
+
+    [UIView animateWithDuration:0.3
+                          delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-                         if(self.isDatePickerExpanded == YES){
+                         if (self.isDatePickerExpanded == YES) {
                              self.datePickerHeightConstraint.constant = 162;
-                             self.datePicker.hidden = NO;
-
-                         }
-                         else if(self.isDatePickerExpanded == NO){
+                             self.datePicker.alpha = 1.0;
+                             [self.view layoutIfNeeded];
+                         } else {
                              self.datePickerHeightConstraint.constant = 0;
-                            self.datePicker.hidden = YES;
-
+                             self.datePicker.alpha = 0.0;
+                            [self.view layoutIfNeeded];
                          }
                      }
                      completion:^(BOOL finished){
-                         if (self.isDatePickerExpanded == NO) {
-                         }
+                         nil;
                      }];
 
 
@@ -181,45 +164,45 @@ static NSString* SEG_THREE = @"transit";
 
 
 
--(void)textViewDidBeginEditing:(UITextView *)textView{
-
-    self.animatedTextView.alpha = 0;
-
-        [UIView animateWithDuration:0.5
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveEaseInOut
-                         animations:^{
-                             [self.scrollView addSubview:self.blackView];
-                             [self.blackView addSubview:self.animatedTextView];
-                             self.animatedTextView.text = self.textView.text;
-                             self.animatedTextView.textAlignment = NSTextAlignmentCenter;
-                             self.animatedTextView.alpha = 1;
-                             self.blackView.alpha = 1.0;
-                         }
-                         completion:^(BOOL finished){
-                             NSLog(@"GOOGLE");
-                         }];
-}
-
--(void)dismissKeyboard {
-    [UIView animateWithDuration:0.5
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         [self.textView resignFirstResponder];
-                         self.blackView.alpha = 0;
-                         self.navigationController.navigationBar.alpha = 1;
-                     }
-                     completion:^(BOOL finished){
-                         [self.blackView removeFromSuperview];
-                     }];
-
-}
+//-(void)textViewDidBeginEditing:(UITextView *)textView{
+//
+//    self.animatedTextView.alpha = 0;
+//
+//        [UIView animateWithDuration:0.5
+//                              delay:0.0
+//                            options:UIViewAnimationOptionCurveEaseInOut
+//                         animations:^{
+//                             [self.scrollView addSubview:self.blackView];
+//                             [self.blackView addSubview:self.animatedTextView];
+//                             self.animatedTextView.text = self.textView.text;
+//                             self.animatedTextView.textAlignment = NSTextAlignmentCenter;
+//                             self.animatedTextView.alpha = 1;
+//                             self.blackView.alpha = 1.0;
+//                         }
+//                         completion:^(BOOL finished){
+//                             NSLog(@"GOOGLE");
+//                         }];
+//}
+//
+//-(void)dismissKeyboard {
+//    [UIView animateWithDuration:0.5
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         [self.textView resignFirstResponder];
+//                         self.blackView.alpha = 0;
+//                         self.navigationController.navigationBar.alpha = 1;
+//                     }
+//                     completion:^(BOOL finished){
+//                         [self.blackView removeFromSuperview];
+//                     }];
+//
+//}
 
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
-    Event *newEvent = [[Event alloc] initWithEventName:self.nameTextField.text
+    Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
@@ -242,41 +225,13 @@ static NSString* SEG_THREE = @"transit";
     }];
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
 
 
 - (void)resetTextFields
 {
-    self.nameTextField.text = @"";
+    self.titleTextField.text = @"Event Title";
     self.datePicker.date = [NSDate date];
     self.locationNameLabel.text = @"";
-    self.addressLabel.text = @"";
-}
-
-- (IBAction)segmentedControl:(id)sender {
-
-    switch (self.segmentedControl.selectedSegmentIndex)
-    {
-        case 0:
-            self.transportationType = SEG_ZERO;
-            break;
-        case 1:
-            self.transportationType = SEG_ONE;
-            break;
-        case 2:
-            self.transportationType = SEG_TW0;
-            break;
-        case 3:
-            self.transportationType = SEG_THREE;
-            break;
-
-        default:
-            break;
-    }
 }
 
 - (void)makeAlert
@@ -295,12 +250,29 @@ static NSString* SEG_THREE = @"transit";
     [self presentViewController:alertView animated:YES completion:^{}];
 }
 
+#pragma mark - UITextField Delegate
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    [self.nameTextField resignFirstResponder];
+    if ([segue.identifier isEqualToString:@"BackToTheMapSegue"]) {
+
+        [self.titleTextField resignFirstResponder];
+
+    } else if ([segue.identifier isEqualToString:@"ModesOfTransportSegue"]){
+
+        ModesOfTransportationViewController *viewController = segue.destinationViewController;
+        viewController.delegate = self;
+    }
+
 }
 
 -(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue
@@ -310,6 +282,17 @@ static NSString* SEG_THREE = @"transit";
     [self.applicationDelegate.userLocationManager updateLocation];
     self.locationNameLabel.text = self.locationInfo.name;
     self.addressLabel.text = self.locationInfo.address;
+}
+
+#pragma mark - Modes of Transportation
+
+
+-(void)modeOfTransportationSelected:(NSString *)transportationType
+{
+    self.transportationType = transportationType;
+    NSLog(@"Transportation Type: %@",self.transportationType);
+    NSLog(@"The Date: %@",self.datePicker.date);
+    NSLog(@"The Locations: %@", self.locationInfo);
 }
 
 @end
