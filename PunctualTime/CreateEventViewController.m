@@ -30,9 +30,10 @@
 @property NSArray *destinationLocations;
 @property NSString *transportationType;
 @property LocationInfo *locationInfo;
-@property EventManager *sharedEventController;
+@property EventManager *sharedEventManager;
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
+@property PTEventRecurrenceOption recurrenceOption;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
@@ -62,11 +63,11 @@
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
-    self.sharedEventController = [EventManager sharedEventManager];
+    self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
-
+    self.recurrenceOption = PTEventRecurrenceOptionNone;
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
@@ -161,7 +162,9 @@
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
-                                    transportationType:self.transportationType];
+                                    transportationType:self.transportationType
+                                  notificationCategory:self.initialNotificationCategory
+                                            recurrence:self.recurrenceOption];
 
     [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
     {
@@ -172,7 +175,7 @@
         }
         else
         {
-            [self.sharedEventController addEvent:newEvent];
+            [self.sharedEventManager addEvent:newEvent];
             [self resetTextFields];
         }
     }];
@@ -211,6 +214,37 @@
         default:
             self.initialNotificationCategory = nil; // Zero minute warning
             break;
+    }
+}
+
+#warning hook up recurrence buttons from storyboard and set tags appropriately
+- (IBAction)onRecurrenceButtonPressed:(UIButton *)button
+{
+    if (button.tag == self.recurrenceOption) // User is deselecting currently selected option
+    {
+        self.recurrenceOption = PTEventRecurrenceOptionNone;
+        //TODO: revert button image to deselected state
+    }
+    else
+    {
+        switch (button.tag)
+        {
+            case 0:
+                self.recurrenceOption = PTEventRecurrenceOptionDaily;
+                // Set image to selected state
+                break;
+            case 1:
+                self.recurrenceOption = PTEventRecurrenceOptionWeekdays;
+                // Set image to selected state
+                break;
+            case 2:
+                self.recurrenceOption = PTEventRecurrenceOptionWeekly;
+                // Set image to selected state
+                break;
+            default:
+                self.recurrenceOption = PTEventRecurrenceOptionNone;
+                break;
+        }
     }
 }
 
