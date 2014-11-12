@@ -8,6 +8,7 @@
 
 #import "FirstViewController.h"
 #import "EventTableViewController.h"
+#import "LiveFrost.h"
 #import "EventManager.h"
 #import "Event.h"
 #import "CircularTimer.h"
@@ -21,6 +22,7 @@
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
 @property BOOL tableViewIsExpanded;
+@property LFGlassView* blurView;
 
 
 @end
@@ -87,6 +89,12 @@
         if (self.containerViewHeightConstraint.constant == 50)
         {
             self.tableViewIsExpanded = NO;
+
+            // Create blur view to animate
+            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];;
+            self.blurView.alpha = 0.0;
+            self.blurView.frame = self.view.frame;
+            [self.view insertSubview:self.blurView atIndex:self.view.subviews.count-2];
         }
         else
         {
@@ -98,26 +106,40 @@
         CGPoint translation = [gesture translationInView:gesture.view];
         self.containerViewHeightConstraint.constant -= translation.y;
         [gesture setTranslation:CGPointMake(0, 0) inView:gesture.view];
+
+        // Set blurView alpha
+        CGPoint location = [gesture locationInView:self.view];
+        self.blurView.alpha = 1.0 - (location.y/(self.view.frame.size.height));
     }
-    else if (UIGestureRecognizerStateEnded == gesture.state) // Gesture has ended so animate to desired location
+    else if (UIGestureRecognizerStateEnded == gesture.state) // Animate to desired location
     {
-        if (self.tableViewIsExpanded) // Close it
+        if (self.tableViewIsExpanded)
         {
             self.containerViewHeightConstraint.constant = 50;
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.blurView removeFromSuperview];
+            }];
         }
         else
         {
             self.containerViewHeightConstraint.constant = self.view.frame.size.height;
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 1.0;
+            }];
         }
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.view layoutIfNeeded];
-        }];
     }
     else // Gesture was cancelled or failed so animate back to original location
     {
         self.containerViewHeightConstraint.constant = 50;
         [UIView animateWithDuration:0.2 animations:^{
             [self.view layoutIfNeeded];
+            self.blurView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.blurView removeFromSuperview];
         }];
     }
 }

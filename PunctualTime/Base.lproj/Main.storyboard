@@ -309,8 +309,7 @@
                                         <exclude reference="u95-p0-Jhi"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="0.0" y="64" width="400" height="836"/>
+                                <variation key="widthClass=compact">
                                     <mask key="subviews">
                                         <include reference="bRM-ga-tqv"/>
                                         <include reference="Nio-dM-nth"/>
@@ -482,11 +481,13 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cXb-Yz-yyN">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="702-25-jrm" detailTextLabel="7Dc-w1-jJI" rowHeight="51" style="IBUITableViewCellStyleSubtitle" id="bTs-EG-XCv">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -522,7 +523,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="cXb-Yz-yyN" secondAttribute="bottom" id="Vgy-ZC-f7R"/>
                             <constraint firstItem="cXb-Yz-yyN" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="dfG-TK-lhJ"/>
@@ -653,15 +653,15 @@
                                 <exclude reference="p7B-z1-vF4"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="X0O-AO-qcA"/>
-                                <exclude reference="qRH-TR-eTk"/>
                                 <exclude reference="22b-cB-5tU"/>
                                 <exclude reference="Cgf-De-vt3"/>
                                 <exclude reference="sfH-Ik-Az4"/>
-                                <exclude reference="cNE-yF-gf9"/>
-                                <exclude reference="x0G-fC-pIM"/>
                                 <exclude reference="1ar-0w-Pug"/>
                                 <exclude reference="NQY-9Z-irO"/>
+                                <exclude reference="X0O-AO-qcA"/>
+                                <exclude reference="qRH-TR-eTk"/>
+                                <exclude reference="cNE-yF-gf9"/>
+                                <exclude reference="x0G-fC-pIM"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -671,15 +671,15 @@
                                 <include reference="p7B-z1-vF4"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="X0O-AO-qcA"/>
-                                <include reference="qRH-TR-eTk"/>
                                 <include reference="22b-cB-5tU"/>
                                 <include reference="Cgf-De-vt3"/>
                                 <include reference="sfH-Ik-Az4"/>
-                                <include reference="cNE-yF-gf9"/>
-                                <include reference="x0G-fC-pIM"/>
                                 <include reference="1ar-0w-Pug"/>
                                 <include reference="NQY-9Z-irO"/>
+                                <include reference="X0O-AO-qcA"/>
+                                <include reference="qRH-TR-eTk"/>
+                                <include reference="cNE-yF-gf9"/>
+                                <include reference="x0G-fC-pIM"/>
                             </mask>
                         </variation>
                     </view>
