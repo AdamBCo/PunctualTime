@@ -43,12 +43,14 @@ static NSString* SEG_THREE = @"transit";
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property UITextView *animatedTextView;
 @property BOOL isMapExpanded;
+@property BOOL isDatePickerExpanded;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
 
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 
 
 @end
@@ -67,6 +69,8 @@ static NSString* SEG_THREE = @"transit";
     self.sharedEventController = [EventController sharedEventController];
     self.textView.delegate = self;
     self.transportationType = SEG_ZERO;
+    self.datePicker.backgroundColor = [UIColor whiteColor];
+    self.isDatePickerExpanded = NO;
 
 
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
@@ -102,85 +106,7 @@ static NSString* SEG_THREE = @"transit";
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
-
-    
-
-//    self.backgroundImage.animationImages = [NSArray arrayWithObjects:
-//                                            [UIImage imageNamed:@"frame_001"],
-//                                            [UIImage imageNamed:@"frame_002"],
-//                                            [UIImage imageNamed:@"frame_003"],
-//                                            [UIImage imageNamed:@"frame_004"],
-//                                            [UIImage imageNamed:@"frame_005"],
-//                                            [UIImage imageNamed:@"frame_006"],
-//                                            [UIImage imageNamed:@"frame_007"],
-//                                            [UIImage imageNamed:@"frame_008"],
-//                                            [UIImage imageNamed:@"frame_009"],
-//                                            [UIImage imageNamed:@"frame_010"],
-//                                            [UIImage imageNamed:@"frame_011"],
-//                                            [UIImage imageNamed:@"frame_012"],
-//                                            [UIImage imageNamed:@"frame_013"],
-//                                            [UIImage imageNamed:@"frame_014"],
-//                                            [UIImage imageNamed:@"frame_015"],
-//                                            [UIImage imageNamed:@"frame_016"],
-//                                            [UIImage imageNamed:@"frame_017"],
-//                                            [UIImage imageNamed:@"frame_018"],
-//                                            [UIImage imageNamed:@"frame_019"],
-//                                            [UIImage imageNamed:@"frame_020"],
-//                                            [UIImage imageNamed:@"frame_021"],
-//                                            [UIImage imageNamed:@"frame_022"],
-//                                            [UIImage imageNamed:@"frame_023"],
-//                                            [UIImage imageNamed:@"frame_024"],
-//                                            [UIImage imageNamed:@"frame_025"],
-//                                            [UIImage imageNamed:@"frame_026"],
-//                                            [UIImage imageNamed:@"frame_027"],
-//                                            [UIImage imageNamed:@"frame_028"],
-//                                            [UIImage imageNamed:@"frame_029"],
-//                                            [UIImage imageNamed:@"frame_030"],
-//                                            [UIImage imageNamed:@"frame_031"],
-//                                            [UIImage imageNamed:@"frame_032"],
-//                                            [UIImage imageNamed:@"frame_033"],
-//                                            [UIImage imageNamed:@"frame_034"],
-//                                            [UIImage imageNamed:@"frame_035"],
-//                                            [UIImage imageNamed:@"frame_036"],
-//                                            [UIImage imageNamed:@"frame_037"],
-//                                            [UIImage imageNamed:@"frame_038"],
-//                                            [UIImage imageNamed:@"frame_039"],
-//                                            [UIImage imageNamed:@"frame_040"],
-//                                            [UIImage imageNamed:@"frame_041"],
-//                                            [UIImage imageNamed:@"frame_042"],
-//                                            [UIImage imageNamed:@"frame_043"],
-//                                            [UIImage imageNamed:@"frame_044"],
-//                                            [UIImage imageNamed:@"frame_045"],
-//                                            [UIImage imageNamed:@"frame_046"],
-//                                            [UIImage imageNamed:@"frame_047"],
-//                                            [UIImage imageNamed:@"frame_048"],
-//                                            [UIImage imageNamed:@"frame_049"],
-//                                            [UIImage imageNamed:@"frame_050"],
-//                                            [UIImage imageNamed:@"frame_051"],
-//                                            [UIImage imageNamed:@"frame_052"],
-//                                            [UIImage imageNamed:@"frame_053"],
-//                                            [UIImage imageNamed:@"frame_054"],
-//                                            [UIImage imageNamed:@"frame_055"],
-//                                            [UIImage imageNamed:@"frame_056"],
-//                                            [UIImage imageNamed:@"frame_057"],
-//                                            [UIImage imageNamed:@"frame_058"],
-//                                            [UIImage imageNamed:@"frame_059"],
-//                                            [UIImage imageNamed:@"frame_060"],
-//                                            [UIImage imageNamed:@"frame_061"],
-//                                            [UIImage imageNamed:@"frame_062"],
-//                                            [UIImage imageNamed:@"frame_063"],
-//                                            [UIImage imageNamed:@"frame_064"],
-//                                            [UIImage imageNamed:@"frame_065"],
-//                                            [UIImage imageNamed:@"frame_066"],
-//                                            [UIImage imageNamed:@"frame_067"],
-//                                            [UIImage imageNamed:@"frame_068"],
-//                                            [UIImage imageNamed:@"frame_069"],
-//                                            [UIImage imageNamed:@"frame_070"],
-//                                            nil];
-//    self.backgroundImage.animationDuration = 1.0f;
-//    self.backgroundImage.animationRepeatCount = 0;
-//    [self.backgroundImage startAnimating];
-
+    [self expandDatePicker];
 
 
     if (self.locationInfo.name.length > 0) {
@@ -195,19 +121,38 @@ static NSString* SEG_THREE = @"transit";
         [self expandMap];
     }
 
-    self.view.backgroundColor = [UIColor redColor];
-    [UIView animateWithDuration:100
-                          delay:0.5
-                        options: UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         self.view.backgroundColor = [UIColor greenColor];
-    } completion:^(BOOL finished)
-     {
-         NSLog(@"Hello");
-     }];
+}
+
+- (IBAction)onTImeButtonPressed:(id)sender {
+    self.isDatePickerExpanded = !self.isDatePickerExpanded;
+    [self expandDatePicker];
 
 }
 
+-(void)expandDatePicker {
+
+    [UIView animateWithDuration:1.0
+                          delay:0.2
+                        options:UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+                         if(self.isDatePickerExpanded == YES){
+                             self.datePickerHeightConstraint.constant = 162;
+                             self.datePicker.hidden = NO;
+
+                         }
+                         else if(self.isDatePickerExpanded == NO){
+                             self.datePickerHeightConstraint.constant = 0;
+                            self.datePicker.hidden = YES;
+
+                         }
+                     }
+                     completion:^(BOOL finished){
+                         if (self.isDatePickerExpanded == NO) {
+                         }
+                     }];
+
+
+}
 
 - (void) expandMap{
     [UIView animateWithDuration:1.0

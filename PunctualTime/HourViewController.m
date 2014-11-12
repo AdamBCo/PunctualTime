@@ -12,7 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *draggableLabel;
 @property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *hourLabel;
-@property NSString *hourTime;
 
 @end
 
@@ -29,27 +28,27 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-
-    UITouch *touch = [touches anyObject];
-    CGPoint firstTouch = [touch locationInView:self.view];
-
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowAnimatedContent animations:^{
-
-        self.draggableLabel.center = CGPointMake(self.draggableLabel.center.x, firstTouch.y);
-
-        for (UILabel *minuteLabel in self.hourLabel) {
-            if (CGRectContainsPoint(minuteLabel.frame, self.draggableLabel.center)){
-                self.hourTime = minuteLabel.text;
-                NSLog(@"Score: %@",self.hourTime);
-            }
-        }
-
-    } completion:^(BOOL finished) {
-        NSLog(@" CHECKING CGPOINT %@", NSStringFromCGPoint(firstTouch));
-
-    }];
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+//
+//    UITouch *touch = [touches anyObject];
+//    CGPoint firstTouch = [touch locationInView:self.view];
+//
+//    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowAnimatedContent animations:^{
+//
+//        self.draggableLabel.center = CGPointMake(self.draggableLabel.center.x, firstTouch.y);
+//
+//        for (UILabel *minuteLabel in self.hourLabel) {
+//            if (CGRectContainsPoint(minuteLabel.frame, self.draggableLabel.center)){
+//                self.hourTime = minuteLabel.text;
+//                NSLog(@"Score: %@",self.hourTime);
+//            }
+//        }
+//
+//    } completion:^(BOOL finished) {
+//        NSLog(@" CHECKING CGPOINT %@", NSStringFromCGPoint(firstTouch));
+//
+//    }];
+//}
 
 
 -(IBAction)pan:(UIPanGestureRecognizer *)gesture {
@@ -60,11 +59,18 @@
         CGPoint point = [gesture locationInView:self.view];
         self.draggableLabel.center = CGPointMake(self.draggableLabel.center.x, point.y);
 
+        for (UILabel *hourLabel in self.hourLabel) {
+            if (CGRectContainsPoint(hourLabel.frame, self.draggableLabel.center)){
+                [self.delegate hourSelected:hourLabel.text];
+            }
+        }
+
     } else if (gesture.state == UIGestureRecognizerStateEnded ||
                gesture.state == UIGestureRecognizerStateFailed ||
                gesture.state == UIGestureRecognizerStateCancelled){
         
     }
+
 }
 
 @end

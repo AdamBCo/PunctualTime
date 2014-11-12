@@ -10,12 +10,10 @@
 #import "MinutesViewController.h"
 #import "HourViewController.h"
 
-#define DOTTED_LINE_HEIGHT 1.
 
-@interface DatePickerViewController () <UIGestureRecognizerDelegate, MinuteViewDelegate>
-
-@property NSString *theValue;
-@property MinutesViewController *minutesViewController;
+@interface DatePickerViewController () <UIGestureRecognizerDelegate, MinuteViewDelegate, HourViewDelegate>
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property NSString *timeOfDay;
 
 
 @end
@@ -24,16 +22,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.minutesViewController = [MinutesViewController new];
-    self.minutesViewController.delegate = self;
-
 
 }
 
+-  (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"MinutesSegue"]) {
+        MinutesViewController *minutesViewController = segue.destinationViewController;
+        minutesViewController.delegate = self;
+
+    } else if ([segue.identifier isEqualToString:@"HourSegue"]){
+        HourViewController *hoursViewController = segue.destinationViewController;
+        hoursViewController.delegate = self;
+
+    }
+}
+- (IBAction)onDoneButtonPressed:(id)sender {
+
+}
+
+- (IBAction)segemntedControl:(id)sender {
+    switch ([self.segmentedControl selectedSegmentIndex]) {
+        case 0:
+            self.timeOfDay = @"AM";
+            NSLog(@"AM");
+            break;
+        case 1:
+            self.timeOfDay = @"PM";
+            NSLog(@"PM");
+            break;
+
+        default:
+            break;
+    }
+}
 
 -(void)minuteSelected:(NSString *)string{
-    self.theValue = string;
-    NSLog(@"We got it: %@",self.theValue);
+    NSLog(@"Minute: %@",string);
+}
+
+-(void)hourSelected:(NSString *)string{
+    NSLog(@"Hour: %@",string);
 }
 
 
