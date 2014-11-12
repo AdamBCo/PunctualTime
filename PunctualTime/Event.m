@@ -242,13 +242,13 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
+
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
         CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
         self.startingAddress = CLLocationCoordinate2DMake(startingLatitude, startingLongitude);
         CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:kEndingAddressLat];
         CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:kEndingAddressLon];
         self.endingAddress = CLLocationCoordinate2DMake(endingLatitude, endingLongitude);
-
     }
 
     return self;

@@ -28,3 +28,10 @@ typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
     PTEventCreationErrorCodeAPIError = 0,
     PTEventCreationErrorCodeImpossibleEvent
 };
+
+// Event recurrence options
+typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
+    PTEventRecurrenceOptionDaily = 0,
+    PTEventRecurrenceOptionWeekdays,
+    PTEventRecurrenceOptionWeekly
+};
