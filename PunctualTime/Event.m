@@ -131,7 +131,7 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
                 minuteWarning = @"Five";
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
             }
-            else
+            else // Zero minute warning
             {
                 newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
