@@ -24,7 +24,6 @@ static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 static NSString* kInitialNotificationCategory = @"InitialNotificationCategory";
 static NSString* kRecurrenceInterval = @"RecurrenceInterval";
-#warning Need new keys for recurrenceInterval and initialNotificationCategory
 
 @interface Event () <NSCoding>
 
