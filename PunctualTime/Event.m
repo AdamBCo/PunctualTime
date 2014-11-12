@@ -34,6 +34,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 @property (readwrite) NSNumber* lastTravelTime;
 @property (readwrite) NSString* uniqueID;
 @property (readwrite) NSString* currentNotificationCategory;
+@property (readwrite) PTEventRecurrenceOption recurrenceInterval;
 
 @end
 
@@ -42,7 +43,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 #pragma mark - Public methods
 
-- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation
+- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation recurrence:(PTEventRecurrenceOption)recurrenceInterval
 {
     if (self = [super init])
     {
@@ -51,6 +52,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.endingAddress = endingAddress;
         self.desiredArrivalTime = arrivalTime;
         self.transportationType = transporation;
+        self.recurrenceInterval = recurrenceInterval;
 
         CFUUIDRef uuid = CFUUIDCreate(NULL);
         NSString *uniqueID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);

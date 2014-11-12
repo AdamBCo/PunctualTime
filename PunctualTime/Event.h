@@ -36,13 +36,13 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
 @property (readonly) NSString* currentNotificationCategory;
 @property NSString *transportationType;
 
-
-
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
                     endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime
-               transportationType:(NSString *)transporation;
+               transportationType:(NSString *)transporation
+                       recurrence:(PTEventRecurrenceOption)recurrenceInterval;
+
 - (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete;
 - (NSComparisonResult)compareEvent:(Event *)otherObject;
 

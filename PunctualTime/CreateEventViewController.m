@@ -68,6 +68,7 @@ static NSString* SEG_THREE = @"transit";
     self.sharedEventController = [EventManager sharedEventManager];
     self.textView.delegate = self;
     self.transportationType = SEG_ZERO;
+    self.recurrenceOption = PTEventRecurrenceOptionNone;
 
 
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
@@ -279,7 +280,8 @@ static NSString* SEG_THREE = @"transit";
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
-                                    transportationType:self.transportationType];
+                                    transportationType:self.transportationType
+                                            recurrence:self.recurrenceOption];
 
     [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
     {
