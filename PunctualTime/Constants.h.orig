@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 The Timers. All rights reserved.
 //
 
+<<<<<<< HEAD
 // UILocalNotification category identifiers
 #define SIXTY_MINUTE_WARNING (@"SixtyMinuteWarning")
 #define THIRTY_MINUTE_WARNING (@"ThirtyMinuteWarning")
@@ -28,6 +29,7 @@ typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
     PTEventCreationErrorCodeAPIError = 0,
     PTEventCreationErrorCodeImpossibleEvent
 };
+=======
 #define kFifteenMinuteAction (@"FifteenMinuteAction")
 #define kFiveMinuteAction (@"FiveMinuteAction")
 #define kZeroMinuteAction (@"ZeroMinuteAction")
@@ -40,3 +42,4 @@ typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
 #define TRANSPO_BIKING @"bicycling"
 #define TRANSPO_TRANSIT @"transit"
 
+>>>>>>> feature/DatePicker

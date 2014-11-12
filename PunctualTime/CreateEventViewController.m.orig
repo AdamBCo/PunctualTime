@@ -61,10 +61,24 @@
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
+<<<<<<< HEAD
+    self.sharedEventController = [EventManager sharedEventManager];
+    self.textView.delegate = self;
+    self.transportationType = SEG_ZERO;
+
+
+    UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
+    UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
+
+    UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:effect];
+    UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+    [vibrancyEffectView setFrame:blurView.bounds];
+=======
     self.sharedEventController = [EventController sharedEventController];
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
+>>>>>>> feature/DatePicker
 
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
@@ -234,28 +248,6 @@
     self.locationNameLabel.text = @"";
 }
 
-- (IBAction)segmentedControl:(id)sender {
-
-    switch (self.segmentedControl.selectedSegmentIndex)
-    {
-        case 0:
-            self.transportationType = SEG_ZERO;
-            break;
-        case 1:
-            self.transportationType = SEG_ONE;
-            break;
-        case 2:
-            self.transportationType = SEG_TW0;
-            break;
-        case 3:
-            self.transportationType = SEG_THREE;
-            break;
-
-        default:
-            break;
-    }
-}
-
 #warning hook up notification buttons from storyboard and set tags appropriately
 - (IBAction)onNotificationButtonPressed:(UIButton *)button
 {
@@ -313,6 +305,7 @@
     [alertView show];
 }
 
+#pragma mark - UITextField Delegate
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {

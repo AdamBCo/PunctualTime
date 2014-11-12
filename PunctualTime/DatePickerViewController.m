@@ -7,8 +7,14 @@
 //
 
 #import "DatePickerViewController.h"
+#import "MinutesViewController.h"
+#import "HourViewController.h"
 
-@interface DatePickerViewController () <UIGestureRecognizerDelegate>
+
+@interface DatePickerViewController () <UIGestureRecognizerDelegate, MinuteViewDelegate, HourViewDelegate>
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
+@property NSString *timeOfDay;
+
 
 @end
 
@@ -16,38 +22,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+-  (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"MinutesSegue"]) {
+        MinutesViewController *minutesViewController = segue.destinationViewController;
+        minutesViewController.delegate = self;
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint firstTouch = [touch locationInView:self.view];
-
-    NSLog(@" CHECKING CGPOINT %@", NSStringFromCGPoint(firstTouch));
-}
-
-
--(IBAction)pan:(UIPanGestureRecognizer *)gesture {
-
-
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        CGPoint point = [gesture translationInView:gesture.view];
-        NSLog(@"The Point: %f, %f",point.x,point.y);
-//        NSLog(@"You toched here: %@",point);
-//        NSLog(@"At this speed: %@",yVelocity);
-
-    } else if (gesture.state == UIGestureRecognizerStateChanged){
-
-    } else if (gesture.state == UIGestureRecognizerStateEnded ||
-               gesture.state == UIGestureRecognizerStateFailed ||
-               gesture.state == UIGestureRecognizerStateCancelled){
+    } else if ([segue.identifier isEqualToString:@"HourSegue"]){
+        HourViewController *hoursViewController = segue.destinationViewController;
+        hoursViewController.delegate = self;
 
     }
+}
+- (IBAction)onDoneButtonPressed:(id)sender {
+
+}
+
+- (IBAction)segemntedControl:(id)sender {
+    switch ([self.segmentedControl selectedSegmentIndex]) {
+        case 0:
+            self.timeOfDay = @"AM";
+            NSLog(@"AM");
+            break;
+        case 1:
+            self.timeOfDay = @"PM";
+            NSLog(@"PM");
+            break;
+
+        default:
+            break;
+    }
+}
+
+-(void)minuteSelected:(NSString *)string{
+    NSLog(@"Minute: %@",string);
+}
+
+-(void)hourSelected:(NSString *)string{
+    NSLog(@"Hour: %@",string);
 }
 
 
