@@ -7,17 +7,20 @@
 //
 
 #import "FirstViewController.h"
+#import "EventTableViewController.h"
 #import "EventManager.h"
 #import "Event.h"
 #import "CircularTimer.h"
 
-@interface FirstViewController ()
+@interface FirstViewController () <EventTableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property EventManager *sharedEventManager;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
+@property BOOL tableViewIsExpanded;
 
 
 @end
@@ -58,7 +61,6 @@
                                     repeats:YES];
 }
 
-
 - (void)updateCounter{
 
     NSDate *startDate = [NSDate date];
@@ -72,6 +74,63 @@
         seconds = (seconds %3600) % 60;
         self.eventNameLabel.text = self.selectedEvent.eventName;
         self.timeTillEvent.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+    }
+}
+
+
+#pragma mark - EventTableViewControllerDelegate
+
+- (void)panGestureDetected:(UIPanGestureRecognizer *)gesture
+{
+    if (UIGestureRecognizerStateBegan == gesture.state)
+    {
+        if (self.containerViewHeightConstraint.constant == 50)
+        {
+            self.tableViewIsExpanded = NO;
+        }
+        else
+        {
+            self.tableViewIsExpanded = YES;
+        }
+    }
+    else if (UIGestureRecognizerStateChanged == gesture.state)
+    {
+        CGPoint translation = [gesture translationInView:gesture.view];
+        self.containerViewHeightConstraint.constant -= translation.y;
+        [gesture setTranslation:CGPointMake(0, 0) inView:gesture.view];
+    }
+    else if (UIGestureRecognizerStateEnded == gesture.state) // Gesture has ended so animate to desired location
+    {
+        if (self.tableViewIsExpanded) // Close it
+        {
+            self.containerViewHeightConstraint.constant = 50;
+        }
+        else
+        {
+            self.containerViewHeightConstraint.constant = self.view.frame.size.height;
+        }
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
+    else // Gesture was cancelled or failed so animate back to original location
+    {
+        self.containerViewHeightConstraint.constant = 50;
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
+}
+
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"EventTableVC"])
+    {
+        EventTableViewController* eventTableVC = segue.destinationViewController;
+        eventTableVC.delegate = self;
     }
 }
 

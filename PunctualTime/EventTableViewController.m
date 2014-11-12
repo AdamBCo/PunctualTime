@@ -32,6 +32,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
+    [self.view addGestureRecognizer:panGesture];
+
     self.sharedEventManager = [EventManager sharedEventManager];
 }
 
@@ -42,6 +46,14 @@
     [self.tableView reloadData];
 
     [super viewWillAppear:animated];
+}
+
+
+#pragma mark - Private methods
+
+- (IBAction)onPanGestureDetected:(UIPanGestureRecognizer *)panGesture
+{
+    [self.delegate panGestureDetected:panGesture];
 }
 
 
