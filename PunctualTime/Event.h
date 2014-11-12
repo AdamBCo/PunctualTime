@@ -9,6 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
+// Event creation error codes
+typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
+    PTEventCreationErrorCodeAPIError = 0,
+    PTEventCreationErrorCodeImpossibleEvent
+};
+
+// Event recurrence options
+typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
+    PTEventRecurrenceOptionDaily = 0,
+    PTEventRecurrenceOptionWeekdays,
+    PTEventRecurrenceOptionWeekly,
+    PTEventRecurrenceOptionNone
+};
+
 @interface Event : NSObject
 
 @property (readonly) NSString* eventName;
