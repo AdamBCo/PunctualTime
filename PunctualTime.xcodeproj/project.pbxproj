@@ -237,8 +237,6 @@
 			isa = PBXGroup;
 			children = (
 				661078EA1A044D830096479F /* Main.storyboard */,
-				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
-				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
 				6616C6761A12FDB800D8C872 /* Custom Date Picker */,
 			);
 			name = Storyboard;
@@ -268,6 +266,8 @@
 				6649BF031A080367007B447B /* SearchTableViewController.m */,
 				664978531A0ACCF90081EA43 /* FirstViewController.h */,
 				664978541A0ACCF90081EA43 /* FirstViewController.m */,
+				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
+				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
