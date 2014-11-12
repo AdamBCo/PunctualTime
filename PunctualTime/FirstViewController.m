@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet UIToolbar *addButtonToolbar;
 @property EventManager *sharedEventManager;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
@@ -33,6 +34,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    // Remove shadow on transparent toolbar:
+    [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 }
 
 -(void)viewWillAppear:(BOOL)animated
