@@ -281,6 +281,7 @@ static NSString* SEG_THREE = @"transit";
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType
+                                  notificationCategory:self.initialNotificationCategory
                                             recurrence:self.recurrenceOption];
 
     [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
