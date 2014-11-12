@@ -13,7 +13,7 @@
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property EventManager *sharedEventController;
+@property EventManager *sharedEventManager;
 
 @end
 
@@ -32,12 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.sharedEventController = [EventManager sharedEventManager];
+    self.sharedEventManager = [EventManager sharedEventManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.sharedEventController refreshEvents];
+    [self.sharedEventManager refreshEvents];
 
     [self.tableView reloadData];
 
@@ -49,12 +49,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.sharedEventController.events.count;
+    return self.sharedEventManager.events.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *event = [self.sharedEventController.events objectAtIndex:indexPath.row];
+    Event *event = [self.sharedEventManager.events objectAtIndex:indexPath.row];
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     cell.textLabel.text = event.eventName;
@@ -75,7 +75,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [self.sharedEventController removeEvent:[self.sharedEventController.events objectAtIndex:indexPath.row]];
+        [self.sharedEventManager removeEvent:[self.sharedEventManager.events objectAtIndex:indexPath.row]];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }

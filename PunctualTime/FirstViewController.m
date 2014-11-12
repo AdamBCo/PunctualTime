@@ -14,7 +14,7 @@
 @interface FirstViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
-@property EventManager *sharedEventController;
+@property EventManager *sharedEventManager;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
@@ -31,9 +31,9 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 
-    self.sharedEventController = [EventManager sharedEventManager];
-    [self.sharedEventController refreshEvents];
-    self.selectedEvent = self.sharedEventController.events.firstObject;
+    self.sharedEventManager = [EventManager sharedEventManager];
+    [self.sharedEventManager refreshEvents];
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
 
     self.cirularTimer = [[CircularTimer alloc]initWithPosition:CGPointMake(60.0f, 130.0f)
                                                         radius:100.0

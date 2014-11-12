@@ -22,7 +22,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @interface AppDelegate ()
 
-@property EventManager* sharedEventController;
+@property EventManager* sharedEventManager;
 @property UIWindow* notificationWindow;
 @property UIVisualEffectView* blurView;
 
@@ -33,7 +33,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
-    self.sharedEventController = [EventManager sharedEventManager];
+    self.sharedEventManager = [EventManager sharedEventManager];
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
@@ -84,9 +84,9 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     int counter = 0;
     [application cancelAllLocalNotifications]; // We're going to recreate them
 
-    if (self.sharedEventController.events.count > 0)
+    if (self.sharedEventManager.events.count > 0)
     {
-        for (Event *event in self.sharedEventController.events)
+        for (Event *event in self.sharedEventManager.events)
         {
             [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
             {
@@ -99,7 +99,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                 NSLog(@"Time to go off: %@",event.desiredArrivalTime);
                 NSLog(@"Notification Category: %@",event.currentNotificationCategory);
 
-                if (counter+1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
+                if (counter+1 == self.sharedEventManager.events.count) // We're at the last object, so call completion handler
                 {
                     NSLog(@"Events have been refreshed %d times",counter+1);
                     completionHandler(UIBackgroundFetchResultNewData);
@@ -122,7 +122,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     if (application.applicationState == UIApplicationStateActive) // The app is in the foreground, so recreate the notification
     {
         // Get the Event object that scheduled the notification
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+        Event* schedulingEvent = [self.sharedEventManager findEventWithUniqueID:notification.userInfo[@"Event"]];
 
         // Setup the buttons to be used in the custom notification
         NSString* firstButtonText;
@@ -214,7 +214,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
-    Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
+    Event* schedulingEvent = [self.sharedEventManager findEventWithUniqueID:notification.userInfo[@"Event"]];
 
     [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
 
