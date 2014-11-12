@@ -33,7 +33,6 @@
 @property EventManager *sharedEventController;
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
-@property PTEventRecurrenceOption recurrenceOption;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
@@ -42,9 +41,12 @@
 @property BOOL isMapExpanded;
 @property BOOL isDatePickerExpanded;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
+
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
+
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
 
 
 @end
@@ -64,29 +66,12 @@
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
-    self.recurrenceOption = PTEventRecurrenceOptionNone;
 
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
 
-
-
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-//    self.blackView = [[UIView alloc] init];
-//    self.blackView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-//    self.blackView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, ([[UIScreen mainScreen] applicationFrame].size.height));
-//    [self.blackView addGestureRecognizer:tap];
-
-
-//    self.animatedTextView = [UITextView new];
-//    self.animatedTextView.frame = CGRectMake(0, 0, [[UIScreen mainScreen] applicationFrame].size.width, 96);
-//    [self.animatedTextView setFont:[UIFont systemFontOfSize:32]];
-//    self.animatedTextView.backgroundColor = [UIColor whiteColor];
-//    self.animatedTextView.textContainerInset = UIEdgeInsetsMake(20, 20, 20, 20);
-
 }
-
 
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -113,6 +98,7 @@
     self.isDatePickerExpanded = !self.isDatePickerExpanded;
     [self expandDatePicker];
 
+
 }
 
 -(void)expandDatePicker {
@@ -126,6 +112,7 @@
                              self.datePickerHeightConstraint.constant = 162;
                              self.datePicker.alpha = 1.0;
                              [self.view layoutIfNeeded];
+                             
                          } else {
                              self.datePickerHeightConstraint.constant = 0;
                              self.datePicker.alpha = 0.0;
@@ -133,7 +120,11 @@
                          }
                      }
                      completion:^(BOOL finished){
-                         nil;
+                         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                         dateFormatter.timeZone = [NSTimeZone localTimeZone];
+                         [dateFormatter setDateFormat:@"MMM dd, yyyy HH:mm"];
+                         [self.datePickerButton setTitle:[dateFormatter stringFromDate:[NSDate date]] forState:UIControlStateNormal];
+                         [self.datePickerButton setTintColor:[UIColor redColor]];
                      }];
 
 
@@ -164,53 +155,13 @@
                      }];
 }
 
-
-
-//-(void)textViewDidBeginEditing:(UITextView *)textView{
-//
-//    self.animatedTextView.alpha = 0;
-//
-//        [UIView animateWithDuration:0.5
-//                              delay:0.0
-//                            options:UIViewAnimationOptionCurveEaseInOut
-//                         animations:^{
-//                             [self.scrollView addSubview:self.blackView];
-//                             [self.blackView addSubview:self.animatedTextView];
-//                             self.animatedTextView.text = self.textView.text;
-//                             self.animatedTextView.textAlignment = NSTextAlignmentCenter;
-//                             self.animatedTextView.alpha = 1;
-//                             self.blackView.alpha = 1.0;
-//                         }
-//                         completion:^(BOOL finished){
-//                             NSLog(@"GOOGLE");
-//                         }];
-//}
-//
-//-(void)dismissKeyboard {
-//    [UIView animateWithDuration:0.5
-//                          delay:0.0
-//                        options:UIViewAnimationOptionCurveEaseInOut
-//                     animations:^{
-//                         [self.textView resignFirstResponder];
-//                         self.blackView.alpha = 0;
-//                         self.navigationController.navigationBar.alpha = 1;
-//                     }
-//                     completion:^(BOOL finished){
-//                         [self.blackView removeFromSuperview];
-//                     }];
-//
-//}
-
-
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
     Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
-                                    transportationType:self.transportationType
-                                  notificationCategory:self.initialNotificationCategory
-                                            recurrence:self.recurrenceOption];
+                                    transportationType:self.transportationType];
 
     [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
     {
@@ -236,66 +187,30 @@
     self.locationNameLabel.text = @"";
 }
 
+
 #warning hook up notification buttons from storyboard and set tags appropriately
 - (IBAction)onNotificationButtonPressed:(UIButton *)button
 {
-    //TODO: Reset images
     switch (button.tag)
     {
         case 0:
             self.initialNotificationCategory = SIXTY_MINUTE_WARNING;
-            // Set image to selected state
             break;
         case 1:
             self.initialNotificationCategory = THIRTY_MINUTE_WARNING;
-            // Set image to selected state
             break;
         case 2:
             self.initialNotificationCategory = FIFTEEN_MINUTE_WARNING;
-            // Set image to selected state
             break;
         case 3:
             self.initialNotificationCategory = TEN_MINUTE_WARNING;
-            // Set image to selected state
             break;
         case 4:
             self.initialNotificationCategory = FIVE_MINUTE_WARNING;
-            // Set image to selected state
             break;
         default:
             self.initialNotificationCategory = nil; // Zero minute warning
             break;
-    }
-}
-
-#warning hook up recurrence buttons from storyboard and set tags appropriately
-- (IBAction)onRecurrenceButtonPressed:(UIButton *)button
-{
-    if (button.tag == self.recurrenceOption) // User is deselecting currently selected option
-    {
-        self.recurrenceOption = PTEventRecurrenceOptionNone;
-        //TODO: revert button image to deselected state
-    }
-    else
-    {
-        switch (button.tag)
-        {
-            case 0:
-                self.recurrenceOption = PTEventRecurrenceOptionDaily;
-                // Set image to selected state
-                break;
-            case 1:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekdays;
-                // Set image to selected state
-                break;
-            case 2:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekly;
-                // Set image to selected state
-                break;
-            default:
-                self.recurrenceOption = PTEventRecurrenceOptionNone;
-                break;
-        }
     }
 }
 

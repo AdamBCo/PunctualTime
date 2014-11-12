@@ -344,7 +344,7 @@
 					};
 					661078F51A044D830096479F = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = GTZ6E2N5Z9;
+						DevelopmentTeam = UT4Y62N2LT;
 						TestTargetID = 661078DC1A044D830096479F;
 					};
 				};

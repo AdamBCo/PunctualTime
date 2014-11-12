@@ -41,7 +41,7 @@
                                              circleStrokeColor:[UIColor greenColor]
                                        activeCircleStrokeColor:[UIColor redColor]
                                                    initialDate:[NSDate date]
-                                                     finalDate:[[NSDate date]dateByAddingTimeInterval:100]
+                                                     finalDate:self.selectedEvent.desiredArrivalTime
                                                  startCallback:^{
                                                      NSLog(@"We are good!");
                                                  } endCallback:^{
@@ -62,7 +62,7 @@
 - (void)updateCounter{
 
     NSDate *startDate = [NSDate date];
-    NSDate *destinationDate = [[NSDate date]dateByAddingTimeInterval:100]; //self.selectedEvent.desiredArrivalTime;
+    NSDate *destinationDate = self.selectedEvent.desiredArrivalTime;
     int seconds = [destinationDate timeIntervalSinceDate: startDate];
 
     if(seconds > 0 ){

@@ -191,7 +191,7 @@
                                         </constraints>
                                         <color key="textColor" red="0.11764705882352941" green="0.12941176470588237" blue="0.16078431372549021" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="bcz-eC-4dT"/>
@@ -406,6 +406,7 @@
                     <size key="freeformSize" width="400" height="900"/>
                     <connections>
                         <outlet property="datePicker" destination="8be-e6-iBw" id="89k-WH-2YV"/>
+                        <outlet property="datePickerButton" destination="Sbu-ny-EOS" id="f4a-vM-ldn"/>
                         <outlet property="datePickerHeightConstraint" destination="aUB-1S-rft" id="PuW-tH-Oap"/>
                         <outlet property="mapView" destination="Wd5-2M-TRB" id="9gU-gk-s6k"/>
                         <outlet property="mapViewHeightConstraint" destination="I3J-cP-8L7" id="Ex4-vB-qBq"/>
@@ -588,8 +589,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="TDF-xs-xZ8"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -607,8 +608,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="hjD-Lj-KpE"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -622,7 +623,7 @@
                                 </variation>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="bDl-Pu-UlC" firstAttribute="top" secondItem="1CT-cN-eBG" secondAttribute="bottom" constant="300" id="1ar-0w-Pug"/>
                             <constraint firstItem="1CT-cN-eBG" firstAttribute="top" secondItem="tNy-8h-VA6" secondAttribute="bottom" constant="8" symbolic="YES" id="22b-cB-5tU"/>
@@ -938,8 +939,7 @@
                                         <exclude reference="Hss-sB-gkE"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="46" height="60"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="Hss-sB-gkE"/>
                                     </mask>
@@ -960,8 +960,7 @@
                                         <exclude reference="Sc9-at-0m5"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="46" height="60"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="Sc9-at-0m5"/>
                                     </mask>
@@ -982,8 +981,7 @@
                                         <exclude reference="E0L-MY-yQE"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="46" height="60"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="E0L-MY-yQE"/>
                                     </mask>
@@ -1025,8 +1023,7 @@
                                         <exclude reference="nMW-TC-rx1"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="46" height="60"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="nMW-TC-rx1"/>
                                     </mask>
@@ -1199,8 +1196,7 @@
                                         <exclude reference="zlI-Qv-GH0"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="80" height="30"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="zlI-Qv-GH0"/>
                                     </mask>
@@ -1224,8 +1220,7 @@
                                         <exclude reference="23b-5m-Rml"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="80" height="30"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="23b-5m-Rml"/>
                                     </mask>
@@ -1249,8 +1244,7 @@
                                         <exclude reference="gO0-Uy-Mh9"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="80" height="30"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="gO0-Uy-Mh9"/>
                                     </mask>
@@ -1274,8 +1268,7 @@
                                         <exclude reference="vrH-C2-xWi"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="-23" y="-15" width="80" height="30"/>
+                                <variation key="widthClass=compact">
                                     <mask key="constraints">
                                         <include reference="vrH-C2-xWi"/>
                                     </mask>
@@ -2183,6 +2176,6 @@
         <image name="location_icon" width="21" height="21"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="9tv-fe-SZ9"/>
+        <segue reference="OEh-Ud-o39"/>
     </inferredMetricsTieBreakers>
 </document>
