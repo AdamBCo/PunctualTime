@@ -16,6 +16,7 @@
 @interface FirstViewController () <EventTableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
+@property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property EventManager *sharedEventManager;
 @property Event *selectedEvent;
@@ -31,10 +32,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
 }
 
--(void)viewWillAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.hidden = YES;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     [self.sharedEventManager refreshEvents];
@@ -53,7 +58,7 @@
                                                      NSLog(@"Hello Chicago");
                                                  }];
 
-    [self.view addSubview:self.cirularTimer];
+    [self.view insertSubview:self.cirularTimer belowSubview:self.containerView];
 
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
@@ -84,9 +89,9 @@
 
 - (void)panGestureDetected:(UIPanGestureRecognizer *)gesture
 {
-    if (UIGestureRecognizerStateBegan == gesture.state)
+    if (UIGestureRecognizerStateBegan == gesture.state) // Check where the tableview is
     {
-        if (self.containerViewHeightConstraint.constant == 50)
+        if (self.containerViewHeightConstraint.constant == 50) // create the blur view
         {
             self.tableViewIsExpanded = NO;
 
@@ -94,7 +99,7 @@
             self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];;
             self.blurView.alpha = 0.0;
             self.blurView.frame = self.view.frame;
-            [self.view insertSubview:self.blurView atIndex:self.view.subviews.count-2];
+            [self.view insertSubview:self.blurView belowSubview:self.containerView];
         }
         else
         {
@@ -153,6 +158,10 @@
     {
         EventTableViewController* eventTableVC = segue.destinationViewController;
         eventTableVC.delegate = self;
+    }
+    if ([segue.identifier isEqualToString:@"CreateEventVC"])
+    {
+        self.navigationController.navigationBar.hidden = NO;
     }
 }
 
