@@ -32,7 +32,6 @@
 		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
-		E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
 /* End PBXBuildFile section */
@@ -93,7 +92,6 @@
 		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
 		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9BECF311A0983CF006ABCF9 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 		661078D41A044D830096479F = {
 			isa = PBXGroup;
 			children = (
-				6616C6701A12F99000D8C872 /* Reveal.framework */,
 				661078DF1A044D830096479F /* PunctualTime */,
 				661078F91A044D830096479F /* PunctualTimeTests */,
 				661078DE1A044D830096479F /* Products */,
@@ -206,6 +203,7 @@
 		E90100DD1A046D2E00D44789 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6616C6701A12F99000D8C872 /* Reveal.framework */,
 				6616C6741A12FB2300D8C872 /* CoreGraphics.framework */,
 				6616C6721A12FB1600D8C872 /* CFNetwork.framework */,
 				E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */,
@@ -334,7 +332,7 @@
 				TargetAttributes = {
 					661078DC1A044D830096479F = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = UT4Y62N2LT;
+						DevelopmentTeam = GTZ6E2N5Z9;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -412,7 +410,6 @@
 				6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */,
-				E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */,
 				6616C67F1A13232A00D8C872 /* UIWindow+SIUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

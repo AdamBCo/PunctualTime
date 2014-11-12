@@ -61,7 +61,7 @@
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventController = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
@@ -232,28 +232,6 @@
     self.titleTextField.text = @"Event Title";
     self.datePicker.date = [NSDate date];
     self.locationNameLabel.text = @"";
-}
-
-- (IBAction)segmentedControl:(id)sender {
-
-    switch (self.segmentedControl.selectedSegmentIndex)
-    {
-        case 0:
-            self.transportationType = SEG_ZERO;
-            break;
-        case 1:
-            self.transportationType = SEG_ONE;
-            break;
-        case 2:
-            self.transportationType = SEG_TW0;
-            break;
-        case 3:
-            self.transportationType = SEG_THREE;
-            break;
-
-        default:
-            break;
-    }
 }
 
 #warning hook up notification buttons from storyboard and set tags appropriately
