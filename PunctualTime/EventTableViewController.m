@@ -13,6 +13,7 @@
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UIImageView *dragImageView;
 @property EventManager *sharedEventManager;
 
 @end
@@ -34,7 +35,7 @@
     [super viewDidLoad];
 
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
-    [self.view addGestureRecognizer:panGesture];
+    [self.dragImageView addGestureRecognizer:panGesture];
 
     self.sharedEventManager = [EventManager sharedEventManager];
 }
