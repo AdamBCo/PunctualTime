@@ -21,6 +21,7 @@
 		6616C6791A12FE3200D8C872 /* ModesOfTransportationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */; };
 		6616C67E1A13232A00D8C872 /* SIAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616C67B1A13232A00D8C872 /* SIAlertView.m */; };
 		6616C67F1A13232A00D8C872 /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616C67D1A13232A00D8C872 /* UIWindow+SIUtils.m */; };
+		6616C6821A1323A900D8C872 /* EventManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6616C6811A1323A900D8C872 /* EventManager.m */; };
 		664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 664978541A0ACCF90081EA43 /* FirstViewController.m */; };
 		6649BF041A080367007B447B /* SearchTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF031A080367007B447B /* SearchTableViewController.m */; };
 		6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649BF3E1A0966EF007B447B /* CreateEventViewController.m */; };
@@ -32,7 +33,6 @@
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */; };
-		E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB791A054E3700F56EBA /* EventController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
 /* End PBXBuildFile section */
@@ -73,6 +73,8 @@
 		6616C67B1A13232A00D8C872 /* SIAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SIAlertView.m; path = PunctualTime/SIAlertView/SIAlertView.m; sourceTree = SOURCE_ROOT; };
 		6616C67C1A13232A00D8C872 /* UIWindow+SIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIWindow+SIUtils.h"; path = "PunctualTime/SIAlertView/UIWindow+SIUtils.h"; sourceTree = SOURCE_ROOT; };
 		6616C67D1A13232A00D8C872 /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIWindow+SIUtils.m"; path = "PunctualTime/SIAlertView/UIWindow+SIUtils.m"; sourceTree = SOURCE_ROOT; };
+		6616C6801A1323A900D8C872 /* EventManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventManager.h; sourceTree = "<group>"; };
+		6616C6811A1323A900D8C872 /* EventManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventManager.m; sourceTree = "<group>"; };
 		664978531A0ACCF90081EA43 /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		664978541A0ACCF90081EA43 /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		6649BF021A080367007B447B /* SearchTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewController.h; sourceTree = "<group>"; };
@@ -92,8 +94,6 @@
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E910C8251A0D4E7700CDD64D /* UIWindow+SIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+SIUtils.m"; sourceTree = "<group>"; };
-		E9ACBB781A054E3700F56EBA /* EventController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventController.h; sourceTree = "<group>"; };
-		E9ACBB791A054E3700F56EBA /* EventController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventController.m; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
 		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9BECF311A0983CF006ABCF9 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -251,8 +251,8 @@
 			children = (
 				E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */,
 				E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */,
-				E9ACBB781A054E3700F56EBA /* EventController.h */,
-				E9ACBB791A054E3700F56EBA /* EventController.m */,
+				6616C6801A1323A900D8C872 /* EventManager.h */,
+				6616C6811A1323A900D8C872 /* EventManager.m */,
 				661079131A057A7A0096479F /* LocationSearchController.h */,
 				661079141A057A7A0096479F /* LocationSearchController.m */,
 			);
@@ -399,6 +399,7 @@
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
 				661078E91A044D830096479F /* EventTableViewController.m in Sources */,
+				6616C6821A1323A900D8C872 /* EventManager.m in Sources */,
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,
 				66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */,
 				6649BF041A080367007B447B /* SearchTableViewController.m in Sources */,
@@ -411,7 +412,6 @@
 				6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */,
-				E9ACBB7A1A054E3700F56EBA /* EventController.m in Sources */,
 				E910C8281A0D4E7700CDD64D /* UIWindow+SIUtils.m in Sources */,
 				6616C67F1A13232A00D8C872 /* UIWindow+SIUtils.m in Sources */,
 			);
@@ -490,6 +490,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -527,6 +528,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "";
