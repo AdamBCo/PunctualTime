@@ -33,6 +33,7 @@
 @property EventManager *sharedEventController;
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
+@property PTEventRecurrenceOption recurrenceOption;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
@@ -41,9 +42,7 @@
 @property BOOL isMapExpanded;
 @property BOOL isDatePickerExpanded;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
-
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
-
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 
@@ -65,6 +64,7 @@
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor whiteColor];
+    self.recurrenceOption = PTEventRecurrenceOptionNone;
 
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
@@ -208,7 +208,9 @@
                                        startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
-                                    transportationType:self.transportationType];
+                                    transportationType:self.transportationType
+                                  notificationCategory:self.initialNotificationCategory
+                                            recurrence:self.recurrenceOption];
 
     [newEvent makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError* error)
     {
@@ -237,26 +239,63 @@
 #warning hook up notification buttons from storyboard and set tags appropriately
 - (IBAction)onNotificationButtonPressed:(UIButton *)button
 {
+    //TODO: Reset images
     switch (button.tag)
     {
         case 0:
             self.initialNotificationCategory = SIXTY_MINUTE_WARNING;
+            // Set image to selected state
             break;
         case 1:
             self.initialNotificationCategory = THIRTY_MINUTE_WARNING;
+            // Set image to selected state
             break;
         case 2:
             self.initialNotificationCategory = FIFTEEN_MINUTE_WARNING;
+            // Set image to selected state
             break;
         case 3:
             self.initialNotificationCategory = TEN_MINUTE_WARNING;
+            // Set image to selected state
             break;
         case 4:
             self.initialNotificationCategory = FIVE_MINUTE_WARNING;
+            // Set image to selected state
             break;
         default:
             self.initialNotificationCategory = nil; // Zero minute warning
             break;
+    }
+}
+
+#warning hook up recurrence buttons from storyboard and set tags appropriately
+- (IBAction)onRecurrenceButtonPressed:(UIButton *)button
+{
+    if (button.tag == self.recurrenceOption) // User is deselecting currently selected option
+    {
+        self.recurrenceOption = PTEventRecurrenceOptionNone;
+        //TODO: revert button image to deselected state
+    }
+    else
+    {
+        switch (button.tag)
+        {
+            case 0:
+                self.recurrenceOption = PTEventRecurrenceOptionDaily;
+                // Set image to selected state
+                break;
+            case 1:
+                self.recurrenceOption = PTEventRecurrenceOptionWeekdays;
+                // Set image to selected state
+                break;
+            case 2:
+                self.recurrenceOption = PTEventRecurrenceOptionWeekly;
+                // Set image to selected state
+                break;
+            default:
+                self.recurrenceOption = PTEventRecurrenceOptionNone;
+                break;
+        }
     }
 }
 

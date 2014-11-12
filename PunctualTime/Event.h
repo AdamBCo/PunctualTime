@@ -9,6 +9,20 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
+// Event creation error codes
+typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
+    PTEventCreationErrorCodeAPIError = 0,
+    PTEventCreationErrorCodeImpossibleEvent
+};
+
+// Event recurrence options
+typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
+    PTEventRecurrenceOptionDaily = 0,
+    PTEventRecurrenceOptionWeekdays,
+    PTEventRecurrenceOptionWeekly,
+    PTEventRecurrenceOptionNone
+};
+
 @interface Event : NSObject
 
 @property (readonly) NSString* eventName;
@@ -20,17 +34,21 @@
 @property (readonly) NSNumber* lastTravelTime;
 @property (readonly) NSString* uniqueID;
 @property (readonly) NSString* currentNotificationCategory;
-@property NSString *transportationType;
-
-
+@property (readonly) NSString* initialNotificationCategory;
+@property (readonly) PTEventRecurrenceOption recurrenceInterval;
+@property (readonly) NSString *transportationType;
 
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
                     endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime
-               transportationType:(NSString *)transporation;
-- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete;
-- (NSComparisonResult)compareEvent:(Event *)otherObject;
+               transportationType:(NSString *)transporation
+             notificationCategory:(NSString *)category
+                       recurrence:(PTEventRecurrenceOption)recurrenceInterval;
 
+- (void)makeLocalNotificationWithCategoryIdentifier:(NSString *)categoryID completion:(void (^)(NSError* error))complete;
+- (void)rescheduleWithCompletion:(void (^)(void))completion;
+
+- (NSComparisonResult)compareEvent:(Event *)otherObject;
 
 @end

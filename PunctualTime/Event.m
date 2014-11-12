@@ -22,6 +22,8 @@ static NSString* kLastTravelTime = @"LastTravelTime";
 static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
+static NSString* kInitialNotificationCategory = @"InitialNotificationCategory";
+static NSString* kRecurrenceInterval = @"RecurrenceInterval";
 
 @interface Event () <NSCoding>
 
@@ -34,6 +36,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 @property (readwrite) NSNumber* lastTravelTime;
 @property (readwrite) NSString* uniqueID;
 @property (readwrite) NSString* currentNotificationCategory;
+@property (readwrite) NSString* initialNotificationCategory;
+@property (readwrite) PTEventRecurrenceOption recurrenceInterval;
+@property (readwrite) NSString *transportationType;
 
 @end
 
@@ -42,7 +47,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 #pragma mark - Public methods
 
-- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation
+- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation notificationCategory:(NSString *)category recurrence:(PTEventRecurrenceOption)recurrenceInterval
 {
     if (self = [super init])
     {
@@ -51,6 +56,8 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.endingAddress = endingAddress;
         self.desiredArrivalTime = arrivalTime;
         self.transportationType = transporation;
+        self.initialNotificationCategory = category;
+        self.recurrenceInterval = recurrenceInterval;
 
         CFUUIDRef uuid = CFUUIDCreate(NULL);
         NSString *uniqueID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
@@ -161,6 +168,46 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     }];
 }
 
+- (void)rescheduleWithCompletion:(void (^)(void))completion
+{
+    NSTimeInterval dayInterval = (60*60*24);
+    NSTimeInterval weekdayInterval;
+
+    // Get the current day of week
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *weekdayComponents = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
+    long numericDayOfWeek = [weekdayComponents weekday];
+
+    if (numericDayOfWeek == 6) // Today is Friday so weekdayInterval should account for weekend
+    {
+        weekdayInterval = dayInterval * 3;
+    }
+    else
+    {
+        weekdayInterval = dayInterval;
+    }
+
+    switch (self.recurrenceInterval)
+    {
+        case PTEventRecurrenceOptionDaily:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + dayInterval)];
+            break;
+        case PTEventRecurrenceOptionWeekdays:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + weekdayInterval)];
+            break;
+        case PTEventRecurrenceOptionWeekly:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + (dayInterval*7))];
+            break;
+
+        default:
+            break;
+    }
+
+    [self makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError *error) {
+        completion();
+    }];
+}
+
 - (NSComparisonResult)compareEvent:(Event *)otherEvent
 {
     return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
@@ -242,13 +289,15 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
+        self.initialNotificationCategory = [decoder decodeObjectForKey:kInitialNotificationCategory];
+        self.recurrenceInterval = [decoder decodeIntegerForKey:kRecurrenceInterval];
+
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
         CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
         self.startingAddress = CLLocationCoordinate2DMake(startingLatitude, startingLongitude);
         CLLocationDegrees endingLatitude = [decoder decodeDoubleForKey:kEndingAddressLat];
         CLLocationDegrees endingLongitude = [decoder decodeDoubleForKey:kEndingAddressLon];
         self.endingAddress = CLLocationCoordinate2DMake(endingLatitude, endingLongitude);
-
     }
 
     return self;
@@ -268,9 +317,8 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
-
+    [encoder encodeObject:self.initialNotificationCategory forKey:kInitialNotificationCategory];
+    [encoder encodeInteger:self.recurrenceInterval forKey:kRecurrenceInterval];
 }
-
-
 
 @end

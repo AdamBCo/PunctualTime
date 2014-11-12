@@ -23,20 +23,8 @@
 // Notification body trailing string
 #define NOTIFICATION_TRAILING_TEXT (@"Slide to snooze")
 
-// Event creation error codes
-typedef NS_ENUM(NSUInteger, PTEventCreationErrorCode) {
-    PTEventCreationErrorCodeAPIError = 0,
-    PTEventCreationErrorCodeImpossibleEvent
-};
-#define kFifteenMinuteAction (@"FifteenMinuteAction")
-#define kFiveMinuteAction (@"FiveMinuteAction")
-#define kZeroMinuteAction (@"ZeroMinuteAction")
-#define kThirtyMinuteWarning (@"ThirtyMinuteWarning")
-#define kFifteenMinuteWarning (@"FifteenMinuteWarning")
-#define kFiveMinuteWarning (@"FiveMinuteWarning")
-
+// Transporation strings for Google Maps API
 #define TRANSPO_DRIVING @"driving"
 #define TRANSPO_WALKING @"walking"
 #define TRANSPO_BIKING @"bicycling"
 #define TRANSPO_TRANSIT @"transit"
-

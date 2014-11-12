@@ -49,25 +49,33 @@
     {
         if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
         {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Cancel the associated notification first
         }
     }
     [self.events removeObject:event];
     [self saveEvents];
 }
 
-- (void)refreshEvents //Removes expired events
+- (void)refreshEvents // Removes or reschedules expired events and resorts by date
 {
     NSArray* eventsToCheckForExpiration = [NSArray arrayWithArray:self.events];
     for (Event* event in eventsToCheckForExpiration)
     {
         if ([[NSDate date] compare:event.desiredArrivalTime] == NSOrderedDescending) // Current time is after event time
         {
-            [self removeEvent:event];
+            if (event.recurrenceInterval == PTEventRecurrenceOptionNone)
+            {
+                [self removeEvent:event];
+                [self.events sortUsingSelector:@selector(compareEvent:)]; // Sort remaining events by date
+            }
+            else
+            {
+                [event rescheduleWithCompletion:^{
+                    [self.events sortUsingSelector:@selector(compareEvent:)];
+                }];
+            }
         }
     }
-
-    [self.events sortUsingSelector:@selector(compareEvent:)];
 }
 
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID
