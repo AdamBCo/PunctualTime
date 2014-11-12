@@ -32,6 +32,8 @@
 		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
+		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
+		E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94821201A13E1EC00DAAC63 /* LFGlassView.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
 /* End PBXBuildFile section */
@@ -92,6 +94,11 @@
 		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E948211D1A13E1EC00DAAC63 /* LFDisplayBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFDisplayBridge.h; sourceTree = "<group>"; };
+		E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFDisplayBridge.m; sourceTree = "<group>"; };
+		E948211F1A13E1EC00DAAC63 /* LFGlassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFGlassView.h; sourceTree = "<group>"; };
+		E94821201A13E1EC00DAAC63 /* LFGlassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFGlassView.m; sourceTree = "<group>"; };
+		E94821211A13E1EC00DAAC63 /* LiveFrost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveFrost.h; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
 		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9BECF311A0983CF006ABCF9 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -152,6 +159,7 @@
 				E9ACBB7C1A054E7400F56EBA /* View Controllers */,
 				E9ACBB7B1A054E6000F56EBA /* Data Controllers */,
 				E9D79C371A046E1D00C9D65F /* Model */,
+				E948211C1A13E1EC00DAAC63 /* LiveFrost */,
 				E910C8201A0D4E7700CDD64D /* SIAlertView */,
 				E9558B2E1A04636200A45E87 /* Storyboard */,
 				E910C81A1A0D3EF900CDD64D /* XIBs */,
@@ -231,6 +239,18 @@
 			);
 			name = SIAlertView;
 			path = ../SIAlertView;
+			sourceTree = "<group>";
+		};
+		E948211C1A13E1EC00DAAC63 /* LiveFrost */ = {
+			isa = PBXGroup;
+			children = (
+				E94821211A13E1EC00DAAC63 /* LiveFrost.h */,
+				E948211F1A13E1EC00DAAC63 /* LFGlassView.h */,
+				E94821201A13E1EC00DAAC63 /* LFGlassView.m */,
+				E948211D1A13E1EC00DAAC63 /* LFDisplayBridge.h */,
+				E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */,
+			);
+			path = LiveFrost;
 			sourceTree = "<group>";
 		};
 		E9558B2E1A04636200A45E87 /* Storyboard */ = {
@@ -400,6 +420,8 @@
 				6616C6821A1323A900D8C872 /* EventManager.m in Sources */,
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,
 				66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */,
+				E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */,
+				E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */,
 				6649BF041A080367007B447B /* SearchTableViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
