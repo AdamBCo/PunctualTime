@@ -24,8 +24,8 @@
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
 @property BOOL tableViewIsExpanded;
+@property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
-
 
 @end
 
@@ -115,14 +115,15 @@
         CGPoint translation = [gesture translationInView:gesture.view];
         self.containerViewHeightConstraint.constant -= translation.y;
         [gesture setTranslation:CGPointMake(0, 0) inView:gesture.view];
+        self.lastYTranslation = translation.y;
 
         // Set blurView alpha
         CGPoint location = [gesture locationInView:self.view];
         self.blurView.alpha = 1.0 - (location.y/(self.view.frame.size.height));
     }
-    else if (UIGestureRecognizerStateEnded == gesture.state) // Animate to desired location
+    else if (UIGestureRecognizerStateEnded == gesture.state)
     {
-        if (self.tableViewIsExpanded)
+        if (self.lastYTranslation > 0) // User was panning down so finish closing
         {
             self.containerViewHeightConstraint.constant = 50;
             [UIView animateWithDuration:0.2 animations:^{
@@ -132,7 +133,7 @@
                 [self.blurView removeFromSuperview];
             }];
         }
-        else
+        else // User was panning up so finish opening
         {
             self.containerViewHeightConstraint.constant = self.view.frame.size.height;
             [UIView animateWithDuration:0.2 animations:^{

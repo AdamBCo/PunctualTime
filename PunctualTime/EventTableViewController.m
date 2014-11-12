@@ -21,13 +21,6 @@
 
 @implementation EventTableViewController
 
-- (IBAction)onDoneButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -54,6 +47,7 @@
 
 - (IBAction)onPanGestureDetected:(UIPanGestureRecognizer *)panGesture
 {
+    [self.tableView setEditing:NO animated:YES];
     [self.delegate panGestureDetected:panGesture];
 }
 
