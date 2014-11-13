@@ -115,7 +115,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
         // Set blurView alpha
         CGPoint location = [gesture locationInView:self.view];
-        self.blurView.alpha = 1.0 - (location.y/(self.view.frame.size.height));
+        self.blurView.alpha = 1.06 - (location.y/self.view.frame.size.height);
     }
     else if (UIGestureRecognizerStateEnded == gesture.state)
     {
