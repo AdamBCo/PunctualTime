@@ -200,4 +200,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     }
 }
 
+- (IBAction)unwindFromCreateEventVC:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"segue: %@", segue);
+    NSLog(@"sender: %@", sender);
+}
+
 @end

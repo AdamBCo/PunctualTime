@@ -142,7 +142,7 @@
 
 - (void)datePickerValueChanged:(id)sender{
 
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
@@ -161,8 +161,8 @@
 
 
 - (void) expandMap{
-    [UIView animateWithDuration:1.0
-                          delay:0.2
+    [UIView animateWithDuration:0.3
+                          delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          if(self.isMapExpanded == YES){
@@ -206,6 +206,7 @@
         {
             [self.sharedEventManager addEvent:newEvent];
             [self resetTextFields];
+            [self performSegueWithIdentifier:@"UnwindFromCreateEventVC" sender:self];
         }
     }];
 }

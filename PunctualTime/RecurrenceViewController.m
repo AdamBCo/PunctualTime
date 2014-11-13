@@ -35,6 +35,13 @@ static UIColor* initialTextColor;
     }
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    [self.view layoutSubviews];
+}
+
 - (IBAction)onRecurrenceButtonPressed:(UIButton *)pressedButton
 {
     UIColor* selectedTextColor = [UIColor colorWithRed:0.071 green:0.871 blue:1.000 alpha:1.000];
