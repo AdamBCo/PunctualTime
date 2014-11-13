@@ -64,9 +64,7 @@
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
-    self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor colorWithRed:1.000 green:0.486 blue:0.071 alpha:1.000];
-    self.recurrenceOption = PTEventRecurrenceOptionNone;
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
@@ -277,6 +275,15 @@
 - (void)recurrenceSelected:(PTEventRecurrenceOption)recurrenceInterval
 {
     self.recurrenceOption = recurrenceInterval;
+}
+
+
+#pragma mark - ModesOfTransportationDelegate
+
+- (void)modeOfTransportationSelected:(NSString *)transportationType
+{
+    self.transportationType = transportationType;
+    NSLog(@"transporation: %@", transportationType);
 }
 
 

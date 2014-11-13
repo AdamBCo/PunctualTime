@@ -272,12 +272,12 @@
 			children = (
 				661078E71A044D830096479F /* EventTableViewController.h */,
 				661078E81A044D830096479F /* EventTableViewController.m */,
-				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
-				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
 				E98ED0D01A14637A00F0078C /* RemindersViewController.h */,
 				E98ED0D11A14637A00F0078C /* RemindersViewController.m */,
 				E9A624701A150AFA009C57B2 /* RecurrenceViewController.h */,
 				E9A624711A150AFA009C57B2 /* RecurrenceViewController.m */,
+				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
+				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
 			);
 			name = "Container View Controllers";
 			sourceTree = "<group>";

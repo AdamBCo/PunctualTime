@@ -26,11 +26,12 @@ static UIColor* initialTextColor;
 
     initialTextColor = [self.buttons.firstObject titleColorForState:UIControlStateNormal];
     self.selectedRecurrence = PTEventRecurrenceOptionNone;
+    [self.delegate recurrenceSelected:PTEventRecurrenceOptionNone];
 
     for (UIButton* button in self.buttons)
     {
         button.layer.borderWidth = 2.0;
-        button.layer.borderColor = [[UIColor blackColor] CGColor];
+        button.layer.borderColor = [initialTextColor CGColor];
     }
 }
 
