@@ -80,7 +80,7 @@
                                     </mapView>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-5h-hpk">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="381-vn-L9K"/>
                                             <constraint firstAttribute="height" constant="60" id="GTc-uc-AIB"/>
@@ -115,7 +115,7 @@
                                     </button>
                                     <datePicker opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="8be-e6-iBw">
                                         <rect key="frame" x="-160" y="-81" width="320" height="162"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="162" id="aUB-1S-rft"/>
                                         </constraints>
@@ -135,7 +135,7 @@
                                     </datePicker>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sbu-ny-EOS">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="0sC-Fs-5iQ"/>
                                         </constraints>
@@ -160,7 +160,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5pu-bG-ddc">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                        <color key="backgroundColor" red="0.12156862745098039" green="0.69411764705882351" blue="0.54117647058823526" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.0" green="0.60392156862745094" blue="0.69803921568627447" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="65" id="MSt-0X-LpQ"/>
                                         </constraints>
@@ -185,7 +185,7 @@
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Event Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FAQ-lh-NOg">
                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="bcz-eC-4dT"/>
                                         </constraints>
@@ -204,7 +204,7 @@
                                         </variation>
                                     </textField>
                                 </subviews>
-                                <color key="backgroundColor" red="0.20684273850000001" green="0.64737946280000003" blue="0.78836495539999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="bRM-ga-tqv" secondAttribute="trailing" id="0qo-ES-crf"/>
                                     <constraint firstAttribute="trailing" secondItem="Wd5-2M-TRB" secondAttribute="trailing" id="3sl-Ek-DQz"/>
@@ -309,7 +309,8 @@
                                         <exclude reference="u95-p0-Jhi"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact">
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="64" width="400" height="836"/>
                                     <mask key="subviews">
                                         <include reference="bRM-ga-tqv"/>
                                         <include reference="Nio-dM-nth"/>
@@ -369,7 +370,7 @@
                                 </connections>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.16862745098039217" green="0.51764705882352946" blue="0.82352941176470584" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="uzn-S6-b8D" secondAttribute="trailing" id="NoG-4h-fqH"/>
                             <constraint firstItem="uzn-S6-b8D" firstAttribute="leading" secondItem="FGA-MB-bzh" secondAttribute="leading" id="Wow-iJ-e7I"/>
@@ -399,9 +400,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Create Event" id="H8Z-UK-dVU">
-                        <barButtonItem key="leftBarButtonItem" id="Rma-s3-gMh"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Create Event" id="H8Z-UK-dVU"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="400" height="900"/>
                     <connections>
@@ -630,7 +629,8 @@
                                         <exclude reference="d0W-Kc-eKD"/>
                                     </mask>
                                 </variation>
-                                <variation key="widthClass=compact">
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="356" y="64" width="44" height="44"/>
                                     <mask key="constraints">
                                         <include reference="LrU-yu-GGs"/>
                                         <include reference="d0W-Kc-eKD"/>
@@ -1063,6 +1063,7 @@
                                 </variation>
                             </button>
                         </subviews>
+                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Nmz-OK-ymz" firstAttribute="leading" secondItem="TND-EV-cNH" secondAttribute="trailing" constant="17" id="0Su-xU-8la"/>
                             <constraint firstItem="Nmz-OK-ymz" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wdF-z7-iqj" secondAttribute="trailingMargin" id="2Ss-lo-7jc"/>
@@ -1315,7 +1316,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="tha-cw-LpW" firstAttribute="leading" relation="lessThanOrEqual" secondItem="dhf-b9-fPK" secondAttribute="trailing" constant="8" id="4o0-BT-fFl">
                                 <variation key="widthClass=compact" constant="16"/>
@@ -2213,9 +2214,10 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="avr-ZB-gVt" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QpH-UU-ctu">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" translucent="NO" id="QpH-UU-ctu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

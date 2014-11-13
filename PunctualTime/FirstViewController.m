@@ -35,6 +35,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.navigationItem.title = @"Cancel"; // For the back button on CreateEventVC
+
     // Remove shadow on transparent toolbar:
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
