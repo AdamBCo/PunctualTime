@@ -184,6 +184,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
 }
 
 
+#pragma mark - EventManagerDelegate
+
+-(void)eventManagerHasBeenUpdated{
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
+}
+
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -199,13 +206,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     }
 }
 
-#pragma mark - EventManagerDelegate
-
--(void)eventManagerHasBeenUpdated{
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
+- (IBAction)unwindFromCreateEventVC:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"segue: %@", segue);
+    NSLog(@"sender: %@", sender);
 }
-
-
-
 
 @end

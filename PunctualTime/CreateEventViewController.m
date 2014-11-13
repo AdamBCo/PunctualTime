@@ -13,12 +13,13 @@
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
 #import "RemindersViewController.h"
+#import "RecurrenceViewController.h"
 #import "Event.h"
 #import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
 
-@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -46,6 +47,7 @@
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
+@property (strong, nonatomic) IBOutlet UIButton *saveButton;
 
 
 @end
@@ -63,9 +65,7 @@
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
-    self.transportationType = TRANSPO_DRIVING;
     self.datePicker.backgroundColor = [UIColor colorWithRed:1.000 green:0.486 blue:0.071 alpha:1.000];
-    self.recurrenceOption = PTEventRecurrenceOptionNone;
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
@@ -78,15 +78,11 @@
 
 }
 
-- (void)viewDidLayoutSubviews {
-
-}
-
-
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
 
+    [self enableSaveButtonIfReady];
 
     if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
@@ -102,7 +98,6 @@
     }
 
 }
-
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];
@@ -141,39 +136,37 @@
                      }];
 }
 
-- (void)datePickerValueChanged:(id)sender{
+- (void)datePickerValueChanged:(id)sender
+{
 
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-
                          NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                          dateFormatter.timeZone = [NSTimeZone localTimeZone];
                          dateFormatter.dateStyle = NSDateFormatterMediumStyle;
                          dateFormatter.timeStyle = NSDateFormatterShortStyle;
                          [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
                      }
-
                      completion:^(BOOL finished){
+                         [self enableSaveButtonIfReady];
                      }];
-
 }
 
 
-- (void) expandMap{
-    [UIView animateWithDuration:1.0
-                          delay:0.2
+- (void) expandMap
+{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          if(self.isMapExpanded == YES){
                              self.mapViewHeightConstraint.constant = 115;
                              [self.view layoutIfNeeded];
-
                          }
                          else if(self.isMapExpanded == NO){
                              self.mapViewHeightConstraint.constant = 0;
-
                          }
                      }
                      completion:^(BOOL finished){
@@ -207,11 +200,10 @@
         {
             [self.sharedEventManager addEvent:newEvent];
             [self resetTextFields];
+            [self performSegueWithIdentifier:@"UnwindFromCreateEventVC" sender:self];
         }
     }];
 }
-
-
 
 - (void)resetTextFields
 {
@@ -219,34 +211,17 @@
     self.datePicker.date = [NSDate date];
 }
 
-#warning hook up recurrence buttons from storyboard and set tags appropriately
-- (IBAction)onRecurrenceButtonPressed:(UIButton *)button
+- (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
 {
-    if (button.tag == self.recurrenceOption) // User is deselecting currently selected option
+    if (![self.titleTextField.text isEqualToString:@""] &&
+        self.datePicker.date.timeIntervalSince1970 > [NSDate date].timeIntervalSince1970 &&
+        self.locationInfo != nil)
     {
-        self.recurrenceOption = PTEventRecurrenceOptionNone;
-        //TODO: revert button image to deselected state
+        self.saveButton.enabled = YES;
     }
     else
     {
-        switch (button.tag)
-        {
-            case 0:
-                self.recurrenceOption = PTEventRecurrenceOptionDaily;
-                // Set image to selected state
-                break;
-            case 1:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekdays;
-                // Set image to selected state
-                break;
-            case 2:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekly;
-                // Set image to selected state
-                break;
-            default:
-                self.recurrenceOption = PTEventRecurrenceOptionNone;
-                break;
-        }
+        self.saveButton.enabled = NO;
     }
 }
 
@@ -284,6 +259,7 @@
 {
     [textField resignFirstResponder];
     [self.blackView removeFromSuperview];
+    [self enableSaveButtonIfReady];
     return YES;
 }
 
@@ -297,6 +273,23 @@
 - (void)reminderSelected:(NSString *)reminderCategory
 {
     self.initialNotificationCategory = reminderCategory;
+}
+
+
+#pragma mark - RecurrenceViewControllerDelegate
+
+- (void)recurrenceSelected:(PTEventRecurrenceOption)recurrenceInterval
+{
+    self.recurrenceOption = recurrenceInterval;
+}
+
+
+#pragma mark - ModesOfTransportationDelegate
+
+- (void)modeOfTransportationSelected:(NSString *)transportationType
+{
+    self.transportationType = transportationType;
+    NSLog(@"transporation: %@", transportationType);
 }
 
 
@@ -318,6 +311,11 @@
         RemindersViewController* remindersVC = segue.destinationViewController;
         remindersVC.delegate = self;
     }
+    else if ([segue.identifier isEqualToString:@"RecurrenceVC"])
+    {
+        RecurrenceViewController* recurrenceVC = segue.destinationViewController;
+        recurrenceVC.delegate = self;
+    }
 
 }
 
@@ -326,17 +324,7 @@
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
-}
-
-#pragma mark - Modes of Transportation
-
-
--(void)modeOfTransportationSelected:(NSString *)transportationType
-{
-    self.transportationType = transportationType;
-    NSLog(@"Transportation Type: %@",self.transportationType);
-    NSLog(@"The Date: %@",self.datePicker.date);
-    NSLog(@"The Locations: %@", self.locationInfo);
+    [self enableSaveButtonIfReady];
 }
 
 @end
