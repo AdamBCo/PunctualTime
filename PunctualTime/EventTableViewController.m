@@ -27,6 +27,9 @@
 {
     [super viewDidLoad];
 
+//    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(goBack)];
+//    [self.navigationController.navigationItem setBackBarButtonItem:cancelButton];
+
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
     [self.dragImageView addGestureRecognizer:panGesture];
 
@@ -35,6 +38,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.view.backgroundColor = [UIColor clearColor];
+
     [self.sharedEventManager refreshEvents];
 
     [self.tableView reloadData];

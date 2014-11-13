@@ -34,6 +34,7 @@
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
 		E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94821201A13E1EC00DAAC63 /* LFGlassView.m */; };
+		E98ED0D21A14637A00F0078C /* RemindersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E98ED0D11A14637A00F0078C /* RemindersViewController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
 /* End PBXBuildFile section */
@@ -99,6 +100,8 @@
 		E948211F1A13E1EC00DAAC63 /* LFGlassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFGlassView.h; sourceTree = "<group>"; };
 		E94821201A13E1EC00DAAC63 /* LFGlassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFGlassView.m; sourceTree = "<group>"; };
 		E94821211A13E1EC00DAAC63 /* LiveFrost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveFrost.h; sourceTree = "<group>"; };
+		E98ED0D01A14637A00F0078C /* RemindersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindersViewController.h; sourceTree = "<group>"; };
+		E98ED0D11A14637A00F0078C /* RemindersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemindersViewController.m; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
 		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9BECF311A0983CF006ABCF9 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -262,6 +265,19 @@
 			name = Storyboard;
 			sourceTree = "<group>";
 		};
+		E98ED0D31A14638400F0078C /* Container View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				661078E71A044D830096479F /* EventTableViewController.h */,
+				661078E81A044D830096479F /* EventTableViewController.m */,
+				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
+				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
+				E98ED0D01A14637A00F0078C /* RemindersViewController.h */,
+				E98ED0D11A14637A00F0078C /* RemindersViewController.m */,
+			);
+			name = "Container View Controllers";
+			sourceTree = "<group>";
+		};
 		E9ACBB7B1A054E6000F56EBA /* Data Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -280,14 +296,11 @@
 			children = (
 				664978531A0ACCF90081EA43 /* FirstViewController.h */,
 				664978541A0ACCF90081EA43 /* FirstViewController.m */,
-				661078E71A044D830096479F /* EventTableViewController.h */,
-				661078E81A044D830096479F /* EventTableViewController.m */,
 				6649BF3D1A0966EF007B447B /* CreateEventViewController.h */,
 				6649BF3E1A0966EF007B447B /* CreateEventViewController.m */,
 				6649BF021A080367007B447B /* SearchTableViewController.h */,
 				6649BF031A080367007B447B /* SearchTableViewController.m */,
-				6616C6771A12FE3200D8C872 /* ModesOfTransportationViewController.h */,
-				6616C6781A12FE3200D8C872 /* ModesOfTransportationViewController.m */,
+				E98ED0D31A14638400F0078C /* Container View Controllers */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -416,6 +429,7 @@
 				6616C6791A12FE3200D8C872 /* ModesOfTransportationViewController.m in Sources */,
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
+				E98ED0D21A14637A00F0078C /* RemindersViewController.m in Sources */,
 				661078E91A044D830096479F /* EventTableViewController.m in Sources */,
 				6616C6821A1323A900D8C872 /* EventManager.m in Sources */,
 				661078E61A044D830096479F /* AppDelegate.m in Sources */,

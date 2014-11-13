@@ -39,6 +39,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
     self.cirularTimer.center =  CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height/2);
 
+    self.navigationItem.title = @"Cancel"; // For the back button on CreateEventVC
+
     // Remove shadow on transparent toolbar:
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
