@@ -23,49 +23,54 @@ static UIColor* initialTextColor;
 {
     [super viewDidLoad];
 
-    //
+    initialTextColor = [self.buttons.firstObject titleColorForState:UIControlStateNormal];
 }
 
-- (IBAction)onNotificationButtonPressed:(UIButton *)button
+- (IBAction)onNotificationButtonPressed:(UIButton *)pressedButton
 {
-    initialTextColor = [UIColor blackColor];
     UIColor* selectedTextColor = [UIColor colorWithRed:0.071 green:0.871 blue:1.000 alpha:1.000];
 
     for (UIButton* button in self.buttons)
     {
-        [button setTitleColor:initialTextColor forState:UIControlStateNormal];
+        if (![button isEqual:pressedButton])
+        {
+            [button setTitleColor:initialTextColor forState:UIControlStateNormal];
+        }
     }
 
-    //if ([[button titleColorForState:UIControlStateNormal] isEqual:selectedTextColor])
-    //{
-    //    selectedTextColor = initialTextColor;
-    //}
-
-    switch (button.tag)
+    if ([[pressedButton titleColorForState:UIControlStateNormal] isEqual:selectedTextColor])
     {
-        case 0:
-            [self.delegate reminderSelected:SIXTY_MINUTE_WARNING];
-            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
-            break;
-        case 1:
-            [self.delegate reminderSelected:THIRTY_MINUTE_WARNING];
-            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
-            break;
-        case 2:
-            [self.delegate reminderSelected:FIFTEEN_MINUTE_WARNING];
-            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
-            break;
-        case 3:
-            [self.delegate reminderSelected:TEN_MINUTE_WARNING];
-            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
-            break;
-        case 4:
-            [self.delegate reminderSelected:FIVE_MINUTE_WARNING];
-            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
-            break;
-        default:
-            [self.delegate reminderSelected:nil]; // Zero minute warning
-            break;
+        [pressedButton setTitleColor:initialTextColor forState:UIControlStateNormal];
+        [self.delegate reminderSelected:nil];
+    }
+    else
+    {
+        switch (pressedButton.tag)
+        {
+            case 0:
+                [self.delegate reminderSelected:SIXTY_MINUTE_WARNING];
+                [pressedButton setTitleColor:selectedTextColor forState:UIControlStateNormal];
+                break;
+            case 1:
+                [self.delegate reminderSelected:THIRTY_MINUTE_WARNING];
+                [pressedButton setTitleColor:selectedTextColor forState:UIControlStateNormal];
+                break;
+            case 2:
+                [self.delegate reminderSelected:FIFTEEN_MINUTE_WARNING];
+                [pressedButton setTitleColor:selectedTextColor forState:UIControlStateNormal];
+                break;
+            case 3:
+                [self.delegate reminderSelected:TEN_MINUTE_WARNING];
+                [pressedButton setTitleColor:selectedTextColor forState:UIControlStateNormal];
+                break;
+            case 4:
+                [self.delegate reminderSelected:FIVE_MINUTE_WARNING];
+                [pressedButton setTitleColor:selectedTextColor forState:UIControlStateNormal];
+                break;
+            default:
+                [self.delegate reminderSelected:nil]; // Zero minute warning
+                break;
+        }
     }
 }
 
