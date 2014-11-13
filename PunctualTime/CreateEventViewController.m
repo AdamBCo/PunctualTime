@@ -13,12 +13,13 @@
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
 #import "RemindersViewController.h"
+#import "RecurrenceViewController.h"
 #import "Event.h"
 #import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
 
-@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -219,36 +220,7 @@
     self.datePicker.date = [NSDate date];
 }
 
-#warning hook up recurrence buttons from storyboard and set tags appropriately
-- (IBAction)onRecurrenceButtonPressed:(UIButton *)button
-{
-    if (button.tag == self.recurrenceOption) // User is deselecting currently selected option
-    {
-        self.recurrenceOption = PTEventRecurrenceOptionNone;
-        //TODO: revert button image to deselected state
-    }
-    else
-    {
-        switch (button.tag)
-        {
-            case 0:
-                self.recurrenceOption = PTEventRecurrenceOptionDaily;
-                // Set image to selected state
-                break;
-            case 1:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekdays;
-                // Set image to selected state
-                break;
-            case 2:
-                self.recurrenceOption = PTEventRecurrenceOptionWeekly;
-                // Set image to selected state
-                break;
-            default:
-                self.recurrenceOption = PTEventRecurrenceOptionNone;
-                break;
-        }
-    }
-}
+
 
 - (void)makeAlertForErrorCode:(PTEventCreationErrorCode)errorCode errorUserInfo:(NSDictionary *)userInfo
 {
@@ -300,6 +272,14 @@
 }
 
 
+#pragma mark - RecurrenceViewControllerDelegate
+
+- (void)recurrenceSelected:(PTEventRecurrenceOption)recurrenceInterval
+{
+    self.recurrenceOption = recurrenceInterval;
+}
+
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -318,6 +298,11 @@
         RemindersViewController* remindersVC = segue.destinationViewController;
         remindersVC.delegate = self;
     }
+    else if ([segue.identifier isEqualToString:@"RecurrenceVC"])
+    {
+        RecurrenceViewController* recurrenceVC = segue.destinationViewController;
+        recurrenceVC.delegate = self;
+    }
 
 }
 
@@ -326,17 +311,6 @@
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
-}
-
-#pragma mark - Modes of Transportation
-
-
--(void)modeOfTransportationSelected:(NSString *)transportationType
-{
-    self.transportationType = transportationType;
-    NSLog(@"Transportation Type: %@",self.transportationType);
-    NSLog(@"The Date: %@",self.datePicker.date);
-    NSLog(@"The Locations: %@", self.locationInfo);
 }
 
 @end
