@@ -95,7 +95,8 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             self.lastTravelTime = travelTime;
 
             NSString* minuteWarning;
-            double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
+            double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
+            double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue - buffer;
             self.lastLeaveTime = [NSDate dateWithTimeIntervalSince1970: leaveTime];
 
             if ([NSDate date].timeIntervalSince1970 > leaveTime) // Current time is after leave time
@@ -111,37 +112,35 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
                 }
             }
 
-            double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
-
             if ([categoryID isEqualToString:SIXTY_MINUTE_WARNING])
             {
                 minuteWarning = @"Sixty";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (60 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (60 * 60))];
             }
             else if ([categoryID isEqualToString:THIRTY_MINUTE_WARNING])
             {
                 minuteWarning = @"Thirty";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60))];
             }
             else if ([categoryID isEqualToString:FIFTEEN_MINUTE_WARNING])
             {
                 minuteWarning = @"Fifteen";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60))];
             }
             else if ([categoryID isEqualToString:TEN_MINUTE_WARNING])
             {
                 minuteWarning = @"Ten";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (10 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (10 * 60))];
             }
             else if ([categoryID isEqualToString:FIVE_MINUTE_WARNING])
             {
                 minuteWarning = @"Five";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60))];
             }
             else // Zero minute warning
             {
                 newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime)];
                 self.lastNotificationDate = newNotification.fireDate;
                 [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
