@@ -288,7 +288,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
     imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-    imageView.frame = CGRectMake(110,10,100,12);
+    imageView.frame = CGRectMake(110,10,85,12);
     [footerView addSubview:imageView];
     self.tableView.tableFooterView = footerView;
 }
