@@ -47,6 +47,7 @@
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
+@property (strong, nonatomic) IBOutlet UIButton *saveButton;
 
 
 @end
@@ -77,15 +78,11 @@
 
 }
 
-- (void)viewDidLayoutSubviews {
-
-}
-
-
 -(void)viewWillAppear:(BOOL)animated{
 
     [super viewWillAppear:animated];
 
+    [self enableSaveButtonIfReady];
 
     if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
@@ -101,7 +98,6 @@
     }
 
 }
-
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];
@@ -140,27 +136,27 @@
                      }];
 }
 
-- (void)datePickerValueChanged:(id)sender{
+- (void)datePickerValueChanged:(id)sender
+{
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-
                          NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
                          dateFormatter.timeZone = [NSTimeZone localTimeZone];
                          dateFormatter.dateStyle = NSDateFormatterMediumStyle;
                          dateFormatter.timeStyle = NSDateFormatterShortStyle;
                          [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
                      }
-
                      completion:^(BOOL finished){
+                         [self enableSaveButtonIfReady];
                      }];
-
 }
 
 
-- (void) expandMap{
+- (void) expandMap
+{
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
@@ -168,11 +164,9 @@
                          if(self.isMapExpanded == YES){
                              self.mapViewHeightConstraint.constant = 115;
                              [self.view layoutIfNeeded];
-
                          }
                          else if(self.isMapExpanded == NO){
                              self.mapViewHeightConstraint.constant = 0;
-
                          }
                      }
                      completion:^(BOOL finished){
@@ -211,15 +205,25 @@
     }];
 }
 
-
-
 - (void)resetTextFields
 {
     self.titleTextField.text = @"";
     self.datePicker.date = [NSDate date];
 }
 
-
+- (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
+{
+    if (![self.titleTextField.text isEqualToString:@""] &&
+        self.datePicker.date.timeIntervalSince1970 > [NSDate date].timeIntervalSince1970 &&
+        self.locationInfo != nil)
+    {
+        self.saveButton.enabled = YES;
+    }
+    else
+    {
+        self.saveButton.enabled = NO;
+    }
+}
 
 - (void)makeAlertForErrorCode:(PTEventCreationErrorCode)errorCode errorUserInfo:(NSDictionary *)userInfo
 {
@@ -255,6 +259,7 @@
 {
     [textField resignFirstResponder];
     [self.blackView removeFromSuperview];
+    [self enableSaveButtonIfReady];
     return YES;
 }
 
@@ -319,6 +324,7 @@
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
+    [self enableSaveButtonIfReady];
 }
 
 @end
