@@ -8,12 +8,23 @@
 
 #import "AppDelegate.h"
 #import "Event.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "Constants.h"
+#import "SIAlertView.h"
+
+static NSString* THIRTY_MINUTE_BUTTON = @"T-30min";
+static NSString* FIFTEEN_MINUTE_BUTTON = @"T-15min";
+static NSString* TEN_MINUTE_BUTTON = @"T-10min";
+static NSString* FIVE_MINUTE_BUTTON = @"T-5min";
+static NSString* ZERO_MINUTE_BUTTON = @"T-0min";
+static NSString* STOP_BUTTON = @"Stop reminders";
+static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @interface AppDelegate ()
 
-@property EventController* sharedEventController;
+@property EventManager* sharedEventManager;
+@property UIWindow* notificationWindow;
+@property UIVisualEffectView* blurView;
 
 @end
 
@@ -22,7 +33,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
-    self.sharedEventController = [EventController sharedEventController];
+    self.sharedEventManager = [EventManager sharedEventManager];
+
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
@@ -66,45 +78,161 @@
 }
 
 
-#pragma mark - ┌∩┐(◣_◢)┌∩┐ Background Refresh ┌∩┐(◣_◢)┌∩┐
+#pragma mark - Background Refresh
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     int counter = 0;
-    [application cancelAllLocalNotifications];
-    for (Event *event in self.sharedEventController.events) {
-        [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
+    [application cancelAllLocalNotifications]; // We're going to recreate them
+
+    if (self.sharedEventManager.events.count > 0)
+    {
+        for (Event *event in self.sharedEventManager.events)
         {
-            if (error) // This shouldn't ever happen
+            [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
             {
-                NSLog(@"Background Fetch error: %@", error.userInfo);
-            }
-            if (counter-1 == self.sharedEventController.events.count) // We're at the last object, so call completion handler
-            {
+                if (error) // This shouldn't ever happen
+                {
+                    NSLog(@"Background Fetch error: %@", error.userInfo);
+                }
+
                 NSLog(@"Name: %@",event.eventName);
                 NSLog(@"Time to go off: %@",event.desiredArrivalTime);
                 NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-                NSLog(@"Events have been refreshed %d times",counter+1);
-                completionHandler(UIBackgroundFetchResultNewData);
-            }
-        }];
 
-        NSLog(@"Name: %@",event.eventName);
-        NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-        NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-        counter++;
+                if (counter+1 == self.sharedEventManager.events.count) // We're at the last object, so call completion handler
+                {
+                    NSLog(@"Events have been refreshed %d times",counter+1);
+                    completionHandler(UIBackgroundFetchResultNewData);
+                }
+            }];
+            counter++;
+        }
+    }
+    else
+    {
+        completionHandler(UIBackgroundFetchResultNoData);
     }
 }
 
 
 #pragma mark - Local notifications
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if (application.applicationState == UIApplicationStateActive) // The app is in the foreground, so recreate the notification
+    {
+        // Get the Event object that scheduled the notification
+        Event* schedulingEvent = [self.sharedEventManager findEventWithUniqueID:notification.userInfo[@"Event"]];
+
+        // Setup the buttons to be used in the custom notification
+        NSString* firstButtonText;
+        NSString* firstButtonNewCategory;
+        NSString* secondButtonText;
+        NSString* inertButtonText;
+        if ([notification.category isEqualToString:SIXTY_MINUTE_WARNING])
+        {
+            firstButtonText = THIRTY_MINUTE_BUTTON;
+            firstButtonNewCategory = THIRTY_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:THIRTY_MINUTE_WARNING])
+        {
+            firstButtonText = FIFTEEN_MINUTE_BUTTON;
+            firstButtonNewCategory = FIFTEEN_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:FIFTEEN_MINUTE_WARNING])
+        {
+            firstButtonText = TEN_MINUTE_BUTTON;
+            firstButtonNewCategory = TEN_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:TEN_MINUTE_WARNING])
+        {
+            firstButtonText = FIVE_MINUTE_BUTTON;
+            firstButtonNewCategory = FIVE_MINUTE_WARNING;
+            secondButtonText = ZERO_MINUTE_BUTTON;
+        }
+        else if ([notification.category isEqualToString:FIVE_MINUTE_WARNING])
+        {
+            firstButtonText = ZERO_MINUTE_BUTTON;
+            inertButtonText = STOP_BUTTON;
+        }
+        else // This is the final warning
+        {
+            inertButtonText = FINAL_BUTTON;
+        }
+
+        // Create the custom notification to present to the user
+        SIAlertView *alertView = [[SIAlertView alloc] initWithTitle:@"Hey!"
+                                                         andMessage:[self correctedMessageBodyFromString:notification.alertBody]];
+        alertView.backgroundStyle = SIAlertViewBackgroundStyleBlur;
+        alertView.transitionStyle = SIAlertViewTransitionStyleBounce;
+
+        if (firstButtonText) // This button will always create a new notification with a category
+        {
+            [alertView addButtonWithTitle:firstButtonText
+                                     type:SIAlertViewButtonTypeDefault
+                                  handler:^(SIAlertView *alert) {
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:firstButtonNewCategory completion:^(NSError* error)
+                                       {
+                                           if (error) // This shouldn't ever happen
+                                           {
+                                               NSLog(@"Error snoozing: %@", error.userInfo);
+                                           }
+                                           [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
+                                       }];
+                                  }];
+        }
+        if (secondButtonText) // This button will always create a new notification without a category
+        {
+            [alertView addButtonWithTitle:secondButtonText
+                                     type:SIAlertViewButtonTypeDefault
+                                  handler:^(SIAlertView *alert) {
+                                      [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
+                                       {
+                                           if (error) // This shouldn't ever happen
+                                           {
+                                               NSLog(@"Error snoozing: %@", error.userInfo);
+                                           }
+                                           [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
+                                       }];
+                                  }];
+        }
+        if (inertButtonText) // This button will never create a new notification
+        {
+            [alertView addButtonWithTitle:inertButtonText
+                                     type:SIAlertViewButtonTypeCancel
+                                  handler:^(SIAlertView *alert) {
+                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
+                                  }];
+        }
+        
+        [alertView show];
+    }
+}
+
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
 {
-    if ([identifier isEqualToString:kFifteenMinuteAction]) // Refresh ETA then set a fifteen minute local notification
+    Event* schedulingEvent = [self.sharedEventManager findEventWithUniqueID:notification.userInfo[@"Event"]];
+
+    [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Dismiss the notification on action tapped - iOS 8 bug?
+
+    if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a thirty minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFifteenMinuteWarning completion:^(NSError* error)
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
+         {
+             if (error) // This shouldn't ever happen
+             {
+                 NSLog(@"Error snoozing: %@", error.userInfo);
+             }
+             completionHandler();
+         }];
+    }
+    else if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
+    {
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
             {
@@ -113,10 +241,20 @@
             completionHandler();
         }];
     }
-    else if ([identifier isEqualToString:kFiveMinuteAction]) // Refresh ETA then set a five minute local notification
+    else if ([identifier isEqualToString:TEN_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:kFiveMinuteWarning completion:^(NSError* error)
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error)
+         {
+             if (error) // This shouldn't ever happen
+             {
+                 NSLog(@"Error snoozing: %@", error.userInfo);
+             }
+             completionHandler();
+         }];
+    }
+    else if ([identifier isEqualToString:FIVE_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
+    {
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIVE_MINUTE_WARNING completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
             {
@@ -125,9 +263,8 @@
             completionHandler();
         }];
     }
-    else if ([identifier isEqualToString:kZeroMinuteAction]) // Refresh ETA then set a zero minute local notification
+    else if ([identifier isEqualToString:ZERO_MINUTE_ACTION]) // Refresh ETA then set a zero minute local notification
     {
-        Event* schedulingEvent = [self.sharedEventController findEventWithUniqueID:notification.userInfo[@"Event"]];
         [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
         {
             if (error) // This shouldn't ever happen
@@ -142,39 +279,83 @@
 
 #pragma mark - Private methods
 
-- (NSSet *)createNotificationCategories // Bless this mess
+- (NSSet *)createNotificationCategories
 {
-    UIMutableUserNotificationAction* fifteenMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    fifteenMinuteAction.identifier = kFifteenMinuteAction;
-    fifteenMinuteAction.title = @"T-15min";
+    UIMutableUserNotificationAction* thirtyMinuteAction = [UIMutableUserNotificationAction new];
+    thirtyMinuteAction.identifier = THIRTY_MINUTE_ACTION;
+    thirtyMinuteAction.title = THIRTY_MINUTE_BUTTON;
+    thirtyMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    thirtyMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationAction* fifteenMinuteAction = [UIMutableUserNotificationAction new];
+    fifteenMinuteAction.identifier = FIFTEEN_MINUTE_ACTION;
+    fifteenMinuteAction.title = FIFTEEN_MINUTE_BUTTON;
     fifteenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fifteenMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationAction* fiveMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    fiveMinuteAction.identifier = kFiveMinuteAction;
-    fiveMinuteAction.title = @"T-5min";
+    UIMutableUserNotificationAction* tenMinuteAction = [UIMutableUserNotificationAction new];
+    tenMinuteAction.identifier = TEN_MINUTE_ACTION;
+    tenMinuteAction.title = TEN_MINUTE_BUTTON;
+    tenMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
+    tenMinuteAction.authenticationRequired = NO;
+
+    UIMutableUserNotificationAction* fiveMinuteAction = [UIMutableUserNotificationAction new];
+    fiveMinuteAction.identifier = FIVE_MINUTE_ACTION;
+    fiveMinuteAction.title = FIVE_MINUTE_BUTTON;
     fiveMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     fiveMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationAction* zeroMinuteAction = [[UIMutableUserNotificationAction alloc] init];
-    zeroMinuteAction.identifier = kZeroMinuteAction;
-    zeroMinuteAction.title = @"T-0min";
+    UIMutableUserNotificationAction* zeroMinuteAction = [UIMutableUserNotificationAction new];
+    zeroMinuteAction.identifier = ZERO_MINUTE_ACTION;
+    zeroMinuteAction.title = ZERO_MINUTE_BUTTON;
     zeroMinuteAction.activationMode = UIUserNotificationActivationModeBackground;
     zeroMinuteAction.authenticationRequired = NO;
 
-    UIMutableUserNotificationCategory* thirtyMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    thirtyMinuteWarning.identifier = kThirtyMinuteWarning;
+    UIMutableUserNotificationCategory* sixtyMinuteWarning = [UIMutableUserNotificationCategory new];
+    sixtyMinuteWarning.identifier = SIXTY_MINUTE_WARNING;
+    [sixtyMinuteWarning setActions:@[thirtyMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* thirtyMinuteWarning = [UIMutableUserNotificationCategory new];
+    thirtyMinuteWarning.identifier = THIRTY_MINUTE_WARNING;
     [thirtyMinuteWarning setActions:@[fifteenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    UIMutableUserNotificationCategory* fifteenMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    fifteenMinuteWarning.identifier = kFifteenMinuteWarning;
-    [fifteenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+    UIMutableUserNotificationCategory* fifteenMinuteWarning = [UIMutableUserNotificationCategory new];
+    fifteenMinuteWarning.identifier = FIFTEEN_MINUTE_WARNING;
+    [fifteenMinuteWarning setActions:@[tenMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    UIMutableUserNotificationCategory* fiveMinuteWarning = [[UIMutableUserNotificationCategory alloc] init];
-    fiveMinuteWarning.identifier = kFiveMinuteWarning;
+    UIMutableUserNotificationCategory* tenMinuteWarning = [UIMutableUserNotificationCategory new];
+    tenMinuteWarning.identifier = TEN_MINUTE_WARNING;
+    [tenMinuteWarning setActions:@[fiveMinuteAction, zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
+
+    UIMutableUserNotificationCategory* fiveMinuteWarning = [UIMutableUserNotificationCategory new];
+    fiveMinuteWarning.identifier = FIVE_MINUTE_WARNING;
     [fiveMinuteWarning setActions:@[zeroMinuteAction] forContext:UIUserNotificationActionContextDefault];
 
-    return [NSSet setWithObjects:thirtyMinuteWarning, fifteenMinuteWarning, fiveMinuteWarning, nil];
+    return [NSSet setWithObjects:sixtyMinuteWarning, thirtyMinuteWarning, fifteenMinuteWarning, tenMinuteWarning, fiveMinuteWarning, nil];
+}
+
+- (NSString *)correctedMessageBodyFromString:(NSString*)oldMessageBody
+{
+    NSError *error;
+
+    if (!oldMessageBody)
+    {
+        oldMessageBody = @"This shouldn't have happened. Please telle me about it.";
+    }
+
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    if (!error)
+    {
+        NSString* newMessageBody = [regex stringByReplacingMatchesInString:oldMessageBody
+                                                                   options:0
+                                                                     range:NSMakeRange(0, oldMessageBody.length)
+                                                              withTemplate:@"Snooze?"];
+        return newMessageBody;
+    }
+
+    return @"";
 }
 
 @end

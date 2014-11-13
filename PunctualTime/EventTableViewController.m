@@ -7,37 +7,43 @@
 //
 
 #import "EventTableViewController.h"
-#import "EventController.h"
+#import "EventManager.h"
 #import "Event.h"
 
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property EventController *sharedEventController;
+@property (strong, nonatomic) IBOutlet UIImageView *dragImageView;
+@property EventManager *sharedEventManager;
 
 @end
 
 
 @implementation EventTableViewController
 
-- (IBAction)onDoneButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-    }];
-}
-
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.sharedEventController = [EventController sharedEventController];
+
+//    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(goBack)];
+//    [self.navigationController.navigationItem setBackBarButtonItem:cancelButton];
+
+    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
+    [self.dragImageView addGestureRecognizer:panGesture];
+
+    self.sharedEventManager = [EventManager sharedEventManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.sharedEventController refreshEvents];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.view.backgroundColor = [UIColor clearColor];
+
+    [self.sharedEventManager refreshEvents];
 
     [self.tableView reloadData];
 
@@ -45,23 +51,32 @@
 }
 
 
+#pragma mark - Private methods
+
+- (IBAction)onPanGestureDetected:(UIPanGestureRecognizer *)panGesture
+{
+    [self.tableView setEditing:NO animated:YES];
+    [self.delegate panGestureDetected:panGesture];
+}
+
+
 #pragma mark - UITableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.sharedEventController.events.count;
+    return self.sharedEventManager.events.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *event = [self.sharedEventController.events objectAtIndex:indexPath.row];
+    Event *event = [self.sharedEventManager.events objectAtIndex:indexPath.row];
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     cell.textLabel.text = event.eventName;
-    NSString *formattedArrivalDate = [NSDateFormatter localizedStringFromDate:event.desiredArrivalTime
+    NSString *formattedLeaveDate = [NSDateFormatter localizedStringFromDate:event.lastLeaveTime
                                                                     dateStyle:NSDateFormatterMediumStyle
                                                                     timeStyle:NSDateFormatterShortStyle];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Arrive: %@", formattedArrivalDate];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Leave: %@", formattedLeaveDate];
 
     return cell;
 }
@@ -75,7 +90,7 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
-        [self.sharedEventController removeEvent:[self.sharedEventController.events objectAtIndex:indexPath.row]];
+        [self.sharedEventManager removeEvent:[self.sharedEventManager.events objectAtIndex:indexPath.row]];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }

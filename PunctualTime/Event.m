@@ -22,6 +22,10 @@ static NSString* kLastTravelTime = @"LastTravelTime";
 static NSString* kTransportationType = @"Transportation";
 static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
+static NSString* kInitialNotificationCategory = @"InitialNotificationCategory";
+static NSString* kRecurrenceInterval = @"RecurrenceInterval";
+static NSString* kLastLeaveTime = @"LastLeaveTime";
+
 
 @interface Event () <NSCoding>
 
@@ -34,6 +38,11 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 @property (readwrite) NSNumber* lastTravelTime;
 @property (readwrite) NSString* uniqueID;
 @property (readwrite) NSString* currentNotificationCategory;
+@property (readwrite) NSString* initialNotificationCategory;
+@property (readwrite) PTEventRecurrenceOption recurrenceInterval;
+@property (readwrite) NSString *transportationType;
+@property (readwrite) NSDate *lastLeaveTime;
+
 
 @end
 
@@ -42,7 +51,7 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 
 #pragma mark - Public methods
 
-- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation
+- (instancetype)initWithEventName:(NSString *)name startingAddress:(CLLocationCoordinate2D)startingAddress endingAddress:(CLLocationCoordinate2D)endingAddress arrivalTime:(NSDate *)arrivalTime transportationType:(NSString *)transporation notificationCategory:(NSString *)category recurrence:(PTEventRecurrenceOption)recurrenceInterval
 {
     if (self = [super init])
     {
@@ -51,6 +60,8 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.endingAddress = endingAddress;
         self.desiredArrivalTime = arrivalTime;
         self.transportationType = transporation;
+        self.initialNotificationCategory = category;
+        self.recurrenceInterval = recurrenceInterval;
 
         CFUUIDRef uuid = CFUUIDCreate(NULL);
         NSString *uniqueID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, uuid);
@@ -69,40 +80,67 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     newNotification.soundName = UILocalNotificationDefaultSoundName;
     newNotification.userInfo = @{@"Event": self.uniqueID};
     BOOL notificationWasSnoozed = ![self.currentNotificationCategory isEqualToString:categoryID];
+    BOOL isNewEvent = self.currentNotificationCategory == nil ? YES : NO;
     self.currentNotificationCategory = categoryID;
 
     [self calculateETAWithCompletion:^(NSNumber* travelTime, NSError* error)
     {
         if (!error || notificationWasSnoozed)
         {
-            if (notificationWasSnoozed && error) // Couldn't get new ETA, so create new notification from last ETA result
+            if (notificationWasSnoozed && error) // Couldn't get new travel time, so create new notification from last travel time result
             {
                 travelTime = self.lastTravelTime;
             }
 
-            NSString* minuteWarning = [NSString new];
-            double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
-            double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
+            self.lastTravelTime = travelTime;
 
-            if ([categoryID isEqualToString:kThirtyMinuteWarning])
+            NSString* minuteWarning;
+            double buffer = 5 * 60; // 5 minute buffer just to be sure they're on time
+            double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue - buffer;
+            self.lastLeaveTime = [NSDate dateWithTimeIntervalSince1970: leaveTime];
+
+            if ([NSDate date].timeIntervalSince1970 > leaveTime) // Current time is after leave time
+            {
+                if (isNewEvent) // This is a new event so notify the user it's too late to make it on time
+                {
+                    NSDictionary* userInfo = @{@"overdue_amount": @(roundf(([NSDate date].timeIntervalSince1970 - leaveTime)/60)).stringValue};
+                    NSError* newError = [NSError errorWithDomain:@"Event Creation Error"
+                                                            code:PTEventCreationErrorCodeImpossibleEvent
+                                                        userInfo:userInfo];
+                    complete(newError);
+                    return;
+                }
+            }
+
+            if ([categoryID isEqualToString:SIXTY_MINUTE_WARNING])
+            {
+                minuteWarning = @"Sixty";
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (60 * 60))];
+            }
+            else if ([categoryID isEqualToString:THIRTY_MINUTE_WARNING])
             {
                 minuteWarning = @"Thirty";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (30 * 60))];
             }
-            else if ([categoryID isEqualToString:kFifteenMinuteWarning])
+            else if ([categoryID isEqualToString:FIFTEEN_MINUTE_WARNING])
             {
                 minuteWarning = @"Fifteen";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (15 * 60))];
             }
-            else if ([categoryID isEqualToString:kFiveMinuteWarning])
+            else if ([categoryID isEqualToString:TEN_MINUTE_WARNING])
+            {
+                minuteWarning = @"Ten";
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (10 * 60))];
+            }
+            else if ([categoryID isEqualToString:FIVE_MINUTE_WARNING])
             {
                 minuteWarning = @"Five";
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60) - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - (5 * 60))];
             }
-            else
+            else // Zero minute warning
             {
                 newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
-                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime - buffer)];
+                newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime)];
                 self.lastNotificationDate = newNotification.fireDate;
                 [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
@@ -110,14 +148,14 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
                 return;
             }
 
-            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! Slide to schedule another", self.eventName, minuteWarning];
+            newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! %@", self.eventName, minuteWarning, NOTIFICATION_TRAILING_TEXT];
             newNotification.category = categoryID;
             self.lastNotificationDate = newNotification.fireDate;
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
             complete(nil);
         }
-        else  // There was a problem getting a new ETA so recreate the last notification
+        else  // There was a problem getting a new travel time so recreate the previously schedueled notification
         {
             if (self.lastNotificationDate)
             {
@@ -136,9 +174,49 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     }];
 }
 
+- (void)rescheduleWithCompletion:(void (^)(void))completion
+{
+    NSTimeInterval dayInterval = (60*60*24);
+    NSTimeInterval weekdayInterval;
+
+    // Get the current day of week
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *weekdayComponents = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
+    long numericDayOfWeek = [weekdayComponents weekday];
+
+    if (numericDayOfWeek == 6) // Today is Friday so weekdayInterval should account for weekend
+    {
+        weekdayInterval = dayInterval * 3;
+    }
+    else
+    {
+        weekdayInterval = dayInterval;
+    }
+
+    switch (self.recurrenceInterval)
+    {
+        case PTEventRecurrenceOptionDaily:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + dayInterval)];
+            break;
+        case PTEventRecurrenceOptionWeekdays:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + weekdayInterval)];
+            break;
+        case PTEventRecurrenceOptionWeekly:
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + (dayInterval*7))];
+            break;
+
+        default:
+            break;
+    }
+
+    [self makeLocalNotificationWithCategoryIdentifier:self.initialNotificationCategory completion:^(NSError *error) {
+        completion();
+    }];
+}
+
 - (NSComparisonResult)compareEvent:(Event *)otherEvent
 {
-    return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
+    return [self.lastLeaveTime compare:otherEvent.lastLeaveTime];
 }
 
 
@@ -178,12 +256,16 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
         //NSLog(@"JSON: %@",jsonResult);
 
-        if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] || [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"])
+        if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] ||
+                [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"] ||
+                    [jsonResult[@"status"] isEqualToString:@"ZERO_RESULTS"])
         {
             if (!error)
             {
                 NSDictionary* userInfo = @{@"error": jsonResult[@"status"]};
-                NSError* newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                NSError* newError = [NSError errorWithDomain:@"API Error"
+                                                        code:PTEventCreationErrorCodeAPIError
+                                                    userInfo:userInfo];
                 complete(nil, newError);
                 return;
             }
@@ -215,6 +297,10 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
         self.transportationType = [decoder decodeObjectForKey:kTransportationType];
         self.uniqueID = [decoder decodeObjectForKey:kUniqueID];
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
+        self.initialNotificationCategory = [decoder decodeObjectForKey:kInitialNotificationCategory];
+        self.recurrenceInterval = [decoder decodeIntegerForKey:kRecurrenceInterval];
+        self.lastLeaveTime = [decoder decodeObjectForKey:kLastLeaveTime];
+
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
         CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
         self.startingAddress = CLLocationCoordinate2DMake(startingLatitude, startingLongitude);
@@ -240,8 +326,9 @@ static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
     [encoder encodeObject:self.transportationType forKey:kTransportationType];
     [encoder encodeObject:self.uniqueID forKey:kUniqueID];
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
+    [encoder encodeObject:self.initialNotificationCategory forKey:kInitialNotificationCategory];
+    [encoder encodeInteger:self.recurrenceInterval forKey:kRecurrenceInterval];
+    [encoder encodeObject:self.lastLeaveTime forKey:kLastLeaveTime];
 }
-
-
 
 @end

@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol EventTableViewDelegate <NSObject>
+
+- (void)panGestureDetected:(UIPanGestureRecognizer *)panGesture;
+
+@end
+
 @interface EventTableViewController : UIViewController
 
+@property id<EventTableViewDelegate> delegate;
 
 @end
 
