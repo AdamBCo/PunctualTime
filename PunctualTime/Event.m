@@ -103,7 +103,7 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             {
                 if (isNewEvent) // This is a new event so notify the user it's too late to make it on time
                 {
-                    NSDictionary* userInfo = @{@"overdue_amount": @(([NSDate date].timeIntervalSince1970 - leaveTime) * 60).stringValue};
+                    NSDictionary* userInfo = @{@"overdue_amount": @(roundf(([NSDate date].timeIntervalSince1970 - leaveTime)/60)).stringValue};
                     NSError* newError = [NSError errorWithDomain:@"Event Creation Error"
                                                             code:PTEventCreationErrorCodeImpossibleEvent
                                                         userInfo:userInfo];
@@ -256,7 +256,9 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
         NSDictionary *jsonResult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
         //NSLog(@"JSON: %@",jsonResult);
 
-        if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] || [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"])
+        if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] ||
+                [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"] ||
+                    [jsonResult[@"status"] isEqualToString:@"ZERO_RESULTS"])
         {
             if (!error)
             {

@@ -337,6 +337,12 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (NSString *)correctedMessageBodyFromString:(NSString*)oldMessageBody
 {
     NSError *error;
+
+    if (!oldMessageBody)
+    {
+        oldMessageBody = @"This shouldn't have happened. Please telle me about it.";
+    }
+
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:&error];

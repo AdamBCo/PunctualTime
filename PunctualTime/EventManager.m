@@ -58,11 +58,9 @@
 
 - (void)refreshEvents // Removes or reschedules expired events and resorts by date
 {
-
     NSArray *sortedEventsArray = [self.events sortedArrayUsingSelector:@selector(compareEvent:)];
     [self.events removeAllObjects];
     [self.events addObjectsFromArray: sortedEventsArray];
-
 
     for (Event* event in sortedEventsArray)
     {
