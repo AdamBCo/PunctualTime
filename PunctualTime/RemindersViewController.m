@@ -7,31 +7,66 @@
 //
 
 #import "RemindersViewController.h"
+#import "Constants.h"
+
+static UIColor* initialTextColor;
 
 @interface RemindersViewController ()
+
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
 
 @end
 
 @implementation RemindersViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    //
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+- (IBAction)onNotificationButtonPressed:(UIButton *)button
+{
+    initialTextColor = [UIColor blackColor];
+    UIColor* selectedTextColor = [UIColor colorWithRed:0.071 green:0.871 blue:1.000 alpha:1.000];
 
-/*
-#pragma mark - Navigation
+    for (UIButton* button in self.buttons)
+    {
+        [button setTitleColor:initialTextColor forState:UIControlStateNormal];
+    }
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    //if ([[button titleColorForState:UIControlStateNormal] isEqual:selectedTextColor])
+    //{
+    //    selectedTextColor = initialTextColor;
+    //}
+
+    switch (button.tag)
+    {
+        case 0:
+            [self.delegate reminderSelected:SIXTY_MINUTE_WARNING];
+            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
+            break;
+        case 1:
+            [self.delegate reminderSelected:THIRTY_MINUTE_WARNING];
+            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
+            break;
+        case 2:
+            [self.delegate reminderSelected:FIFTEEN_MINUTE_WARNING];
+            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
+            break;
+        case 3:
+            [self.delegate reminderSelected:TEN_MINUTE_WARNING];
+            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
+            break;
+        case 4:
+            [self.delegate reminderSelected:FIVE_MINUTE_WARNING];
+            [button setTitleColor:selectedTextColor forState:UIControlStateNormal];
+            break;
+        default:
+            [self.delegate reminderSelected:nil]; // Zero minute warning
+            break;
+    }
 }
-*/
 
 @end

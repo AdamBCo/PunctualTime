@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RemindersViewControllerDelegate <NSObject>
+
+- (void)reminderSelected:(NSString *)reminderCategory;
+
+@end
+
 @interface RemindersViewController : UIViewController
+
+@property id<RemindersViewControllerDelegate> delegate;
 
 @end

@@ -12,18 +12,16 @@
 #import "Constants.h"
 #import "LocationSearchController.h"
 #import "SearchTableViewController.h"
+#import "RemindersViewController.h"
 #import "Event.h"
 #import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
 
-@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentedControl;
-@property (weak, nonatomic) IBOutlet UILabel *locationNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property AppDelegate *applicationDelegate;
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
@@ -66,7 +64,7 @@
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
     self.transportationType = TRANSPO_DRIVING;
-    self.datePicker.backgroundColor = [UIColor whiteColor];
+    self.datePicker.backgroundColor = [UIColor colorWithRed:1.000 green:0.486 blue:0.071 alpha:1.000];
     self.recurrenceOption = PTEventRecurrenceOptionNone;
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
@@ -102,23 +100,21 @@
 
 }
 
--(void)expandDatePicker {
-
+-(void)expandDatePicker
+{
+    if (self.isDatePickerExpanded == YES) {
+        self.datePickerHeightConstraint.constant = 162;
+        self.datePicker.alpha = 1.0;
+    } else {
+        self.datePickerHeightConstraint.constant = 0;
+        self.datePicker.alpha = 0.0;
+    }
 
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-                         if (self.isDatePickerExpanded == YES) {
-                             self.datePickerHeightConstraint.constant = 162;
-                             self.datePicker.alpha = 1.0;
-                             [self.view layoutIfNeeded];
-                             
-                         } else {
-                             self.datePickerHeightConstraint.constant = 0;
-                             self.datePicker.alpha = 0.0;
-                            [self.view layoutIfNeeded];
-                         }
+                         [self.view layoutIfNeeded];
                      }
                      completion:^(BOOL finished){
                          NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -185,36 +181,8 @@
 
 - (void)resetTextFields
 {
-    self.titleTextField.text = @"Event Title";
+    self.titleTextField.text = @"";
     self.datePicker.date = [NSDate date];
-    self.locationNameLabel.text = @"";
-}
-
-
-#warning hook up notification buttons from storyboard and set tags appropriately
-- (IBAction)onNotificationButtonPressed:(UIButton *)button
-{
-    switch (button.tag)
-    {
-        case 0:
-            self.initialNotificationCategory = SIXTY_MINUTE_WARNING;
-            break;
-        case 1:
-            self.initialNotificationCategory = THIRTY_MINUTE_WARNING;
-            break;
-        case 2:
-            self.initialNotificationCategory = FIFTEEN_MINUTE_WARNING;
-            break;
-        case 3:
-            self.initialNotificationCategory = TEN_MINUTE_WARNING;
-            break;
-        case 4:
-            self.initialNotificationCategory = FIVE_MINUTE_WARNING;
-            break;
-        default:
-            self.initialNotificationCategory = nil; // Zero minute warning
-            break;
-    }
 }
 
 #warning hook up recurrence buttons from storyboard and set tags appropriately
@@ -273,8 +241,6 @@
                              type:SIAlertViewButtonTypeDefault
                           handler:^(SIAlertView *alertView) {
                               self.locationInfo = nil;
-                              self.locationNameLabel.text = @"";
-                              self.addressLabel.text = @"";
                           }];
     [alertView show];
 }
@@ -287,18 +253,31 @@
 }
 
 
+#pragma mark - RemindersViewControllerDelegate
+
+- (void)reminderSelected:(NSString *)reminderCategory
+{
+    self.initialNotificationCategory = reminderCategory;
+}
+
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"BackToTheMapSegue"]) {
-
+    if ([segue.identifier isEqualToString:@"BackToTheMapSegue"])
+    {
         [self.titleTextField resignFirstResponder];
-
-    } else if ([segue.identifier isEqualToString:@"ModesOfTransportSegue"]){
-
+    }
+    else if ([segue.identifier isEqualToString:@"ModesOfTransportSegue"])
+    {
         ModesOfTransportationViewController *viewController = segue.destinationViewController;
         viewController.delegate = self;
+    }
+    else if ([segue.identifier isEqualToString:@"RemindersVC"])
+    {
+        RemindersViewController* remindersVC = segue.destinationViewController;
+        remindersVC.delegate = self;
     }
 
 }
@@ -308,8 +287,6 @@
     SearchTableViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
-    self.locationNameLabel.text = self.locationInfo.name;
-    self.addressLabel.text = self.locationInfo.address;
 }
 
 #pragma mark - Modes of Transportation
