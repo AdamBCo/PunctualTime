@@ -31,7 +31,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 };
 
-
 @implementation SearchTableViewController
 
 - (void)viewDidLoad {
@@ -52,6 +51,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     [self.localSearchQueries removeAllObjects];
     [self.pastSearchResults removeAllObjects];
     [self.pastSearchWords removeAllObjects];
+    [super viewWillAppear:animated];
 }
 
 

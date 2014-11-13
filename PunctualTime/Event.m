@@ -89,8 +89,8 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
             }
 
             self.lastTravelTime = travelTime;
-            
-            NSString* minuteWarning = [NSString new];
+
+            NSString* minuteWarning;
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
 
             if ([NSDate date].timeIntervalSince1970 > leaveTime) // Current time is after leave time

@@ -28,12 +28,16 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
 
+
 @end
 
 @implementation FirstViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
+    self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
+    self.cirularTimer.center =  CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height/2);
 
     // Remove shadow on transparent toolbar:
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
@@ -51,20 +55,48 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.sharedEventManager refreshEvents];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
-    self.cirularTimer = [[CircularTimer alloc]initWithPosition:CGPointMake(60.0f, 130.0f)
-                                                        radius:100.0
-                                                internalRadius:90.0
-                                             circleStrokeColor:[UIColor greenColor]
-                                       activeCircleStrokeColor:[UIColor redColor]
-                                                   initialDate:[NSDate date]
-                                                     finalDate:self.selectedEvent.desiredArrivalTime
-                                                 startCallback:^{
-                                                     NSLog(@"We are good!");
-                                                 } endCallback:^{
-                                                     NSLog(@"Hello Chicago");
-                                                 }];
 
-    [self.view insertSubview:self.cirularTimer belowSubview:self.containerView];
+    [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:0.03 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
+        self.timeTillEvent.center = self.view.center;
+        self.cirularTimer.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height/2) - 20);
+    } completion:^(BOOL finished) {
+    }];
+
+    int radius = 120;
+    CAShapeLayer *circle = [CAShapeLayer layer];
+//     Make a circular shape
+    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                             cornerRadius:radius].CGPath;
+
+    // Center the shape in self.view
+    circle.position = CGPointMake(CGRectGetMidX(self.view.frame)-radius,
+                                  CGRectGetMidY(self.view.frame)-radius-25);
+
+    // Configure the apperence of the circle
+    circle.fillColor = [UIColor clearColor].CGColor;
+    circle.strokeColor = [UIColor whiteColor].CGColor;
+    circle.lineWidth = 5;
+
+    // Add to parent layer
+    [self.view.layer addSublayer:circle];
+
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration            = 3.0; // "animate over 10 seconds or so.."
+    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+
+    // Animate from no part of the stroke being drawn to the entire stroke being drawn
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+
+    // Experiment with timing to get the appearence to look the way you want
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+    
+    // Add the animation to the circle
+    [circle addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+
+    [self.view.layer insertSublayer:circle below:self.containerView.layer];
 
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
