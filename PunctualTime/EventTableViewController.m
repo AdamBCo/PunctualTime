@@ -73,10 +73,10 @@
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     cell.textLabel.text = event.eventName;
-    NSString *formattedArrivalDate = [NSDateFormatter localizedStringFromDate:event.desiredArrivalTime
+    NSString *formattedLeaveDate = [NSDateFormatter localizedStringFromDate:event.lastLeaveTime
                                                                     dateStyle:NSDateFormatterMediumStyle
                                                                     timeStyle:NSDateFormatterShortStyle];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Arrive: %@", formattedArrivalDate];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"Leave: %@", formattedLeaveDate];
 
     return cell;
 }

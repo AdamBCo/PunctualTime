@@ -24,6 +24,8 @@ static NSString* kUniqueID = @"UniqueID";
 static NSString* kCurrentNotificationCategory = @"CurrentNotificationCategory";
 static NSString* kInitialNotificationCategory = @"InitialNotificationCategory";
 static NSString* kRecurrenceInterval = @"RecurrenceInterval";
+static NSString* kLastLeaveTime = @"LastLeaveTime";
+
 
 @interface Event () <NSCoding>
 
@@ -39,6 +41,8 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
 @property (readwrite) NSString* initialNotificationCategory;
 @property (readwrite) PTEventRecurrenceOption recurrenceInterval;
 @property (readwrite) NSString *transportationType;
+@property (readwrite) NSDate *lastLeaveTime;
+
 
 @end
 
@@ -92,6 +96,7 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
 
             NSString* minuteWarning;
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
+            self.lastLeaveTime = [NSDate dateWithTimeIntervalSince1970: leaveTime];
 
             if ([NSDate date].timeIntervalSince1970 > leaveTime) // Current time is after leave time
             {
@@ -212,7 +217,7 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
 
 - (NSComparisonResult)compareEvent:(Event *)otherEvent
 {
-    return [self.desiredArrivalTime compare:otherEvent.desiredArrivalTime];
+    return [self.lastLeaveTime compare:otherEvent.lastLeaveTime];
 }
 
 
@@ -293,6 +298,7 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
         self.currentNotificationCategory = [decoder decodeObjectForKey:kCurrentNotificationCategory];
         self.initialNotificationCategory = [decoder decodeObjectForKey:kInitialNotificationCategory];
         self.recurrenceInterval = [decoder decodeIntegerForKey:kRecurrenceInterval];
+        self.lastLeaveTime = [decoder decodeObjectForKey:kLastLeaveTime];
 
         CLLocationDegrees startingLatitude = [decoder decodeDoubleForKey:kStartingAddressLat];
         CLLocationDegrees startingLongitude = [decoder decodeDoubleForKey:kStartingAddressLon];
@@ -321,6 +327,7 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
     [encoder encodeObject:self.currentNotificationCategory forKey:kCurrentNotificationCategory];
     [encoder encodeObject:self.initialNotificationCategory forKey:kInitialNotificationCategory];
     [encoder encodeInteger:self.recurrenceInterval forKey:kRecurrenceInterval];
+    [encoder encodeObject:self.lastLeaveTime forKey:kLastLeaveTime];
 }
 
 @end

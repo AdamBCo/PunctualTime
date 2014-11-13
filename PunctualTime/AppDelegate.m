@@ -35,6 +35,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
 
+
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     //Ask the user permission to send them Local Push LocalNotifications

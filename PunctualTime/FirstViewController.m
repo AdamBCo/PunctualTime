@@ -15,7 +15,7 @@
 
 static CGFloat INITIAL_CONTAINER_LOC;
 
-@interface FirstViewController () <EventTableViewDelegate>
+@interface FirstViewController () <EventTableViewDelegate, EventManagerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
@@ -35,6 +35,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.sharedEventManager = [EventManager sharedEventManager];
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
+    NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
+
+    self.sharedEventManager.delegate = self;
+
     self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
     self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
     self.cirularTimer.center =  CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height/2);
@@ -44,19 +50,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     // Remove shadow on transparent toolbar:
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    self.navigationController.navigationBar.hidden = YES;
-    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
-
-    self.sharedEventManager = [EventManager sharedEventManager];
-    [self.sharedEventManager refreshEvents];
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
-
 
     [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:0.03 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
@@ -67,7 +60,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     int radius = 120;
     CAShapeLayer *circle = [CAShapeLayer layer];
-//     Make a circular shape
+    //     Make a circular shape
     circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                              cornerRadius:radius].CGPath;
 
@@ -80,9 +73,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     circle.strokeColor = [UIColor whiteColor].CGColor;
     circle.lineWidth = 5;
 
-    // Add to parent layer
-    [self.view.layer addSublayer:circle];
-
     // Configure animation
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
     drawAnimation.duration            = 3.0; // "animate over 10 seconds or so.."
@@ -94,12 +84,21 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     // Experiment with timing to get the appearence to look the way you want
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    
+
     // Add the animation to the circle
     [circle addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
 
     [self.view.layer insertSublayer:circle below:self.containerView.layer];
+}
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.hidden = YES;
+    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
+
+    [self eventManagerHasBeenUpdated];
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
@@ -108,12 +107,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                     repeats:YES];
 }
 
+
+
 - (void)updateCounter{
 
-    NSDate *startDate = [NSDate date];
-    NSDate *destinationDate = self.selectedEvent.desiredArrivalTime;
-    int seconds = [destinationDate timeIntervalSinceDate: startDate];
-
+    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
+    
     if(seconds > 0 ){
         seconds -- ;
         int hours = (seconds / 3600);
@@ -199,5 +198,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
         self.navigationController.navigationBar.hidden = NO;
     }
 }
+
+#pragma mark - EventManagerDelegate
+
+-(void)eventManagerHasBeenUpdated{
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
+}
+
+
+
 
 @end

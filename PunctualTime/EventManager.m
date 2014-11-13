@@ -58,25 +58,33 @@
 
 - (void)refreshEvents // Removes or reschedules expired events and resorts by date
 {
-    NSArray* eventsToCheckForExpiration = [NSArray arrayWithArray:self.events];
-    for (Event* event in eventsToCheckForExpiration)
+
+    NSArray *sortedEventsArray = [self.events sortedArrayUsingSelector:@selector(compareEvent:)];
+    [self.events removeAllObjects];
+    [self.events addObjectsFromArray: sortedEventsArray];
+
+
+    for (Event* event in sortedEventsArray)
     {
-        if ([[NSDate date] compare:event.desiredArrivalTime] == NSOrderedDescending) // Current time is after event time
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
         {
             if (event.recurrenceInterval == PTEventRecurrenceOptionNone)
             {
                 [self removeEvent:event];
-                [self.events sortUsingSelector:@selector(compareEvent:)]; // Sort remaining events by date
+                [self.delegate eventManagerHasBeenUpdated];
+                NSLog(@"It has been refreshed");
             }
             else
             {
                 [event rescheduleWithCompletion:^{
-                    [self.events sortUsingSelector:@selector(compareEvent:)];
+                    [self.delegate eventManagerHasBeenUpdated];
+                    NSLog(@"It has been refreshed Gold");
                 }];
             }
         }
     }
 }
+
 
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID
 {

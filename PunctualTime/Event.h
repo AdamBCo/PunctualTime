@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
 @property (readonly) NSString* initialNotificationCategory;
 @property (readonly) PTEventRecurrenceOption recurrenceInterval;
 @property (readonly) NSString *transportationType;
+@property (readonly) NSDate *lastLeaveTime;
 
 - (instancetype)initWithEventName:(NSString *)name
                   startingAddress:(CLLocationCoordinate2D)startingAddress
