@@ -72,6 +72,16 @@
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
 
+    self.blackView = [[UIView alloc] initWithFrame: self.view.bounds];
+
+
+    [self.view addSubview:self.blackView];
+
+
+}
+
+- (void)viewDidLayoutSubviews {
+
 }
 
 
@@ -95,6 +105,14 @@
 
 }
 
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [super touchesBegan:touches withEvent:event];
+    NSLog(@"the life");
+        [self.titleTextField resignFirstResponder];
+        [self.blackView removeFromSuperview];
+}
+
 - (IBAction)onTImeButtonPressed:(id)sender {
     self.isDatePickerExpanded = !self.isDatePickerExpanded;
     [self expandDatePicker];
@@ -103,7 +121,6 @@
 }
 
 -(void)expandDatePicker {
-
 
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -121,15 +138,33 @@
                          }
                      }
                      completion:^(BOOL finished){
-                         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                         dateFormatter.timeZone = [NSTimeZone localTimeZone];
-                         [dateFormatter setDateFormat:@"MMM dd, yyyy HH:mm"];
-                         [self.datePickerButton setTitle:[dateFormatter stringFromDate:[NSDate date]] forState:UIControlStateNormal];
-                         [self.datePickerButton setTintColor:[UIColor redColor]];
+
+                         [self.datePicker addTarget:self
+                                    action:@selector(datePickerValueChanged:)
+                          forControlEvents:UIControlEventValueChanged];
                      }];
 
+}
+
+- (void)datePickerValueChanged:(id)sender{
+
+    [UIView animateWithDuration:0.5
+                          delay:0.0
+                        options:UIViewAnimationOptionAllowUserInteraction
+                     animations:^{
+
+                         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                         dateFormatter.timeZone = [NSTimeZone localTimeZone];
+                         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+                         dateFormatter.timeStyle = NSDateFormatterShortStyle;
+                         [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
+                     }
+
+                     completion:^(BOOL finished){
+                     }];
 
 }
+
 
 - (void) expandMap{
     [UIView animateWithDuration:1.0
@@ -283,7 +318,12 @@
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
+    [self.blackView removeFromSuperview];
     return YES;
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self.view bringSubviewToFront:self.blackView];
 }
 
 

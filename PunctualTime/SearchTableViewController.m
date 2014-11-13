@@ -12,8 +12,9 @@
 
 @interface SearchTableViewController () <UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchTextField;
+@property NSMutableArray *pastSearchResults;
+@property NSMutableArray *pastSearchWords;
 @property NSMutableArray *localSearchQueries;
-@property NSMutableArray *pastSearchQueries;
 @property AppDelegate *applicationDelegate;
 @property NSTimer *autoCompleteTimer;
 @property NSString *substring;
@@ -35,8 +36,9 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.pastSearchQueries = [NSMutableArray array];
     self.localSearchQueries = [NSMutableArray array];
+    self.pastSearchWords = [NSMutableArray array];
+    self.pastSearchResults = [NSMutableArray array];
     self.searchTextField.delegate = self;
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.locationInfo = [LocationInfo new];
@@ -47,23 +49,45 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 -(void)viewWillAppear:(BOOL)animated{
     [self.applicationDelegate.userLocationManager updateLocation];
     [self.searchTextField becomeFirstResponder];
+    [self.localSearchQueries removeAllObjects];
+    [self.pastSearchResults removeAllObjects];
+    [self.pastSearchWords removeAllObjects];
 }
 
 
 #pragma mark - Autocomplete SearchBar methods
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
-    if (![self.localSearchQueries containsObject:self.searchTextField.text]) {
-        [self.localSearchQueries addObject:self.searchTextField.text];
-    }
+    [self.autoCompleteTimer invalidate];
+    [self searchAutocompleteLocationsWithSubstring:self.substring];
+    [self.searchTextField resignFirstResponder];
     [self.tableView reloadData];
 }
 
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
+
+    NSString *searchWordProtection = [self.searchTextField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"Length: %lu",(unsigned long)searchWordProtection.length);
+
+    if (searchWordProtection.length != 0) {
+
+        [self runScript];
+
+    } else {
+        NSLog(@"Whatsup");
+    }
+}
+
 -(BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+
     self.substring = [NSString stringWithString:self.searchTextField.text];
     self.substring= [self.substring stringByReplacingOccurrencesOfString:@" " withString:@"+"];
     self.substring = [self.substring stringByReplacingCharactersInRange:range withString:text];
 
-    [self runScript];
+    if ([self.substring hasPrefix:@"+"] && self.substring.length >1) {
+        self.substring  = [self.substring substringFromIndex:1];
+        NSLog(@"This string: %@ had a space at the begining.",self.substring);
+    }
+
 
     return YES;
 }
@@ -72,7 +96,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 - (void)runScript{
 
     [self.autoCompleteTimer invalidate];
-    self.autoCompleteTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f
+    self.autoCompleteTimer = [NSTimer scheduledTimerWithTimeInterval:0.65f
                                                               target:self
                                                             selector:@selector(searchAutocompleteLocationsWithSubstring:)
                                                             userInfo:nil
@@ -81,18 +105,28 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 
 - (void)searchAutocompleteLocationsWithSubstring:(NSString *)substring{
-    [self.pastSearchQueries removeAllObjects];
+    [self.localSearchQueries removeAllObjects];
 
-    [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
-        [self.pastSearchQueries addObjectsFromArray:results];
-        [self.tableView reloadData];
-    }];
 
-    for(NSString *pastSearch in self.localSearchQueries) {
-        NSRange substringRange = [pastSearch rangeOfString:substring];
-        if (substringRange.location == 0) {
-            [self.pastSearchQueries addObject:pastSearch];
 
+    if (![self.pastSearchWords containsObject:self.substring]) {
+        [self.pastSearchWords addObject:self.substring];
+        NSLog(@"Search: %lu",(unsigned long)self.pastSearchResults.count);
+        [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
+            [self.localSearchQueries addObjectsFromArray:results];
+            NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
+            [self.pastSearchResults addObject:searchResult];
+            [self.tableView reloadData];
+
+        }];
+
+    }else {
+
+        for (NSDictionary *pastResult in self.pastSearchResults) {
+            if([[pastResult objectForKey:@"keyword"] isEqualToString:self.substring]){
+                [self.localSearchQueries addObjectsFromArray:[pastResult objectForKey:@"results"]];
+                [self.tableView reloadData];
+            }
         }
     }
 }
@@ -102,36 +136,46 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 
 -(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
-    //Add error handling
-    NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=establishment|geocode&language=en&key=%@",searchWord,apiKey];
-    NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
-    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        NSArray *results = [jSONresult valueForKey:@"predictions"];
+    NSString *searchWordProtection = [searchWord stringByReplacingOccurrencesOfString:@" " withString:@""];
 
-        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
-            if (!error){
-                NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
-                NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
-                complete(@[@"API Error", newError]);
+    if (searchWordProtection.length != 0) {
+
+        CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
+        NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
+        NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
+
+        NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=establishment|geocode&location=%@,%@&radius=500&language=en&key=%@",searchWord,currentLatitude,currentLongitude,apiKey];
+        NSLog(@"AutoComplete URL: %@",urlString);
+        NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            NSArray *results = [jSONresult valueForKey:@"predictions"];
+
+            if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
+                if (!error){
+                    NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
+                    NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                    complete(@[@"API Error", newError]);
+                    return;
+                }
+                complete(@[@"Actual Error", error]);
                 return;
+            }else{
+                complete(results);
             }
-            complete(@[@"Actual Error", error]);
-            return;
-        }else{
-            complete(results);
-        }
-    }];
-    
-    [task resume];
+        }];
+        
+        [task resume];
+    }
 
 }
 
 -(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
-    //Add error handling
+
+
     NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=%@",place,apiKey];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -174,7 +218,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             return 1;
             break;
         case TableViewSectionMain:
-            return self.pastSearchQueries.count;
+            return self.localSearchQueries.count;
             break;
     }
 
@@ -197,7 +241,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         }    break;
         case TableViewSectionMain: {
             //this is where it broke
-            NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
+            NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             NSString *placeID = [searchResult objectForKey:@"place_id"];
             [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {
                         //NSLog(@"Place %@", place);
@@ -228,7 +272,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         }    break;
 
         case TableViewSectionMain: {
-            NSDictionary *searchResult = [self.pastSearchQueries objectAtIndex:indexPath.row];
+            NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
         }break;

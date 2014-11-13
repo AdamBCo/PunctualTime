@@ -88,6 +88,8 @@ static NSString* kRecurrenceInterval = @"RecurrenceInterval";
                 travelTime = self.lastTravelTime;
             }
 
+            self.lastTravelTime = travelTime;
+            
             NSString* minuteWarning = [NSString new];
             double leaveTime = self.desiredArrivalTime.timeIntervalSince1970 - travelTime.doubleValue;
 
