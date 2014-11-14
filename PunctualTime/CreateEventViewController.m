@@ -74,8 +74,6 @@
 
 
     [self.view addSubview:self.blackView];
-
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -99,18 +97,17 @@
 
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesBegan:touches withEvent:event];
-    NSLog(@"the life");
-        [self.titleTextField resignFirstResponder];
-        [self.blackView removeFromSuperview];
+    [self.titleTextField resignFirstResponder];
+    [self.blackView removeFromSuperview];
 }
 
-- (IBAction)onTImeButtonPressed:(id)sender {
+- (IBAction)onTImeButtonPressed:(id)sender
+{
     self.isDatePickerExpanded = !self.isDatePickerExpanded;
     [self expandDatePicker];
-
-
 }
 
 -(void)expandDatePicker
@@ -138,6 +135,7 @@
 
 - (void)datePickerValueChanged:(id)sender
 {
+    [self enableSaveButtonIfReady];
 
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -150,14 +148,14 @@
                          [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
                      }
                      completion:^(BOOL finished){
-                         [self enableSaveButtonIfReady];
+        
                      }];
 }
 
 
 - (void) expandMap
 {
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
@@ -182,7 +180,6 @@
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
     Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
-                                       startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType
@@ -289,7 +286,6 @@
 - (void)modeOfTransportationSelected:(NSString *)transportationType
 {
     self.transportationType = transportationType;
-    NSLog(@"transporation: %@", transportationType);
 }
 
 

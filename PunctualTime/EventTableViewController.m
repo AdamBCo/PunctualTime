@@ -43,8 +43,6 @@
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
 
-    [self.sharedEventManager refreshEvents];
-
     [self.tableView reloadData];
 
     [super viewWillAppear:animated];

@@ -35,7 +35,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
 
-
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
     //Ask the user permission to send them Local Push LocalNotifications
@@ -75,6 +74,25 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+
+    [self.sharedEventManager saveEvents];
+}
+
+
+#pragma mark - Public methods
+
+- (UILocalNotification *)getNotificationForEvent:(Event *)event
+{
+    NSArray* notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification* notification in notifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
+        {
+            return notification;
+        }
+    }
+
+    return nil;
 }
 
 
@@ -82,37 +100,9 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    int counter = 0;
-    [application cancelAllLocalNotifications]; // We're going to recreate them
-
-    if (self.sharedEventManager.events.count > 0)
-    {
-        for (Event *event in self.sharedEventManager.events)
-        {
-            [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
-            {
-                if (error) // This shouldn't ever happen
-                {
-                    NSLog(@"Background Fetch error: %@", error.userInfo);
-                }
-
-                NSLog(@"Name: %@",event.eventName);
-                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-
-                if (counter+1 == self.sharedEventManager.events.count) // We're at the last object, so call completion handler
-                {
-                    NSLog(@"Events have been refreshed %d times",counter+1);
-                    completionHandler(UIBackgroundFetchResultNewData);
-                }
-            }];
-            counter++;
-        }
-    }
-    else
-    {
-        completionHandler(UIBackgroundFetchResultNoData);
-    }
+    [self.sharedEventManager refreshEventsWithCompletion:^{
+        completionHandler(UIBackgroundFetchResultNewData);
+    }];
 }
 
 
@@ -340,7 +330,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     if (!oldMessageBody)
     {
-        oldMessageBody = @"This shouldn't have happened. Please telle me about it.";
+        oldMessageBody = @"This shouldn't have happened. Please tell me about it. - Nathan";
     }
 
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
