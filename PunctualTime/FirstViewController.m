@@ -40,6 +40,25 @@ static CGFloat INITIAL_CONTAINER_LOC;
 {
 
     [super viewDidLoad];
+
+//    UIView *test = [[UIView alloc] initWithFrame:self.view.bounds];
+//    test.backgroundColor = [UIColor purpleColor];
+//
+//    [self.view addSubview:test];
+//
+//
+//    UIBezierPath *myClippingPath = [UIBezierPath bezierPath];
+//    [myClippingPath moveToPoint:CGPointMake(100, 100)];
+//    [myClippingPath addCurveToPoint:CGPointMake(200, 200) controlPoint1:CGPointMake(self.view.frame.size.width, 0) controlPoint2:CGPointMake(self.self.view.frame.size.width, 50)];
+//    [myClippingPath closePath];
+//
+//    CAShapeLayer *mask = [CAShapeLayer layer];
+//    mask.path = myClippingPath.CGPath;
+//
+//    self.view.layer.mask = mask;
+
+
+
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
     self.sharedEventManager.delegate = self;
@@ -66,6 +85,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
     } completion:^(BOOL finished) {
 
     }];
+
+
 
     //Circle Drawing
 
@@ -106,7 +127,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
             CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
         }
     }
-        CGPathCloseSubpath(drawStarPath);
+    CGPathCloseSubpath(drawStarPath);
 
     star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
     star.fillColor = [UIColor clearColor].CGColor;
