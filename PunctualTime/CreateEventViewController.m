@@ -74,8 +74,6 @@
 
 
     [self.view addSubview:self.blackView];
-
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -99,18 +97,17 @@
 
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
     [super touchesBegan:touches withEvent:event];
-    NSLog(@"the life");
-        [self.titleTextField resignFirstResponder];
-        [self.blackView removeFromSuperview];
+    [self.titleTextField resignFirstResponder];
+    [self.blackView removeFromSuperview];
 }
 
-- (IBAction)onTImeButtonPressed:(id)sender {
+- (IBAction)onTImeButtonPressed:(id)sender
+{
     self.isDatePickerExpanded = !self.isDatePickerExpanded;
     [self expandDatePicker];
-
-
 }
 
 -(void)expandDatePicker
