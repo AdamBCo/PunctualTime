@@ -1,3 +1,4 @@
+
 //
 //  FirstViewController.m
 //  PunctualTime
@@ -27,72 +28,134 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property CircularTimer *cirularTimer;
 @property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
+@property UIView *animationShapeView;
 
+@property BOOL animating;
 
 @end
 
 @implementation FirstViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
+
     [super viewDidLoad];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
-    NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
-
     self.sharedEventManager.delegate = self;
 
     self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
     self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
-    self.cirularTimer.center =  CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height/2);
+
+    self.animationShapeView = [[UIView alloc]initWithFrame:CGRectMake(0 ,self.view.bounds.size.height/6, self.view.bounds.size.width, self.view.bounds.size.width)];
 
     self.navigationItem.title = @"Cancel"; // For the back button on CreateEventVC
 
     // Remove shadow on transparent toolbar:
+
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
+
     [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:0.03 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+
         self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
+
         self.timeTillEvent.center = self.view.center;
-        self.cirularTimer.center = CGPointMake(self.view.frame.size.width/2, (self.view.frame.size.height/2) - 20);
+
     } completion:^(BOOL finished) {
+
     }];
 
+    //Circle Drawing
+
     int radius = 120;
+
     CAShapeLayer *circle = [CAShapeLayer layer];
-    //     Make a circular shape
+    circle.position = CGPointMake(CGRectGetMidX(self.animationShapeView.frame)-radius,
+                                  CGRectGetMidY(self.animationShapeView.frame)-radius-25);
     circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                              cornerRadius:radius].CGPath;
-
-    // Center the shape in self.view
-    circle.position = CGPointMake(CGRectGetMidX(self.view.frame)-radius,
-                                  CGRectGetMidY(self.view.frame)-radius-25);
-
-    // Configure the apperence of the circle
     circle.fillColor = [UIColor clearColor].CGColor;
     circle.strokeColor = [UIColor whiteColor].CGColor;
     circle.lineWidth = 5;
 
-    // Configure animation
-    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = 3.0; // "animate over 10 seconds or so.."
-    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+    //Star Drawing
 
-    // Animate from no part of the stroke being drawn to the entire stroke being drawn
+    CAShapeLayer *star = [CAShapeLayer layer];
+    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
+    int r1 = self.animationShapeView.frame.size.width/2;
+    int r2 = r1 - 20;
+    int numberOfPoints =    60;//60
+    float TWOPI = 2 * M_PI;
+    CGMutablePathRef drawStarPath = CGPathCreateMutable();
+    for (float n=0; n < numberOfPoints; n+=3)
+    {
+        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
+        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
+        if (n==0){
+
+            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
+        }else {
+            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
+            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
+            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
+            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
+            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
+            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
+            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
+        }
+    }
+        CGPathCloseSubpath(drawStarPath);
+
+    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
+    star.fillColor = [UIColor clearColor].CGColor;
+    star.strokeColor = [UIColor whiteColor].CGColor;
+    star.lineWidth = 5;
+
+    // Configure animation
+
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration            = 4.0; // "animate over 10 seconds or so.."
+    drawAnimation.repeatCount         = 1.0;  // Animate only once..
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
-
-    // Experiment with timing to get the appearence to look the way you want
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-
-    // Add the animation to the circle
     [circle addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [star addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
 
-    [self.view.layer insertSublayer:circle below:self.containerView.layer];
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+    rotationAnimation.duration = 10;
+    rotationAnimation.repeatCount = INFINITY;
+//    [star addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+
+    //Add layers to Animation View
+
+    [self.animationShapeView.layer addSublayer:star];
+    [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
+    [self runSpinAnimationOnView:self.animationShapeView duration:5 rotations:1 repeat:1];
+
+}
+
+- (void)runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat
+{
+
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * rotations * duration ];
+    rotationAnimation.duration = duration;
+    rotationAnimation.cumulative = YES;
+    rotationAnimation.repeatCount = repeat;
+
+    [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+
     [super viewWillAppear:animated];
 
     self.navigationController.navigationBar.hidden = YES;
@@ -108,11 +171,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
 }
 
 
+- (void)updateCounter
 
-- (void)updateCounter{
-
+{
     int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
-    
+
     if(seconds > 0 ){
         seconds -- ;
         int hours = (seconds / 3600);
@@ -149,7 +212,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
         // Set blurView alpha
         CGPoint location = [gesture locationInView:self.view];
         self.blurView.alpha = 1.06 - (location.y/self.view.frame.size.height);
+
     }
+
     else if (UIGestureRecognizerStateEnded == gesture.state)
     {
         if (self.lastYTranslation > 0) // User was panning down so finish closing
@@ -164,13 +229,18 @@ static CGFloat INITIAL_CONTAINER_LOC;
         }
         else // User was panning up so finish opening
         {
+
             self.containerViewHeightConstraint.constant = self.view.frame.size.height;
             [UIView animateWithDuration:0.2 animations:^{
                 [self.view layoutIfNeeded];
                 self.blurView.alpha = 1.0;
+                
             }];
+            
         }
+        
     }
+    
     else // Gesture was cancelled or failed so animate back to original location
     {
         self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
@@ -186,7 +256,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 #pragma mark - EventManagerDelegate
 
--(void)eventManagerHasBeenUpdated{
+-(void)eventManagerHasBeenUpdated
+{
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 }
 
@@ -195,21 +266,25 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"EventTableVC"])
-    {
+    if ([segue.identifier isEqualToString:@"EventTableVC"]){
+        
         EventTableViewController* eventTableVC = segue.destinationViewController;
         eventTableVC.delegate = self;
+        
     }
-    if ([segue.identifier isEqualToString:@"CreateEventVC"])
-    {
+    if ([segue.identifier isEqualToString:@"CreateEventVC"]){
+
         self.navigationController.navigationBar.hidden = NO;
     }
 }
 
 - (IBAction)unwindFromCreateEventVC:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    
     NSLog(@"segue: %@", segue);
     NSLog(@"sender: %@", sender);
+    
 }
 
 @end
+
