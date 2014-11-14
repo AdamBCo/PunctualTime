@@ -142,6 +142,7 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
                 newNotification.alertBody = [NSString stringWithFormat:@"%@: Leave Now!", self.eventName];
                 newNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime)];
                 self.lastNotificationDate = newNotification.fireDate;
+                self.lastNotificationText = newNotification.alertBody;
                 [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
                 complete(nil);
@@ -151,6 +152,7 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             newNotification.alertBody = [NSString stringWithFormat:@"%@: %@ minute warning! %@", self.eventName, minuteWarning, NOTIFICATION_TRAILING_TEXT];
             newNotification.category = categoryID;
             self.lastNotificationDate = newNotification.fireDate;
+            self.lastNotificationText = newNotification.alertBody;
             [[UIApplication sharedApplication] scheduleLocalNotification:newNotification];
 
             complete(nil);

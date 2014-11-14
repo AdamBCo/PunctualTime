@@ -138,6 +138,7 @@
 
 - (void)datePickerValueChanged:(id)sender
 {
+    [self enableSaveButtonIfReady];
 
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -150,14 +151,14 @@
                          [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
                      }
                      completion:^(BOOL finished){
-                         [self enableSaveButtonIfReady];
+        
                      }];
 }
 
 
 - (void) expandMap
 {
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:0.5
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
@@ -289,7 +290,6 @@
 - (void)modeOfTransportationSelected:(NSString *)transportationType
 {
     self.transportationType = transportationType;
-    NSLog(@"transporation: %@", transportationType);
 }
 
 
