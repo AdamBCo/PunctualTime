@@ -26,7 +26,6 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
 @interface Event : NSObject
 
 @property (readonly) NSString* eventName;
-@property (readonly) CLLocationCoordinate2D startingAddress;
 @property (readonly) CLLocationCoordinate2D endingAddress;
 @property (readonly) NSDate* desiredArrivalTime;
 @property (readonly) NSDate* lastNotificationDate;
@@ -40,7 +39,6 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
 @property (readonly) NSDate *lastLeaveTime;
 
 - (instancetype)initWithEventName:(NSString *)name
-                  startingAddress:(CLLocationCoordinate2D)startingAddress
                     endingAddress:(CLLocationCoordinate2D)endingAddress
                       arrivalTime:(NSDate *)arrivalTime
                transportationType:(NSString *)transporation

@@ -22,8 +22,10 @@
 + (EventManager *)sharedEventManager;
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
-- (void)refreshEvents;
+- (void)refreshEventsWithCompletion:(void (^)(void))completion;
+- (void)sortEvents;
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID;
+- (void)saveEvents;
 
 @property id<EventManagerDelegate> delegate;
 

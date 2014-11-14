@@ -183,7 +183,6 @@
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
     Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
-                                       startingAddress:self.applicationDelegate.userLocationManager.location.coordinate
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.datePicker.date
                                     transportationType:self.transportationType
