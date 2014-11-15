@@ -10,7 +10,7 @@
 #import "LocationInfo.h"
 
 
-@interface SearchTableViewController : UITableViewController
+@interface SearchViewController : UIViewController
 
 @property LocationInfo *locationInfo;
 

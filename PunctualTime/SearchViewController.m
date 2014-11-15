@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 The Timers. All rights reserved.
 //
 
-#import "SearchTableViewController.h"
+#import "SearchViewController.h"
 #import "AppDelegate.h"
 
 
-@interface SearchTableViewController () <UISearchBarDelegate>
+@interface SearchViewController () <UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UISearchBar *searchTextField;
 @property NSMutableArray *pastSearchResults;
 @property NSMutableArray *pastSearchWords;
@@ -18,6 +18,7 @@
 @property AppDelegate *applicationDelegate;
 @property NSTimer *autoCompleteTimer;
 @property NSString *substring;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -31,7 +32,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 };
 
-@implementation SearchTableViewController
+@implementation SearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -251,7 +252,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 NSString *longitude = [NSString stringWithFormat:@"%@",[place valueForKey:@"geometry"][@"location"][@"lng"]];
                 self.locationInfo.locationCoordinates = CLLocationCoordinate2DMake(latitude.doubleValue, longitude.doubleValue);
 
-                NSLog(@"Location:%@",self.locationInfo);
+                NSLog(@"Location:%f",self.locationInfo.locationCoordinates.latitude);
                 [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
             }];
         }break;
