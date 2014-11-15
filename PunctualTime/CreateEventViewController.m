@@ -48,6 +48,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *destinationButton;
 
 
 @end
@@ -75,7 +76,6 @@
 
     [self.view addSubview:self.blackView];
 
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -88,7 +88,7 @@
         MKCoordinateRegion mapRegion;
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
-        
+        self.destinationButton.titleLabel.text = [NSString stringWithFormat:@"Location: %@",self.locationInfo.name];;
         [self.mapView setRegion:mapRegion animated: NO];
         self.isMapExpanded = YES;
         [self expandMap];
@@ -174,6 +174,9 @@
                              MKPointAnnotation *point = [MKPointAnnotation new];
                              point.coordinate = self.locationInfo.locationCoordinates;
                              [self.mapView addAnnotation:point];
+                             NSString *location = [NSString stringWithFormat:@"%@",self.locationInfo.name];
+                                 self.destinationButton.titleLabel.adjustsFontSizeToFitWidth = TRUE;
+                             [self.destinationButton setTitle:location forState:UIControlStateNormal];
                          }
                          nil;
                      }];

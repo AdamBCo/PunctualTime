@@ -93,11 +93,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     int radius = 120;
 
     CAShapeLayer *circle = [CAShapeLayer layer];
-    circle.position = CGPointMake(CGRectGetMidX(self.animationShapeView.frame)-radius,
-                                  CGRectGetMidY(self.animationShapeView.frame)-radius-25);
-    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+    circle.position = CGPointMake(self.view.frame.size.width, self.view.frame.size.height);
+    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius-20, 2.0*radius-20)
                                              cornerRadius:radius].CGPath;
-    circle.fillColor = [UIColor clearColor].CGColor;
+    circle.fillColor = [UIColor blueColor].CGColor;
     circle.strokeColor = [UIColor whiteColor].CGColor;
     circle.lineWidth = 5;
 
@@ -137,7 +136,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     // Configure animation
 
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = 4.0; // "animate over 10 seconds or so.."
+    drawAnimation.duration            = 2.0; // "animate over 10 seconds or so.."
     drawAnimation.repeatCount         = 1.0;  // Animate only once..
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
@@ -155,8 +154,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
     //Add layers to Animation View
 
     [self.animationShapeView.layer addSublayer:star];
+    [self.view.layer addSublayer:circle];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
-    [self runSpinAnimationOnView:self.animationShapeView duration:5 rotations:1 repeat:1];
+    [self runSpinAnimationOnView:self.animationShapeView duration:3 rotations:1 repeat:1];
 
 }
 

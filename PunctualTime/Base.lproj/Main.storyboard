@@ -43,7 +43,7 @@
                                             <segue destination="os6-hQ-Duq" kind="embed" identifier="RemindersVC" id="LZk-jh-R3X"/>
                                         </connections>
                                     </containerView>
-                                    <datePicker opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="8be-e6-iBw">
+                                    <datePicker opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="5" translatesAutoresizingMaskIntoConstraints="NO" id="8be-e6-iBw">
                                         <rect key="frame" x="-160" y="-81" width="320" height="162"/>
                                         <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -107,6 +107,27 @@
                                             </mask>
                                         </variation>
                                     </textField>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vDb-hh-txw">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="118" id="xeE-Kp-qix">
+                                                <variation key="widthClass=compact" constant="80"/>
+                                            </constraint>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="xeE-Kp-qix"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="xeE-Kp-qix"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <segue destination="5aM-h4-jKr" kind="embed" identifier="RecurrenceVC" id="29r-FF-PFg"/>
+                                        </connections>
+                                    </containerView>
                                     <containerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nio-dM-nth" userLabel="Container View Transportation">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
@@ -126,7 +147,24 @@
                                             <segue destination="sFc-zZ-igX" kind="embed" identifier="ModesOfTransportSegue" id="vz4-hC-YPg"/>
                                         </connections>
                                     </containerView>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-5h-hpk">
+                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wd5-2M-TRB">
+                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="115" id="I3J-cP-8L7"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="I3J-cP-8L7"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="I3J-cP-8L7"/>
+                                            </mask>
+                                        </variation>
+                                    </mapView>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WUP-5h-hpk">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                         <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -135,10 +173,10 @@
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="hd5-Qk-rVt"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="nyQ-xG-tiY"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="25"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title=" Destination" image="location_icon">
+                                        <state key="normal" title=" Destination">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -170,7 +208,7 @@
                                                 <variation key="widthClass=compact" constant="85"/>
                                             </constraint>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="25"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -190,44 +228,6 @@
                                             <action selector="onSaveEventButtonPressed:" destination="NNb-Hq-cvw" eventType="touchUpInside" id="8Wq-kg-F7n"/>
                                         </connections>
                                     </button>
-                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vDb-hh-txw">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="118" id="xeE-Kp-qix">
-                                                <variation key="widthClass=compact" constant="100"/>
-                                            </constraint>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="xeE-Kp-qix"/>
-                                            </mask>
-                                        </variation>
-                                        <variation key="widthClass=compact">
-                                            <mask key="constraints">
-                                                <include reference="xeE-Kp-qix"/>
-                                            </mask>
-                                        </variation>
-                                        <connections>
-                                            <segue destination="5aM-h4-jKr" kind="embed" identifier="RecurrenceVC" id="29r-FF-PFg"/>
-                                        </connections>
-                                    </containerView>
-                                    <mapView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" mapType="standard" zoomEnabled="NO" scrollEnabled="NO" rotateEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wd5-2M-TRB">
-                                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="115" id="I3J-cP-8L7"/>
-                                        </constraints>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="I3J-cP-8L7"/>
-                                            </mask>
-                                        </variation>
-                                        <variation key="widthClass=compact">
-                                            <mask key="constraints">
-                                                <include reference="I3J-cP-8L7"/>
-                                            </mask>
-                                        </variation>
-                                    </mapView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -263,7 +263,7 @@
                                     <constraint firstItem="Wd5-2M-TRB" firstAttribute="top" secondItem="vDb-hh-txw" secondAttribute="bottom" constant="8" id="TvK-kP-nuU"/>
                                     <constraint firstAttribute="centerX" secondItem="Sbu-ny-EOS" secondAttribute="centerX" id="V6e-eF-2Wr"/>
                                     <constraint firstAttribute="bottom" secondItem="5pu-bG-ddc" secondAttribute="bottom" id="W6j-Pu-SIY">
-                                        <variation key="widthClass=compact" constant="52"/>
+                                        <variation key="widthClass=compact" constant="22"/>
                                     </constraint>
                                     <constraint firstItem="bRM-ga-tqv" firstAttribute="leading" secondItem="uzn-S6-b8D" secondAttribute="leading" id="WYg-nD-z8a">
                                         <variation key="widthClass=compact" constant="0.0"/>
@@ -304,11 +304,11 @@
                                         <exclude reference="8be-e6-iBw"/>
                                         <exclude reference="Sbu-ny-EOS"/>
                                         <exclude reference="FAQ-lh-NOg"/>
+                                        <exclude reference="vDb-hh-txw"/>
                                         <exclude reference="Nio-dM-nth"/>
+                                        <exclude reference="Wd5-2M-TRB"/>
                                         <exclude reference="WUP-5h-hpk"/>
                                         <exclude reference="5pu-bG-ddc"/>
-                                        <exclude reference="vDb-hh-txw"/>
-                                        <exclude reference="Wd5-2M-TRB"/>
                                     </mask>
                                     <mask key="constraints">
                                         <exclude reference="S5C-4R-cPe"/>
@@ -369,11 +369,11 @@
                                         <include reference="8be-e6-iBw"/>
                                         <include reference="Sbu-ny-EOS"/>
                                         <include reference="FAQ-lh-NOg"/>
+                                        <include reference="vDb-hh-txw"/>
                                         <include reference="Nio-dM-nth"/>
+                                        <include reference="Wd5-2M-TRB"/>
                                         <include reference="WUP-5h-hpk"/>
                                         <include reference="5pu-bG-ddc"/>
-                                        <include reference="vDb-hh-txw"/>
-                                        <include reference="Wd5-2M-TRB"/>
                                     </mask>
                                     <mask key="constraints">
                                         <include reference="S5C-4R-cPe"/>
@@ -470,6 +470,7 @@
                         <outlet property="datePicker" destination="8be-e6-iBw" id="89k-WH-2YV"/>
                         <outlet property="datePickerButton" destination="Sbu-ny-EOS" id="f4a-vM-ldn"/>
                         <outlet property="datePickerHeightConstraint" destination="aUB-1S-rft" id="PuW-tH-Oap"/>
+                        <outlet property="destinationButton" destination="WUP-5h-hpk" id="0uy-uC-vJD"/>
                         <outlet property="mapView" destination="Wd5-2M-TRB" id="9gU-gk-s6k"/>
                         <outlet property="mapViewHeightConstraint" destination="I3J-cP-8L7" id="Ex4-vB-qBq"/>
                         <outlet property="saveButton" destination="5pu-bG-ddc" id="7Rc-yr-Lje"/>
@@ -2479,42 +2480,17 @@
                                     <action selector="onRecurrenceButtonPressed:" destination="5aM-h4-jKr" eventType="touchUpInside" id="pfa-eo-6wR"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recurrence:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YEt-Kw-kgP">
-                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="Osg-je-AnP"/>
-                                    <constraint firstAttribute="width" constant="93" id="WGt-HO-kWs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Osg-je-AnP"/>
-                                        <exclude reference="WGt-HO-kWs"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                    <rect key="frame" x="16" y="0.0" width="93" height="21"/>
-                                    <mask key="constraints">
-                                        <include reference="Osg-je-AnP"/>
-                                        <include reference="WGt-HO-kWs"/>
-                                    </mask>
-                                </variation>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="OmS-fy-78c" firstAttribute="width" secondItem="TFb-Y7-y8w" secondAttribute="width" id="0ht-5L-9fi"/>
                             <constraint firstAttribute="centerX" secondItem="OmS-fy-78c" secondAttribute="centerX" id="4Xs-4V-w50"/>
                             <constraint firstAttribute="centerY" secondItem="OmS-fy-78c" secondAttribute="centerY" id="FK8-hs-b6r"/>
-                            <constraint firstItem="YEt-Kw-kgP" firstAttribute="leading" secondItem="wh3-MV-vc9" secondAttribute="leading" constant="16" id="FY5-eu-Xaa"/>
                             <constraint firstItem="qoF-du-PWf" firstAttribute="leading" secondItem="OmS-fy-78c" secondAttribute="trailing" constant="16" id="IBK-zz-khV"/>
                             <constraint firstItem="TFb-Y7-y8w" firstAttribute="leading" secondItem="wh3-MV-vc9" secondAttribute="leadingMargin" id="LE0-dn-pBH"/>
                             <constraint firstItem="OmS-fy-78c" firstAttribute="width" secondItem="qoF-du-PWf" secondAttribute="width" id="TEF-0Y-JZB"/>
                             <constraint firstItem="qoF-du-PWf" firstAttribute="trailing" secondItem="wh3-MV-vc9" secondAttribute="trailingMargin" id="ZUS-Wl-Q3N"/>
                             <constraint firstAttribute="centerY" secondItem="TFb-Y7-y8w" secondAttribute="centerY" id="aPY-wW-aqh"/>
-                            <constraint firstItem="YEt-Kw-kgP" firstAttribute="top" secondItem="QzH-P7-kOc" secondAttribute="bottom" id="c0M-qc-dUl"/>
                             <constraint firstAttribute="centerY" secondItem="qoF-du-PWf" secondAttribute="centerY" id="qal-DJ-WNO"/>
                             <constraint firstItem="OmS-fy-78c" firstAttribute="leading" secondItem="TFb-Y7-y8w" secondAttribute="trailing" constant="16" id="tJj-xX-c9Q"/>
                         </constraints>
@@ -2523,11 +2499,8 @@
                                 <exclude reference="OmS-fy-78c"/>
                                 <exclude reference="qoF-du-PWf"/>
                                 <exclude reference="TFb-Y7-y8w"/>
-                                <exclude reference="YEt-Kw-kgP"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="FY5-eu-Xaa"/>
-                                <exclude reference="c0M-qc-dUl"/>
                                 <exclude reference="0ht-5L-9fi"/>
                                 <exclude reference="4Xs-4V-w50"/>
                                 <exclude reference="FK8-hs-b6r"/>
@@ -2545,11 +2518,8 @@
                                 <include reference="OmS-fy-78c"/>
                                 <include reference="qoF-du-PWf"/>
                                 <include reference="TFb-Y7-y8w"/>
-                                <include reference="YEt-Kw-kgP"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="FY5-eu-Xaa"/>
-                                <include reference="c0M-qc-dUl"/>
                                 <include reference="0ht-5L-9fi"/>
                                 <include reference="4Xs-4V-w50"/>
                                 <include reference="FK8-hs-b6r"/>
@@ -2580,6 +2550,5 @@
     <resources>
         <image name="Circle" width="128" height="128"/>
         <image name="dragicon" width="32" height="32"/>
-        <image name="location_icon" width="21" height="21"/>
     </resources>
 </document>
