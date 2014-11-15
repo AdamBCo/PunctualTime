@@ -71,8 +71,14 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     // If the app is active and the location manager has been created, I start updating the users location.
     [self.userLocationManager updateLocation];
 
-    // Refresh the events and views that show events
-    [self.sharedEventManager refreshEventsWithCompletion:^{}];
+    // Check if any events have expired
+    for (Event* event in self.sharedEventManager.events)
+    {
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
