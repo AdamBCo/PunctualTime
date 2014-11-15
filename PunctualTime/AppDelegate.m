@@ -68,8 +68,11 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 
-    //If the app is active and the location manager has been created, I start updating the users location.
+    // If the app is active and the location manager has been created, I start updating the users location.
     [self.userLocationManager updateLocation];
+
+    // Refresh the events and views that show events
+    [self.sharedEventManager refreshEventsWithCompletion:^{}];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -150,6 +153,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         else // This is the final warning
         {
             inertButtonText = FINAL_BUTTON;
+            [self.sharedEventManager handleExpiredEvent:schedulingEvent completion:^{}];
         }
 
         // Create the custom notification to present to the user

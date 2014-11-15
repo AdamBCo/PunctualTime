@@ -8,6 +8,7 @@
 
 #import "EventTableViewController.h"
 #import "EventManager.h"
+#import "Constants.h"
 #import "Event.h"
 
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -27,13 +28,17 @@
 {
     [super viewDidLoad];
 
-//    UIBarButtonItem* cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(goBack)];
-//    [self.navigationController.navigationItem setBackBarButtonItem:cancelButton];
+    self.sharedEventManager = [EventManager sharedEventManager];
 
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
     [self.dragImageView addGestureRecognizer:panGesture];
 
-    self.sharedEventManager = [EventManager sharedEventManager];
+    [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
+                                                      object:self.sharedEventManager
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note){
+                                                      [self.tableView reloadData];
+                                                  }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,9 +47,7 @@
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
-
-    [self.tableView reloadData];
-
+    
     [super viewWillAppear:animated];
 }
 
@@ -90,6 +93,7 @@
     {
         [self.sharedEventManager removeEvent:[self.sharedEventManager.events objectAtIndex:indexPath.row]];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
     }
 }
 

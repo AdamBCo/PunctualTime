@@ -8,6 +8,7 @@
 
 #import "EventManager.h"
 #import "AppDelegate.h"
+#import "Constants.h"
 
 @interface EventManager () <EventDelegate>
 
@@ -56,7 +57,23 @@
     }
 
     [self.events removeObject:event];
-    [self sortEvents];
+    [self saveEvents];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
+}
+
+- (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion
+{
+    if (event.recurrenceInterval == PTEventRecurrenceOptionNone) // Remove the event
+    {
+        [self removeEvent:event];
+        completion();
+    }
+    else // Reschedule the event
+    {
+        [event rescheduleWithCompletion:^{
+            completion();
+        }];
+    }
 }
 
 - (void)refreshEventsWithCompletion:(void (^)(void))completion // Updates events or removes/reschedules them if expired
@@ -69,25 +86,13 @@
         {
             if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
             {
-                if (event.recurrenceInterval == PTEventRecurrenceOptionNone) // Remove the event
-                {
-                    [self removeEvent:event];
+                [self handleExpiredEvent:event completion:^{
                     if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
                     {
                         [self sortEvents];
                         completion();
                     }
-                }
-                else // Reschedule the event
-                {
-                    [event rescheduleWithCompletion:^{
-                        if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
-                        {
-                            [self sortEvents];
-                            completion();
-                        }
-                    }];
-                }
+                }];
             }
             else // Just update with the latest travel time
             {
@@ -141,15 +146,18 @@
     [self.events addObjectsFromArray: sortedEventsArray];
 
     [self saveEvents];
-    [self.delegate eventManagerHasBeenUpdated]; //TODO: replace delegate with NSNotificationCenter message
+    [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
 }
 
 
 #pragma mark - Event delegate
 
-- (void)eventWasUpdated
+- (void)eventWasUpdated:(Event *)event
 {
-    [self sortEvents];
+    if ([self.events containsObject:event])
+    {
+        [self sortEvents];
+    }
 }
 
 
@@ -186,11 +194,25 @@
     for (NSData* data in savedData)
     {
         Event* event = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
         event.delegate = self;
         [self.events addObject:event];
     }
 
-    [self refreshEventsWithCompletion:^{}];
+    NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
+
+    for (Event* event in eventsCopy)
+    {
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self handleExpiredEvent:event completion:^{
+                if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
+                {
+                    [self sortEvents];
+                }
+            }];
+        }
+    }
 }
 
 

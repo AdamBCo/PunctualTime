@@ -23,9 +23,11 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
     PTEventRecurrenceOptionNone
 };
 
+@class Event;
+
 @protocol EventDelegate <NSObject>
 
-- (void)eventWasUpdated;
+- (void)eventWasUpdated:(Event *)event;
 
 @end
 

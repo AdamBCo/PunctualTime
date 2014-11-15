@@ -150,7 +150,7 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             self.lastLeaveTime = [NSDate dateWithTimeIntervalSince1970: leaveTime];
             self.lastTravelTime = travelTime;
 
-            [self.delegate eventWasUpdated];
+            [self.delegate eventWasUpdated:self];
             complete(nil);
         }
         else

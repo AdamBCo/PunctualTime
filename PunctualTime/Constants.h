@@ -28,3 +28,6 @@
 #define TRANSPO_WALKING @"walking"
 #define TRANSPO_BIKING @"bicycling"
 #define TRANSPO_TRANSIT @"transit"
+
+// NSNotificationCenter
+#define EVENTS_UPDATED @"EventsUpdated"
