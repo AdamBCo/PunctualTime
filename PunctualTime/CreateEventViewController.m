@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 #import "LocationSearchController.h"
-#import "SearchTableViewController.h"
+#import "SearchViewController.h"
 #import "RemindersViewController.h"
 #import "RecurrenceViewController.h"
 #import "Event.h"
@@ -297,7 +297,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"BackToTheMapSegue"])
+    if ([segue.identifier isEqualToString:@"ToSearchViewSegue"])
     {
         [self.titleTextField resignFirstResponder];
     }
@@ -319,12 +319,13 @@
 
 }
 
--(IBAction)unwindFromSearchTableViewController:(UIStoryboardSegue *)segue
+-(IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
 {
-    SearchTableViewController *viewController = segue.sourceViewController;
+    SearchViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
     [self enableSaveButtonIfReady];
+    NSLog(@"Pictures: %f",self.locationInfo.locationCoordinates.latitude);
 }
 
 @end
