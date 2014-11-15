@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Event.h"
 
-@protocol EventManagerDelegate <NSObject>
-
--(void)eventManagerHasBeenUpdated;
-
-@end
-
 @interface EventManager : NSObject
 
 @property (readonly) NSMutableArray* events;
@@ -22,11 +16,8 @@
 + (EventManager *)sharedEventManager;
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
+- (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion;
 - (void)refreshEventsWithCompletion:(void (^)(void))completion;
-- (void)sortEvents;
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID;
-- (void)saveEvents;
-
-@property id<EventManagerDelegate> delegate;
 
 @end

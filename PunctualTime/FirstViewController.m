@@ -8,6 +8,7 @@
 
 #import "FirstViewController.h"
 #import "EventTableViewController.h"
+#import "Constants.h"
 #import "LiveFrost.h"
 #import "EventManager.h"
 #import "Event.h"
@@ -15,7 +16,7 @@
 
 static CGFloat INITIAL_CONTAINER_LOC;
 
-@interface FirstViewController () <EventTableViewDelegate, EventManagerDelegate>
+@interface FirstViewController () <EventTableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
@@ -40,7 +41,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.selectedEvent = self.sharedEventManager.events.firstObject;
     NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
 
-    self.sharedEventManager.delegate = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      self.selectedEvent = self.sharedEventManager.events.firstObject;
+                                                  }];
 
     self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
     self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
@@ -99,7 +105,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.navigationController.navigationBar.hidden = YES;
     INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
 
-    [self eventManagerHasBeenUpdated];
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
@@ -182,14 +188,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
             [self.blurView removeFromSuperview];
         }];
     }
-}
-
-
-#pragma mark - EventManagerDelegate
-
--(void)eventManagerHasBeenUpdated
-{
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
 }
 
 
