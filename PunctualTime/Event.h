@@ -23,7 +23,15 @@ typedef NS_ENUM(NSUInteger, PTEventRecurrenceOption) {
     PTEventRecurrenceOptionNone
 };
 
+@protocol EventDelegate <NSObject>
+
+- (void)eventWasUpdated;
+
+@end
+
 @interface Event : NSObject
+
+@property id<EventDelegate> delegate;
 
 @property (readonly) NSString* eventName;
 @property (readonly) CLLocationCoordinate2D endingAddress;

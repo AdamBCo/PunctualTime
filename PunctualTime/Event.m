@@ -128,7 +128,7 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             }
             else // Zero minute warning
             {
-                minuteWarning =@"Leave Now!";
+                minuteWarning = @"Leave Now!";
                 notificationFireDate = [NSDate dateWithTimeIntervalSince1970:(leaveTime)];
             }
 
@@ -149,7 +149,8 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
             self.lastNotificationText = newNotification.alertBody;
             self.lastLeaveTime = [NSDate dateWithTimeIntervalSince1970: leaveTime];
             self.lastTravelTime = travelTime;
-            
+
+            [self.delegate eventWasUpdated];
             complete(nil);
         }
         else
