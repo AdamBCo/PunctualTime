@@ -58,7 +58,6 @@
 
     [self.events removeObject:event];
     [self saveEvents];
-    [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
 }
 
 - (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion
@@ -66,6 +65,7 @@
     if (event.recurrenceInterval == PTEventRecurrenceOptionNone) // Remove the event
     {
         [self removeEvent:event];
+        [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
         completion();
     }
     else // Reschedule the event
