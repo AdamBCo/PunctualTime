@@ -24,7 +24,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @property EventManager* sharedEventManager;
 @property UIWindow* notificationWindow;
-@property UIVisualEffectView* blurView;
 
 @end
 
@@ -103,12 +102,12 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 }
 
 
-#pragma mark - Background Refresh
+#pragma mark - Background refresh
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [self.sharedEventManager refreshEventsWithCompletion:^{
-        completionHandler(UIBackgroundFetchResultNewData);
+    [self.sharedEventManager refreshEventsWithCompletion:^(UIBackgroundFetchResult fetchResult){
+        completionHandler(fetchResult);
     }];
 }
 
@@ -175,10 +174,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                   handler:^(SIAlertView *alert) {
                                       [schedulingEvent makeLocalNotificationWithCategoryIdentifier:firstButtonNewCategory completion:^(NSError* error)
                                        {
-                                           if (error) // This shouldn't ever happen
-                                           {
-                                               NSLog(@"Error snoozing: %@", error.userInfo);
-                                           }
                                            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
                                   }];
@@ -190,10 +185,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                   handler:^(SIAlertView *alert) {
                                       [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
                                        {
-                                           if (error) // This shouldn't ever happen
-                                           {
-                                               NSLog(@"Error snoozing: %@", error.userInfo);
-                                           }
                                            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
                                   }];
@@ -219,56 +210,31 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a thirty minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
-         {
-             if (error) // This shouldn't ever happen
-             {
-                 NSLog(@"Error snoozing: %@", error.userInfo);
-             }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error){
              completionHandler();
          }];
     }
     else if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error){
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:TEN_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error)
-         {
-             if (error) // This shouldn't ever happen
-             {
-                 NSLog(@"Error snoozing: %@", error.userInfo);
-             }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error){
              completionHandler();
          }];
     }
     else if ([identifier isEqualToString:FIVE_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIVE_MINUTE_WARNING completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIVE_MINUTE_WARNING completion:^(NSError* error){
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:ZERO_MINUTE_ACTION]) // Refresh ETA then set a zero minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error){
             completionHandler();
         }];
     }
@@ -335,11 +301,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (NSString *)correctedMessageBodyFromString:(NSString*)oldMessageBody
 {
     NSError *error;
-
-    if (!oldMessageBody)
-    {
-        oldMessageBody = @"This shouldn't have happened. Please tell me about it. - Nathan";
-    }
 
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
                                                                            options:NSRegularExpressionCaseInsensitive

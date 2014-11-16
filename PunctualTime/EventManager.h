@@ -17,7 +17,7 @@
 - (void)addEvent:(Event *)event;
 - (void)removeEvent:(Event *)event;
 - (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion;
-- (void)refreshEventsWithCompletion:(void (^)(void))completion;
+- (void)refreshEventsWithCompletion:(void (^)(UIBackgroundFetchResult fetchResult))completion;
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID;
 
 @end
