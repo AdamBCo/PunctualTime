@@ -21,10 +21,13 @@
 #define ZERO_MINUTE_ACTION (@"ZeroMinuteAction")
 
 // Notification body trailing string
-#define NOTIFICATION_TRAILING_TEXT (@"Slide to snooze")
+#define NOTIFICATION_TRAILING_TEXT (@" Slide to snooze")
 
 // Transporation strings for Google Maps API
 #define TRANSPO_DRIVING @"driving"
 #define TRANSPO_WALKING @"walking"
 #define TRANSPO_BIKING @"bicycling"
 #define TRANSPO_TRANSIT @"transit"
+
+// NSNotificationCenter
+#define EVENTS_UPDATED @"EventsUpdated"

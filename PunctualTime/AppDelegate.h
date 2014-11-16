@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "UserLocationManager.h"
 
+@class Event;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UserLocationManager *userLocationManager;
 @property (strong, nonatomic) UIWindow *window;
+
+- (UILocalNotification *)getNotificationForEvent:(Event *)event;
 
 @end
 

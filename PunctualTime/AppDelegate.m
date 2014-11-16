@@ -24,7 +24,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @property EventManager* sharedEventManager;
 @property UIWindow* notificationWindow;
-@property UIVisualEffectView* blurView;
 
 @end
 
@@ -34,7 +33,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
-
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 
@@ -69,8 +67,17 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 
-    //If the app is active and the location manager has been created, I start updating the users location.
+    // If the app is active and the location manager has been created, I start updating the users location.
     [self.userLocationManager updateLocation];
+
+    // Check if any events have expired
+    for (Event* event in self.sharedEventManager.events)
+    {
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -78,41 +85,30 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 }
 
 
-#pragma mark - Background Refresh
+#pragma mark - Public methods
+
+- (UILocalNotification *)getNotificationForEvent:(Event *)event
+{
+    NSArray* notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification* notification in notifications)
+    {
+        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
+        {
+            return notification;
+        }
+    }
+
+    return nil;
+}
+
+
+#pragma mark - Background refresh
 
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    int counter = 0;
-    [application cancelAllLocalNotifications]; // We're going to recreate them
-
-    if (self.sharedEventManager.events.count > 0)
-    {
-        for (Event *event in self.sharedEventManager.events)
-        {
-            [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError* error)
-            {
-                if (error) // This shouldn't ever happen
-                {
-                    NSLog(@"Background Fetch error: %@", error.userInfo);
-                }
-
-                NSLog(@"Name: %@",event.eventName);
-                NSLog(@"Time to go off: %@",event.desiredArrivalTime);
-                NSLog(@"Notification Category: %@",event.currentNotificationCategory);
-
-                if (counter+1 == self.sharedEventManager.events.count) // We're at the last object, so call completion handler
-                {
-                    NSLog(@"Events have been refreshed %d times",counter+1);
-                    completionHandler(UIBackgroundFetchResultNewData);
-                }
-            }];
-            counter++;
-        }
-    }
-    else
-    {
-        completionHandler(UIBackgroundFetchResultNoData);
-    }
+    [self.sharedEventManager refreshEventsWithCompletion:^(UIBackgroundFetchResult fetchResult){
+        completionHandler(fetchResult);
+    }];
 }
 
 
@@ -162,6 +158,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
         else // This is the final warning
         {
             inertButtonText = FINAL_BUTTON;
+            [self.sharedEventManager handleExpiredEvent:schedulingEvent completion:^{}];
         }
 
         // Create the custom notification to present to the user
@@ -177,10 +174,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                   handler:^(SIAlertView *alert) {
                                       [schedulingEvent makeLocalNotificationWithCategoryIdentifier:firstButtonNewCategory completion:^(NSError* error)
                                        {
-                                           if (error) // This shouldn't ever happen
-                                           {
-                                               NSLog(@"Error snoozing: %@", error.userInfo);
-                                           }
                                            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
                                   }];
@@ -192,10 +185,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
                                   handler:^(SIAlertView *alert) {
                                       [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
                                        {
-                                           if (error) // This shouldn't ever happen
-                                           {
-                                               NSLog(@"Error snoozing: %@", error.userInfo);
-                                           }
                                            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                        }];
                                   }];
@@ -221,56 +210,31 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
     if ([identifier isEqualToString:THIRTY_MINUTE_ACTION]) // Refresh ETA then set a thirty minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error)
-         {
-             if (error) // This shouldn't ever happen
-             {
-                 NSLog(@"Error snoozing: %@", error.userInfo);
-             }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:THIRTY_MINUTE_WARNING completion:^(NSError* error){
              completionHandler();
          }];
     }
     else if ([identifier isEqualToString:FIFTEEN_MINUTE_ACTION]) // Refresh ETA then set a fifteen minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIFTEEN_MINUTE_WARNING completion:^(NSError* error){
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:TEN_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error)
-         {
-             if (error) // This shouldn't ever happen
-             {
-                 NSLog(@"Error snoozing: %@", error.userInfo);
-             }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:TEN_MINUTE_WARNING completion:^(NSError* error){
              completionHandler();
          }];
     }
     else if ([identifier isEqualToString:FIVE_MINUTE_ACTION]) // Refresh ETA then set a five minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIVE_MINUTE_WARNING completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:FIVE_MINUTE_WARNING completion:^(NSError* error){
             completionHandler();
         }];
     }
     else if ([identifier isEqualToString:ZERO_MINUTE_ACTION]) // Refresh ETA then set a zero minute local notification
     {
-        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error)
-        {
-            if (error) // This shouldn't ever happen
-            {
-                NSLog(@"Error snoozing: %@", error.userInfo);
-            }
+        [schedulingEvent makeLocalNotificationWithCategoryIdentifier:nil completion:^(NSError* error){
             completionHandler();
         }];
     }
@@ -337,6 +301,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (NSString *)correctedMessageBodyFromString:(NSString*)oldMessageBody
 {
     NSError *error;
+
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:NOTIFICATION_TRAILING_TEXT
                                                                            options:NSRegularExpressionCaseInsensitive
                                                                              error:&error];

@@ -7,8 +7,10 @@
 //
 
 #import "EventManager.h"
+#import "AppDelegate.h"
+#import "Constants.h"
 
-@interface EventManager ()
+@interface EventManager () <EventDelegate>
 
 @property (readwrite) NSMutableArray* events;
 
@@ -38,53 +40,92 @@
         self.events = [NSMutableArray new];
     }
 
+    event.delegate = self;
     [self.events addObject:event];
-    [self saveEvents];
+
+    [self sortEvents];
 }
 
 - (void)removeEvent:(Event *)event
 {
-    NSArray* notifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    for (UILocalNotification* notification in notifications)
+    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
+
+    if (notification)
     {
-        if ([notification.userInfo[@"Event"] isEqualToString:event.uniqueID])
-        {
-            [[UIApplication sharedApplication] cancelLocalNotification:notification]; // Cancel the associated notification first
-        }
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
     }
+
     [self.events removeObject:event];
     [self saveEvents];
 }
 
-- (void)refreshEvents // Removes or reschedules expired events and resorts by date
+- (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion
 {
-
-    NSArray *sortedEventsArray = [self.events sortedArrayUsingSelector:@selector(compareEvent:)];
-    [self.events removeAllObjects];
-    [self.events addObjectsFromArray: sortedEventsArray];
-
-
-    for (Event* event in sortedEventsArray)
+    if (event.recurrenceInterval == PTEventRecurrenceOptionNone) // Remove the event
     {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        [self removeEvent:event];
+        [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
+        completion();
+    }
+    else // Reschedule the event
+    {
+        [event rescheduleWithCompletion:^{
+            completion();
+        }];
+    }
+}
+
+- (void)refreshEventsWithCompletion:(void (^)(UIBackgroundFetchResult fetchResult))completion // Updates events or removes/reschedules them if expired
+{
+    __block UIBackgroundFetchResult fetchResult = UIBackgroundFetchResultNoData;
+
+    if (self.events.count > 0)
+    {
+        NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
+
+        for (Event* event in eventsCopy)
         {
-            if (event.recurrenceInterval == PTEventRecurrenceOptionNone)
+            if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
             {
-                [self removeEvent:event];
-                [self.delegate eventManagerHasBeenUpdated];
-                NSLog(@"It has been refreshed");
+                [self handleExpiredEvent:event completion:^{
+                    if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
+                    {
+                        [self sortEvents];
+                        completion(fetchResult);
+                    }
+                }];
             }
-            else
+            else // Just update with the latest travel time
             {
-                [event rescheduleWithCompletion:^{
-                    [self.delegate eventManagerHasBeenUpdated];
-                    NSLog(@"It has been refreshed Gold");
+                AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+                UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
+
+                [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError *error) {
+                    if (!error)
+                    {
+                        fetchResult = UIBackgroundFetchResultNewData;
+
+                        if (notification)
+                        {
+                            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+                        }
+                    }
+
+                    if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
+                    {
+                        [self sortEvents];
+                        completion(fetchResult);
+                    }
                 }];
             }
         }
     }
+    else
+    {
+        completion(fetchResult);
+    }
 }
-
 
 - (Event *)findEventWithUniqueID:(NSString *)uniqueID
 {
@@ -97,6 +138,30 @@
     }
 
     return nil;
+}
+
+
+#pragma mark - Private methods
+
+- (void)sortEvents // Sort self.events by leave time
+{
+    NSArray *sortedEventsArray = [self.events sortedArrayUsingSelector:@selector(compareEvent:)];
+    [self.events removeAllObjects];
+    [self.events addObjectsFromArray: sortedEventsArray];
+
+    [self saveEvents];
+    [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
+}
+
+
+#pragma mark - Event delegate
+
+- (void)eventWasUpdated:(Event *)event
+{
+    if ([self.events containsObject:event])
+    {
+        [self sortEvents];
+    }
 }
 
 
@@ -124,7 +189,7 @@
     [dataToSave writeToURL:plist atomically:YES];
 }
 
-- (void)loadEvents
+- (void)loadEvents // This method should NEVER be public
 {
     NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
     self.events = [NSMutableArray array];
@@ -133,10 +198,25 @@
     for (NSData* data in savedData)
     {
         Event* event = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+        event.delegate = self;
         [self.events addObject:event];
     }
 
-    [self refreshEvents];
+    NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
+
+    for (Event* event in eventsCopy)
+    {
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self handleExpiredEvent:event completion:^{
+                if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
+                {
+                    [self sortEvents];
+                }
+            }];
+        }
+    }
 }
 
 
@@ -147,7 +227,7 @@
     if (self = [super init])
     {
         // Load any saved Event objects from local storage
-        [self loadEvents];
+        [self loadEvents];;
     }
 
     return self;

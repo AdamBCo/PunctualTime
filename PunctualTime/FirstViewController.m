@@ -9,6 +9,7 @@
 
 #import "FirstViewController.h"
 #import "EventTableViewController.h"
+#import "Constants.h"
 #import "LiveFrost.h"
 #import "EventManager.h"
 #import "Event.h"
@@ -16,7 +17,7 @@
 
 static CGFloat INITIAL_CONTAINER_LOC;
 
-@interface FirstViewController () <EventTableViewDelegate, EventManagerDelegate>
+@interface FirstViewController () <EventTableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
@@ -38,7 +39,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 - (void)viewDidLoad
 {
-
     [super viewDidLoad];
 
 //    UIView *test = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -61,7 +61,15 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
-    self.sharedEventManager.delegate = self;
+
+    NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(NSNotification *note) {
+                                                      self.selectedEvent = self.sharedEventManager.events.firstObject;
+                                                  }];
 
     self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
     self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
@@ -288,7 +296,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.navigationController.navigationBar.hidden = YES;
     INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
 
-    [self eventManagerHasBeenUpdated];
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
 
     [NSTimer scheduledTimerWithTimeInterval:1.0
                                      target:self
@@ -297,13 +305,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                     repeats:YES];
 }
 
-
 - (void)updateCounter
-
 {
-    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
 
-    if(seconds > 0 ){
+    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
+    
+    if(seconds > 0)
+    {
         seconds -- ;
         int hours = (seconds / 3600);
         int minutes = (seconds % 3600) / 60;
@@ -323,9 +331,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
         if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
         {
             // Create blur view to animate
-            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];;
+            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
             self.blurView.alpha = 0.0;
-            self.blurView.frame = self.view.frame;
             [self.view insertSubview:self.blurView belowSubview:self.containerView];
         }
     }
@@ -380,15 +387,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     }
 }
 
-
-#pragma mark - EventManagerDelegate
-
--(void)eventManagerHasBeenUpdated
-{
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
-}
-
-
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -407,10 +405,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 - (IBAction)unwindFromCreateEventVC:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    
-    NSLog(@"segue: %@", segue);
-    NSLog(@"sender: %@", sender);
-    
+    //
 }
 
 @end
