@@ -20,7 +20,7 @@ NSString *const SIAlertViewDidDismissNotification = @"SIAlertViewDidDismissNotif
 
 #define MESSAGE_MIN_LINE_COUNT 3
 #define MESSAGE_MAX_LINE_COUNT 5
-#define GAP 10
+#define GAP 5
 #define CANCEL_BUTTON_PADDING_TOP 5
 #define CONTENT_PADDING_LEFT 10
 #define CONTENT_PADDING_TOP 10
@@ -883,7 +883,7 @@ static LFGlassView* blurView;
     if (self.messageLabel) {
         CGFloat maxHeight = MESSAGE_MAX_LINE_COUNT * self.messageLabel.font.lineHeight;
         
-        #ifdef __IPHONE_7_0
+//        #ifdef __IPHONE_7_0
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
             paragraphStyle.lineBreakMode = self.messageLabel.lineBreakMode;
             
@@ -898,13 +898,13 @@ static LFGlassView* blurView;
                                                              context:nil];
             
             return MAX(minHeight, ceil(rect.size.height));
-        #else
-            CGSize size = [self.message sizeWithFont:self.messageLabel.font
-                                   constrainedToSize:CGSizeMake(CONTAINER_WIDTH - CONTENT_PADDING_LEFT * 2, maxHeight)
-                                       lineBreakMode:self.messageLabel.lineBreakMode];
-            
-            return MAX(minHeight, size.height);
-        #endif
+//        #else
+//            CGSize size = [self.message sizeWithFont:self.messageLabel.font
+//                                   constrainedToSize:CGSizeMake(CONTAINER_WIDTH - CONTENT_PADDING_LEFT * 2, maxHeight)
+//                                       lineBreakMode:self.messageLabel.lineBreakMode];
+//            
+//            return MAX(minHeight, size.height);
+//        #endif
     }
     
     return minHeight;
@@ -974,6 +974,7 @@ static LFGlassView* blurView;
 
 - (void)updateMessageLabel
 {
+#pragma mark - Message Label Stuff
     if (self.message) {
         if (!self.messageLabel) {
             self.messageLabel = [[UILabel alloc] initWithFrame:self.bounds];
