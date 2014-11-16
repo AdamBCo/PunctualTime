@@ -122,7 +122,7 @@
         self.datePickerHeightConstraint.constant = 0;
         self.datePicker.alpha = 0.0;
     }
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:0.7
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{

@@ -86,52 +86,154 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     }];
 
+//    //Circle Drawing
+//
+//    int radius = 120;
+//
+//    CAShapeLayer *circle = [CAShapeLayer layer];
+//    circle.position = CGPointMake(self.view.frame.size.width, self.view.frame.size.height);
+//    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius-20, 2.0*radius-20)
+//                                             cornerRadius:radius].CGPath;
+//    circle.fillColor = [UIColor blueColor].CGColor;
+//    circle.strokeColor = [UIColor whiteColor].CGColor;
+//    circle.lineWidth = 5;
+//
+//    //Star Drawing
+//
+//    CAShapeLayer *star = [CAShapeLayer layer];
+//    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
+//    int r1 = self.animationShapeView.frame.size.width/2;
+//    int r2 = r1 - 20;
+//    int numberOfPoints =    60;//60
+//    float TWOPI = 2 * M_PI;
+//    CGMutablePathRef drawStarPath = CGPathCreateMutable();
+//    for (float n=0; n < numberOfPoints; n+=3)
+//    {
+//        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
+//        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
+//        if (n==0){
+//
+//            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
+//        }else {
+//            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
+//            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
+//            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
+//            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
+//            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
+//            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
+//            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
+//        }
+//    }
+//    CGPathCloseSubpath(drawStarPath);
+//
+//    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
+//    star.fillColor = [UIColor clearColor].CGColor;
+//    star.strokeColor = [UIColor whiteColor].CGColor;
+//    star.lineWidth = 5;
 
-
-    //Circle Drawing
-
-    int radius = 120;
-
-    CAShapeLayer *circle = [CAShapeLayer layer];
-    circle.position = CGPointMake(self.view.frame.size.width, self.view.frame.size.height);
-    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius-20, 2.0*radius-20)
+    //Sun
+    int radius = self.view.frame.size.width*.23;
+    CAShapeLayer *sun = [CAShapeLayer new];
+    sun.position = CGPointMake(self.view.frame.size.width*.28, self.view.frame.size.height*.28);
+    sun.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                              cornerRadius:radius].CGPath;
-    circle.fillColor = [UIColor blueColor].CGColor;
-    circle.strokeColor = [UIColor whiteColor].CGColor;
-    circle.lineWidth = 5;
+    sun.fillColor = [UIColor clearColor].CGColor;
+    sun.strokeColor = [UIColor whiteColor].CGColor;
+    sun.lineWidth = 5;
 
-    //Star Drawing
+    //Ground
+    CAShapeLayer *ground = [CAShapeLayer new];
+    CGMutablePathRef background = CGPathCreateMutable();
+    CGPathMoveToPoint(background, nil, 0, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(background, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);
+    CGPathRetain(background);
+    ground.path = [UIBezierPath bezierPathWithCGPath:background].CGPath;
+    ground.strokeColor = [UIColor whiteColor].CGColor;
+    ground.lineWidth = 5;
 
-    CAShapeLayer *star = [CAShapeLayer layer];
-    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
-    int r1 = self.animationShapeView.frame.size.width/2;
-    int r2 = r1 - 20;
-    int numberOfPoints =    60;//60
-    float TWOPI = 2 * M_PI;
-    CGMutablePathRef drawStarPath = CGPathCreateMutable();
-    for (float n=0; n < numberOfPoints; n+=3)
-    {
-        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
-        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
-        if (n==0){
+    //Buildings
 
-            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
-        }else {
-            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
-            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
-            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
-            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
-            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
-            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
-            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
-        }
-    }
-    CGPathCloseSubpath(drawStarPath);
+    CAShapeLayer *buildings = [CAShapeLayer new];
+    CGMutablePathRef chicago = CGPathCreateMutable();
+    CGPathMoveToPoint(chicago, nil, 0, self.view.bounds.size.height*.65);//Starting Point
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.64);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.62);//Arc Begin
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.07, self.view.bounds.size.height*.60);//Arch End
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);//Top of Building One
 
-    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
-    star.fillColor = [UIColor clearColor].CGColor;
-    star.strokeColor = [UIColor whiteColor].CGColor;
-    star.lineWidth = 5;
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.62);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.65);
+
+
+
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height *.65); //Space
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60); //Building Two
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.60);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.80);//Space
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.60);//Building Three
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.60);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.80);//Space
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.70);//Building Four
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.80);
+
+    //Sears Tower
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.79, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.79, self.view.bounds.size.height*.75);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.75);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.65);//Building Five
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.65);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.82, self.view.bounds.size.height*.55);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.82, self.view.bounds.size.height*.45);//First Spike
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.45);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.35);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.45);
+
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);//Second Spike
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.35);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.45);
+    
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.55);//Building Five
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.55);
+
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.45);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);
+
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);//Building Five
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.65);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.75);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.90, self.view.bounds.size.height*.75);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.90, self.view.bounds.size.height*.80);
+
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);//End of Drawing
+
+    CGPathRetain(chicago);
+    buildings.path = [UIBezierPath bezierPathWithCGPath:chicago].CGPath;
+    buildings.strokeColor = [UIColor whiteColor].CGColor;
+    buildings.fillColor = [UIColor clearColor].CGColor;
+    buildings.lineWidth = 2;
+
+
 
     // Configure animation
 
@@ -141,22 +243,26 @@ static CGFloat INITIAL_CONTAINER_LOC;
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    [circle addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [star addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [sun addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+//    [star addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [ground addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [buildings addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
 
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
     rotationAnimation.duration = 10;
     rotationAnimation.repeatCount = INFINITY;
-//    [star addAnimation:rotationAnimation forKey:@"rotationAnimation"];
+//    [sun addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 
     //Add layers to Animation View
 
-    [self.animationShapeView.layer addSublayer:star];
-    [self.view.layer addSublayer:circle];
+//    [self.animationShapeView.layer addSublayer:star];
+    [self.view.layer addSublayer:ground];
+    [self.view.layer addSublayer:sun];
+    [self.view.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
-    [self runSpinAnimationOnView:self.animationShapeView duration:3 rotations:1 repeat:1];
+//    [self runSpinAnimationOnView:self.animationShapeView duration:3 rotations:1 repeat:1];
 
 }
 
