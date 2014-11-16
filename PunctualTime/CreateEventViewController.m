@@ -246,7 +246,6 @@
     [alertView addButtonWithTitle:@"OK"
                              type:SIAlertViewButtonTypeDefault
                           handler:^(SIAlertView *alertView) {
-                              self.locationInfo = nil;
                           }];
     [alertView show];
 }
