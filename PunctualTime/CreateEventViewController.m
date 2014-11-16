@@ -19,6 +19,8 @@
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
 
+static UIColor* initialButtonTextColor;
+
 @interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
@@ -50,6 +52,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *destinationButton;
 
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *reminderButtons;
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *reminderButtonConstraints;
 
 @end
 
@@ -73,16 +77,37 @@
 
     self.blackView = [[UIView alloc] initWithFrame: self.view.bounds];
 
-
     [self.view addSubview:self.blackView];
-
 }
 
--(void)viewWillAppear:(BOOL)animated{
-
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
 
     [self enableSaveButtonIfReady];
+
+    // Setup buttons
+    initialButtonTextColor = [self.reminderButtons.firstObject titleColorForState:UIControlStateNormal];
+
+    // Reminder buttons
+    CGFloat buttonSize = SCREEN_WIDTH/6.5;
+
+    for (NSLayoutConstraint* constraint in self.reminderButtonConstraints)
+    {
+        constraint.constant = buttonSize;
+    }
+
+    for (UIButton* button in self.reminderButtons)
+    {
+        button.layer.borderWidth = 1.0;
+        button.layer.cornerRadius = (buttonSize)/2.0;
+        button.layer.borderColor = [initialButtonTextColor CGColor];
+    }
+
+    // Recurrence buttons
+    buttonSize = SCREEN_WIDTH/4.0;
+
+    
 
     if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
