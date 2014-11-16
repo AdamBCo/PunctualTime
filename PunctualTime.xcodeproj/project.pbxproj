@@ -34,6 +34,7 @@
 		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
 		E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94821201A13E1EC00DAAC63 /* LFGlassView.m */; };
 		E98ED0D21A14637A00F0078C /* RemindersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E98ED0D11A14637A00F0078C /* RemindersViewController.m */; };
+		E996166D1A181E1900044A49 /* SIAlertView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E996166C1A181E1900044A49 /* SIAlertView.bundle */; };
 		E9A624721A150AFA009C57B2 /* RecurrenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A624711A150AFA009C57B2 /* RecurrenceViewController.m */; };
 		E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */; };
 		E9D79C361A046DE600C9D65F /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = E9D79C351A046DE600C9D65F /* Event.m */; };
@@ -102,6 +103,7 @@
 		E94821211A13E1EC00DAAC63 /* LiveFrost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveFrost.h; sourceTree = "<group>"; };
 		E98ED0D01A14637A00F0078C /* RemindersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindersViewController.h; sourceTree = "<group>"; };
 		E98ED0D11A14637A00F0078C /* RemindersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemindersViewController.m; sourceTree = "<group>"; };
+		E996166C1A181E1900044A49 /* SIAlertView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = SIAlertView.bundle; path = PunctualTime/SIAlertView/SIAlertView.bundle; sourceTree = SOURCE_ROOT; };
 		E9A624701A150AFA009C57B2 /* RecurrenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecurrenceViewController.h; sourceTree = "<group>"; };
 		E9A624711A150AFA009C57B2 /* RecurrenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecurrenceViewController.m; sourceTree = "<group>"; };
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 		E910C8201A0D4E7700CDD64D /* SIAlertView */ = {
 			isa = PBXGroup;
 			children = (
+				E996166C1A181E1900044A49 /* SIAlertView.bundle */,
 				6616C67A1A13232A00D8C872 /* SIAlertView.h */,
 				6616C67B1A13232A00D8C872 /* SIAlertView.m */,
 				6616C67C1A13232A00D8C872 /* UIWindow+SIUtils.h */,
@@ -411,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				661078EC1A044D830096479F /* Main.storyboard in Resources */,
+				E996166D1A181E1900044A49 /* SIAlertView.bundle in Resources */,
 				661078F11A044D830096479F /* LaunchScreen.xib in Resources */,
 				661078EE1A044D830096479F /* Images.xcassets in Resources */,
 			);
