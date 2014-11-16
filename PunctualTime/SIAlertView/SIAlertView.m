@@ -8,6 +8,7 @@
 
 #import "SIAlertView.h"
 #import "UIWindow+SIUtils.h"
+#import "LiveFrost.h"
 #import <QuartzCore/QuartzCore.h>
 
 NSString *const SIAlertViewWillShowNotification = @"SIAlertViewWillShowNotification";
@@ -17,7 +18,7 @@ NSString *const SIAlertViewDidDismissNotification = @"SIAlertViewDidDismissNotif
 
 #define DEBUG_LAYOUT 0
 
-#define MESSAGE_MIN_LINE_COUNT 2
+#define MESSAGE_MIN_LINE_COUNT 3
 #define MESSAGE_MAX_LINE_COUNT 5
 #define GAP 10
 #define CANCEL_BUTTON_PADDING_TOP 5
@@ -37,6 +38,8 @@ static NSMutableArray *__si_alert_queue;
 static BOOL __si_alert_animating;
 static SIAlertBackgroundWindow *__si_alert_background_window;
 static SIAlertView *__si_alert_current_view;
+
+static LFGlassView* blurView;
 
 @interface SIAlertView ()
 
@@ -123,9 +126,8 @@ static SIAlertView *__si_alert_current_view;
         }
         case SIAlertViewBackgroundStyleBlur:
         {
-            UIVisualEffectView* blurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-            blurView.frame = self.frame;
-            [self addSubview:blurView];
+            blurView = [[LFGlassView alloc] initWithFrame:self.bounds];
+            [[[UIApplication sharedApplication].windows firstObject] addSubview:blurView];
             break;
         }
     }
@@ -247,9 +249,9 @@ static SIAlertView *__si_alert_current_view;
 
 #pragma mark TODO:setting appearance properties
     SIAlertView *appearance = [self appearance];
-    appearance.viewBackgroundColor = [UIColor whiteColor];
-    appearance.titleColor = [UIColor blackColor];
-    appearance.messageColor = [UIColor darkGrayColor];
+    appearance.viewBackgroundColor = [UIColor colorWithRed:0.000 green:0.604 blue:0.698 alpha:1.000];
+    appearance.titleColor = [UIColor whiteColor];
+    appearance.messageColor = [UIColor whiteColor];
     appearance.titleFont = [UIFont boldSystemFontOfSize:20];
     appearance.messageFont = [UIFont systemFontOfSize:16];
     appearance.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
@@ -534,6 +536,7 @@ static SIAlertView *__si_alert_current_view;
     }
     [window makeKeyWindow];
     window.hidden = NO;
+    [blurView removeFromSuperview];
 }
 
 #pragma mark - Transitions
