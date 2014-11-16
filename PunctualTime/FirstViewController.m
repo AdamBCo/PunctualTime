@@ -140,9 +140,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
         if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
         {
             // Create blur view to animate
-            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];;
+            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
             self.blurView.alpha = 0.0;
-            self.blurView.frame = self.view.frame;
             [self.view insertSubview:self.blurView belowSubview:self.containerView];
         }
     }
