@@ -166,29 +166,35 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
     NSTimeInterval weekdayInterval;
 
     // Get the current day of week
-    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *weekdayComponents = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
-    long numericDayOfWeek = [weekdayComponents weekday];
+    NSCalendar* gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents* weekdayComponents = [gregorian components:NSCalendarUnitWeekday fromDate:[NSDate date]];
+    NSInteger numericDayOfWeek = [weekdayComponents weekday];
+    double daysSinceEvent = (floor((([NSDate date].timeIntervalSince1970/60)/60)/24) - (((self.desiredArrivalTime.timeIntervalSince1970/60)/60)/24));
+    daysSinceEvent *= dayInterval;
 
     if (numericDayOfWeek == 6) // Today is Friday so weekdayInterval should account for weekend
     {
-        weekdayInterval = dayInterval * 3;
+        weekdayInterval = daysSinceEvent + (dayInterval * 3);
+    }
+    else if (numericDayOfWeek == 7) // Today is Saturday so skip to Monday
+    {
+        weekdayInterval = daysSinceEvent + (dayInterval * 2);
     }
     else
     {
-        weekdayInterval = dayInterval;
+        weekdayInterval = daysSinceEvent + dayInterval;
     }
 
     switch (self.recurrenceInterval)
     {
         case PTEventRecurrenceOptionDaily:
-            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + dayInterval)];
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + daysSinceEvent + dayInterval)];
             break;
         case PTEventRecurrenceOptionWeekdays:
             self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + weekdayInterval)];
             break;
         case PTEventRecurrenceOptionWeekly:
-            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + (dayInterval*7))];
+            self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + daysSinceEvent + (dayInterval*7))];
             break;
 
         default:
