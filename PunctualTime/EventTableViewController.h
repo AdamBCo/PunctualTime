@@ -11,6 +11,7 @@
 @protocol EventTableViewDelegate <NSObject>
 
 - (void)panGestureDetected:(UIPanGestureRecognizer *)panGesture;
+- (void)tapGestureDetected:(UITapGestureRecognizer *)tapGesture;
 
 @end
 

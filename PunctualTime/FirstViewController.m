@@ -15,6 +15,7 @@
 #import "Event.h"
 #import "CircularTimer.h"
 
+BOOL isOpeningEventTable;
 static CGFloat INITIAL_CONTAINER_LOC;
 
 @interface FirstViewController () <EventTableViewDelegate>
@@ -516,7 +517,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
         }
         else // User was panning up so finish opening
         {
-            self.containerViewHeightConstraint.constant = self.view.frame.size.height;
+            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
             [UIView animateWithDuration:0.2 animations:^{
                 [self.view layoutIfNeeded];
                 self.blurView.alpha = 1.0;
@@ -536,6 +537,61 @@ static CGFloat INITIAL_CONTAINER_LOC;
             [self.blurView removeFromSuperview];
         }];
     }
+}
+
+- (void)tapGestureDetected:(UITapGestureRecognizer *)gesture
+{
+    if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
+    {
+        isOpeningEventTable = YES;
+
+        // Create blur view to animate
+        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
+        self.blurView.alpha = 0.0;
+        [self.view insertSubview:self.blurView belowSubview:self.containerView];
+    }
+    else
+    {
+        isOpeningEventTable = NO;
+    }
+
+    if (UIGestureRecognizerStateEnded == gesture.state)
+    {
+        if (!isOpeningEventTable)
+        {
+            self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.blurView removeFromSuperview];
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
+        }
+        else
+        {
+            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 1.0;
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
+        }
+    }
+
+    else // Gesture was cancelled or failed so animate back to original location
+    {
+        self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view layoutIfNeeded];
+            self.blurView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.blurView removeFromSuperview];
+        }];
+    }
+
 }
 
 #pragma mark - Navigation

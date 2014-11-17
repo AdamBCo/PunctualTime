@@ -33,7 +33,8 @@
     self.sharedEventManager = [EventManager sharedEventManager];
 
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
-    [self.panView addGestureRecognizer:panGesture];
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGestureDetected:)];
+    [self.panView setGestureRecognizers:@[panGesture, tapGesture]];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:self.sharedEventManager
@@ -67,6 +68,12 @@
 {
     [self.tableView setEditing:NO animated:YES];
     [self.delegate panGestureDetected:panGesture];
+}
+
+- (IBAction)onTapGestureDetected:(UITapGestureRecognizer *)tapGesture
+{
+    [self.tableView setEditing:NO animated:YES];
+    [self.delegate tapGestureDetected:tapGesture];
 }
 
 
