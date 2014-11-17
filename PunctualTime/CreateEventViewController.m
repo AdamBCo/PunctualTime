@@ -236,7 +236,7 @@
             break;
         default:
             alertTitle = @"Dangit...";
-            alertMessage = @"There was a network problem or the selected destination and transportation are incompatible. Please try again.";
+            alertMessage = @"Either we couldn't connect or there is no data for your destination via the selected transportation.";
             break;
     }
 
@@ -312,7 +312,6 @@
         RecurrenceViewController* recurrenceVC = segue.destinationViewController;
         recurrenceVC.delegate = self;
     }
-
 }
 
 -(IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
@@ -321,7 +320,6 @@
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
     [self enableSaveButtonIfReady];
-    NSLog(@"Pictures: %f",self.locationInfo.locationCoordinates.latitude);
 }
 
 @end
