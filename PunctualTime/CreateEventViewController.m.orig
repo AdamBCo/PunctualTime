@@ -75,7 +75,10 @@
 
 
     [self.view addSubview:self.blackView];
+<<<<<<< HEAD
 
+=======
+>>>>>>> d4310fc3f25de9c3b7c5e2dc04f2816ecfd96bff
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -88,6 +91,7 @@
         MKCoordinateRegion mapRegion;
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
+        self.destinationButton.titleLabel.text = [NSString stringWithFormat:@"Location: %@",self.locationInfo.name];;
         [self.mapView setRegion:mapRegion animated: NO];
         self.isMapExpanded = YES;
         [self expandMap];

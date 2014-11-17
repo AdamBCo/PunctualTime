@@ -145,7 +145,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     sun.position = CGPointMake(self.view.frame.size.width*.28, self.view.frame.size.height*.28);
     sun.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                              cornerRadius:radius].CGPath;
-    sun.fillColor = [UIColor clearColor].CGColor;
+    sun.fillColor = [UIColor greenColor].CGColor;
     sun.strokeColor = [UIColor whiteColor].CGColor;
     sun.lineWidth = 5;
 
@@ -159,46 +159,189 @@ static CGFloat INITIAL_CONTAINER_LOC;
     ground.strokeColor = [UIColor whiteColor].CGColor;
     ground.lineWidth = 5;
 
+    //SKY
+    CAShapeLayer *sky = [CAShapeLayer new];
+    CGMutablePathRef skyPath = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPath, nil, 0, self.view.bounds.size.height*.25);
+
+    CGPathAddCurveToPoint(skyPath, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, self.view.bounds.size.width, self.view.bounds.size.height*.3);
+    sky.path = [UIBezierPath bezierPathWithCGPath:skyPath].CGPath;
+    sky.strokeColor = [UIColor whiteColor].CGColor;
+    sky.fillColor = [UIColor clearColor].CGColor;
+    sky.lineWidth = 2;
+
+    //SkyTwo
+    CAShapeLayer *skyTwo = [CAShapeLayer new];
+    CGMutablePathRef skyPathTwo = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPathTwo, nil, 0, self.view.bounds.size.height*.45);
+
+    CGPathAddCurveToPoint(skyPathTwo, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, self.view.bounds.size.width, self.view.bounds.size.height*.5);
+    skyTwo.path = [UIBezierPath bezierPathWithCGPath:skyPathTwo].CGPath;
+    skyTwo.strokeColor = [UIColor whiteColor].CGColor;
+    skyTwo.fillColor = [UIColor clearColor].CGColor;
+    skyTwo.lineWidth = 2;
+
+    //Birds
+    CAShapeLayer *birdOne = [CAShapeLayer new];
+    CGMutablePathRef birdPath = CGPathCreateMutable();
+    CGPathMoveToPoint(birdPath, nil, self.view.bounds.size.width*.4, self.view.bounds.size.height*.20);
+    CGPathAddQuadCurveToPoint(birdPath, nil, self.view.bounds.size.width*.43, self.view.bounds.size.height*.18, self.view.bounds.size.width*.45, self.view.bounds.size.height*.20);
+    CGPathAddQuadCurveToPoint(birdPath, nil, self.view.bounds.size.width*.46, self.view.bounds.size.height*.18, self.view.bounds.size.width*.50, self.view.bounds.size.height*.20);
+    birdOne.path = [UIBezierPath bezierPathWithCGPath:birdPath].CGPath;
+    birdOne.strokeColor = [UIColor whiteColor].CGColor;
+    birdOne.fillColor = [UIColor clearColor].CGColor;
+    birdOne.lineWidth = 2;
+
+    CAShapeLayer *birdTwo = [CAShapeLayer new];
+    CGMutablePathRef birdPathTwo = CGPathCreateMutable();
+    CGPathMoveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.44, self.view.bounds.size.height*.24);
+    CGPathAddQuadCurveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.22, self.view.bounds.size.width*.49, self.view.bounds.size.height*.24);
+    CGPathAddQuadCurveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.50, self.view.bounds.size.height*.22, self.view.bounds.size.width*.54, self.view.bounds.size.height*.24);
+    birdTwo.path = [UIBezierPath bezierPathWithCGPath:birdPathTwo].CGPath;
+    birdTwo.strokeColor = [UIColor whiteColor].CGColor;
+    birdTwo.fillColor = [UIColor clearColor].CGColor;
+    birdTwo.lineWidth = 2;
+
+
+
+
+
     //Buildings
 
     CAShapeLayer *buildings = [CAShapeLayer new];
     CGMutablePathRef chicago = CGPathCreateMutable();
     CGPathMoveToPoint(chicago, nil, 0, self.view.bounds.size.height*.65);//Starting Point
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.64);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.62);//Arc Begin
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.07, self.view.bounds.size.height*.60);//Arch End
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);//Top of Building One
+//
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.62);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.65);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.65);
+//
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height *.65);
+//
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60); //Building Two
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.60);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.80);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.80);//Space
+
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.64);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.62);//Arc Begin
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.07, self.view.bounds.size.height*.60);//Arch End
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);//Top of Building One
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.08, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.51);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.51);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.16, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.19, self.view.bounds.size.height*.80);
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.62);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.19, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.21, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.21, self.view.bounds.size.height*.52);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.22, self.view.bounds.size.height*.52);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.22, self.view.bounds.size.height*.52);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.23, self.view.bounds.size.height*.52);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.23, self.view.bounds.size.height*.50);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.24, self.view.bounds.size.height*.50);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.50);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.46);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.50);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.27, self.view.bounds.size.height*.50);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.27, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.80);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.80);
+
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.37, self.view.bounds.size.height*.60);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.80);
+
+
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.75);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60);//Slit
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);//Corner
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);
+//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.80);
 
 
 
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height *.65); //Space
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60); //Building Two
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.60);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.80);//Space
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.68);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.41, self.view.bounds.size.height*.67);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.46, self.view.bounds.size.height*.67);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.68);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.80);
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.60);//Building Three
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.60);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.74);//Merchant mart
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.485, self.view.bounds.size.height*.735);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.52, self.view.bounds.size.height*.735);//base
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.52, self.view.bounds.size.height*.73);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.53, self.view.bounds.size.height*.725);//Bridge
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.725);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.61, self.view.bounds.size.height*.73);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.61, self.view.bounds.size.height*.735);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.645, self.view.bounds.size.height*.735);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.74);//base
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.80);
+
+
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.80);//Space
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.67);//Building Four
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.64);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.665);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.64);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.67);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.692);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.67);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.692);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.67);
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.70);//Building Four
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.80);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);
+
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.75);
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60);//Slit
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);//Corner
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);
+    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.80);
+
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);//Building Five
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.70);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.80);
 
     //Sears Tower
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.79, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.79, self.view.bounds.size.height*.75);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.75);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.75);
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.65);//Building Five
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.65);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.65);
 
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.55);
@@ -209,28 +352,27 @@ static CGFloat INITIAL_CONTAINER_LOC;
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.35);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.45);
 
-
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);//Second Spike
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.35);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.35);//Top of Spike
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);//Back To Bottom
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.45);//Top right Edge
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.45);
-    
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.55);//Building Five
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.55);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.55);//First Down
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.55);//Edge
 
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.45);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.65);//Third Down
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);//Third Edge
 
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);//Building Five
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.75);//Fourth Edge
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.75);//
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.80);//Bottom
 
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.75);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.90, self.view.bounds.size.height*.75);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.90, self.view.bounds.size.height*.80);
+    //New Building
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.91, self.view.bounds.size.height*.80);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.91, self.view.bounds.size.height*.65);
+    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.65);
+
 
 
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);//End of Drawing
@@ -255,6 +397,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
 //    [star addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
     [ground addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
     [buildings addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [sky addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [skyTwo addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [birdOne addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [birdTwo addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+
 
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
@@ -266,8 +413,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
     //Add layers to Animation View
 
 //    [self.animationShapeView.layer addSublayer:star];
+    [self.view.layer addSublayer:sky];
+    [self.view.layer addSublayer:skyTwo];
     [self.view.layer addSublayer:ground];
     [self.view.layer addSublayer:sun];
+    [self.view.layer addSublayer:birdOne];
+    [self.view.layer addSublayer:birdTwo];
     [self.view.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
 //    [self runSpinAnimationOnView:self.animationShapeView duration:3 rotations:1 repeat:1];
