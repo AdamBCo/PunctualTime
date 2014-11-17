@@ -50,7 +50,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *destinationButton;
 
-
 @end
 
 
@@ -73,13 +72,11 @@
 
     self.blackView = [[UIView alloc] initWithFrame: self.view.bounds];
 
-
     [self.view addSubview:self.blackView];
-
 }
 
--(void)viewWillAppear:(BOOL)animated{
-
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
 
     [self enableSaveButtonIfReady];

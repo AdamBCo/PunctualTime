@@ -31,3 +31,7 @@
 
 // NSNotificationCenter
 #define EVENTS_UPDATED @"EventsUpdated"
+
+// Screen size
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
+#define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
