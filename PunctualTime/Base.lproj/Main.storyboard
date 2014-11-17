@@ -2478,11 +2478,15 @@
                             <constraint firstAttribute="trailing" secondItem="qoF-du-PWf" secondAttribute="trailing" constant="16" id="FlZ-hY-iAt">
                                 <variation key="widthClass=compact" constant="9"/>
                             </constraint>
-                            <constraint firstItem="qoF-du-PWf" firstAttribute="leading" secondItem="OmS-fy-78c" secondAttribute="trailing" constant="16" id="IBK-zz-khV"/>
+                            <constraint firstItem="qoF-du-PWf" firstAttribute="leading" secondItem="OmS-fy-78c" secondAttribute="trailing" constant="16" id="IBK-zz-khV">
+                                <variation key="widthClass=compact" constant="8"/>
+                            </constraint>
                             <constraint firstItem="OmS-fy-78c" firstAttribute="width" secondItem="qoF-du-PWf" secondAttribute="width" id="TEF-0Y-JZB"/>
                             <constraint firstAttribute="centerY" secondItem="TFb-Y7-y8w" secondAttribute="centerY" id="aPY-wW-aqh"/>
                             <constraint firstAttribute="centerY" secondItem="qoF-du-PWf" secondAttribute="centerY" id="qal-DJ-WNO"/>
-                            <constraint firstItem="OmS-fy-78c" firstAttribute="leading" secondItem="TFb-Y7-y8w" secondAttribute="trailing" constant="16" id="tJj-xX-c9Q"/>
+                            <constraint firstItem="OmS-fy-78c" firstAttribute="leading" secondItem="TFb-Y7-y8w" secondAttribute="trailing" constant="16" id="tJj-xX-c9Q">
+                                <variation key="widthClass=compact" constant="8"/>
+                            </constraint>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">

@@ -32,19 +32,6 @@
 // NSNotificationCenter
 #define EVENTS_UPDATED @"EventsUpdated"
 
-//// Screen sizes
-///// The height and width (in points) of a 3.5" iPhone
-//#define k3_5iPhoneHeight = 480.0
-//#define k3_5iPhoneWidth = 320.0
-///// The height (in points) of a 4" iPhone
-//#define k4_iPhoneHeight = 568.0
-///// The height and width (in points) of a 4.7" iPhone
-//#define k4_7iPhoneHeight = 667.0
-//#define k4_7iPhoneWidth = 375.0
-///// The height and width (in points) of a 5.5" iPhone
-//#define k5_5iPhoneHeight = 736.0
-//#define k5_5iPhoneWidth = 414.0
-
 // Screen size
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
