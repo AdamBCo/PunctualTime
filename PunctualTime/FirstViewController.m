@@ -36,9 +36,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property UIView *skyView;
 @property UIView *bottomView;
 
-
-@property BOOL animating;
-
 @end
 
 @implementation FirstViewController
@@ -160,20 +157,19 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 
     //Animate Sun Moving from Bottom View
-    [UIView animateWithDuration:6.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
     } completion:^(BOOL finished) {
 
     }];
 
     //Animate Text Alpha
-    [UIView animateWithDuration:2.5 delay:5.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.eventNameLabel.alpha = 1;
         self.timeTillEvent.alpha = 1;
     } completion:^(BOOL finished) {
 
     }];
-
 
     //Ground
     self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -191,9 +187,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     //Sky
     CAShapeLayer *sky = [CAShapeLayer new];
     CGMutablePathRef skyPath = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPath, nil, -self.view.bounds.size.width, self.view.bounds.size.height*.25);
+    CGPathAddCurveToPoint(skyPath, nil, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, 0, self.view.bounds.size.height*.25);
     CGPathMoveToPoint(skyPath, nil, 0, self.view.bounds.size.height*.25);
-
-    CGPathAddCurveToPoint(skyPath, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, self.view.bounds.size.width, self.view.bounds.size.height*.3);
+    CGPathAddCurveToPoint(skyPath, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, self.view.bounds.size.width, self.view.bounds.size.height*.25);
     sky.path = [UIBezierPath bezierPathWithCGPath:skyPath].CGPath;
     sky.strokeColor = [UIColor whiteColor].CGColor;
     sky.fillColor = [UIColor clearColor].CGColor;
@@ -202,9 +199,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     //SkyTwo
     CAShapeLayer *skyTwo = [CAShapeLayer new];
     CGMutablePathRef skyPathTwo = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPathTwo, nil, -self.view.bounds.size.width, self.view.bounds.size.height*.45);
+    CGPathAddCurveToPoint(skyPathTwo, nil, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, 0, self.view.bounds.size.height*.45);
     CGPathMoveToPoint(skyPathTwo, nil, 0, self.view.bounds.size.height*.45);
-
-    CGPathAddCurveToPoint(skyPathTwo, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, self.view.bounds.size.width, self.view.bounds.size.height*.5);
+    CGPathAddCurveToPoint(skyPathTwo, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, self.view.bounds.size.width, self.view.bounds.size.height*.45);
     skyTwo.path = [UIBezierPath bezierPathWithCGPath:skyPathTwo].CGPath;
     skyTwo.strokeColor = [UIColor whiteColor].CGColor;
     skyTwo.fillColor = [UIColor clearColor].CGColor;
@@ -372,7 +370,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
 
-    [sun addAnimation:drawAnimation forKey:@"drawSunAnimation"];
     [ground addAnimation:drawAnimation forKey:@"drawGroundAnimation"];
     [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
     [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
@@ -386,28 +383,21 @@ static CGFloat INITIAL_CONTAINER_LOC;
     rotationAnimation.duration = 10;
     rotationAnimation.repeatCount = INFINITY;
 
-#warning This is the new view
-//    UIView *greatness = [[UIView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:greatness];
-//    [greatness.layer addSublayer:sky];
-//    [greatness.layer addSublayer:skyTwo];
+    //SkyView Animation
+    [UIView animateWithDuration:10.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.view.bounds.size.height/2);
+                     }
+                     completion:nil];
 
-//    [UIView animateWithDuration:10.0 //10seconds
-//                          delay: 0
-//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-//                     animations:^{
-//                         greatness.center = CGPointMake(0, greatness.center.y);
-//                     }
-//                     completion:nil];
-
-
-//    [self runSpinAnimationOnView:sunView duration:3 rotations:1 repeat:INFINITY];
 
     [self.chicagoAnimationView.layer addSublayer:ground];
     [self.skyView.layer addSublayer:sky];
     [self.skyView.layer addSublayer:skyTwo];
-    [self.skyView.layer addSublayer:birdOne];
-    [self.skyView.layer addSublayer:birdTwo];
+//    [self.skyView.layer addSublayer:birdOne];
+//    [self.skyView.layer addSublayer:birdTwo];
     [self.chicagoAnimationView.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
 
