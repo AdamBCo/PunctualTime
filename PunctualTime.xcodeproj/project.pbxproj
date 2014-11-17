@@ -29,6 +29,8 @@
 		6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED411A1070BC007C5D90 /* CircularTimer.m */; };
 		6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED4D1A11B553007C5D90 /* HourViewController.m */; };
 		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
+		667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799031A1A8803000FD20D /* FBShimmeringLayer.m */; };
+		667799071A1A8803000FD20D /* FBShimmeringView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799051A1A8803000FD20D /* FBShimmeringView.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
@@ -93,6 +95,12 @@
 		6660ED4D1A11B553007C5D90 /* HourViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HourViewController.m; sourceTree = "<group>"; };
 		6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinutesViewController.h; sourceTree = "<group>"; };
 		6660ED501A11B7DD007C5D90 /* MinutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinutesViewController.m; sourceTree = "<group>"; };
+		667799001A1A8803000FD20D /* FBShimmering-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FBShimmering-Prefix.pch"; sourceTree = "<group>"; };
+		667799011A1A8803000FD20D /* FBShimmering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmering.h; sourceTree = "<group>"; };
+		667799021A1A8803000FD20D /* FBShimmeringLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmeringLayer.h; sourceTree = "<group>"; };
+		667799031A1A8803000FD20D /* FBShimmeringLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringLayer.m; sourceTree = "<group>"; };
+		667799041A1A8803000FD20D /* FBShimmeringView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmeringView.h; sourceTree = "<group>"; };
+		667799051A1A8803000FD20D /* FBShimmeringView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringView.m; sourceTree = "<group>"; };
 		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -139,6 +147,7 @@
 		661078D41A044D830096479F = {
 			isa = PBXGroup;
 			children = (
+				667798FF1A1A8803000FD20D /* FBShimmering */,
 				661078DF1A044D830096479F /* PunctualTime */,
 				661078F91A044D830096479F /* PunctualTimeTests */,
 				661078DE1A044D830096479F /* Products */,
@@ -213,6 +222,19 @@
 				6660ED501A11B7DD007C5D90 /* MinutesViewController.m */,
 			);
 			name = "Custom Date Picker";
+			sourceTree = "<group>";
+		};
+		667798FF1A1A8803000FD20D /* FBShimmering */ = {
+			isa = PBXGroup;
+			children = (
+				667799001A1A8803000FD20D /* FBShimmering-Prefix.pch */,
+				667799011A1A8803000FD20D /* FBShimmering.h */,
+				667799021A1A8803000FD20D /* FBShimmeringLayer.h */,
+				667799031A1A8803000FD20D /* FBShimmeringLayer.m */,
+				667799041A1A8803000FD20D /* FBShimmeringView.h */,
+				667799051A1A8803000FD20D /* FBShimmeringView.m */,
+			);
+			path = FBShimmering;
 			sourceTree = "<group>";
 		};
 		E90100DD1A046D2E00D44789 /* Frameworks */ = {
@@ -448,10 +470,12 @@
 				6649BF041A080367007B447B /* SearchViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
+				667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */,
 				6616C67E1A13232A00D8C872 /* SIAlertView.m in Sources */,
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */,
+				667799071A1A8803000FD20D /* FBShimmeringView.m in Sources */,
 				6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */,
