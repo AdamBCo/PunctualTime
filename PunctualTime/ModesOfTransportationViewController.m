@@ -31,7 +31,6 @@ static UIColor* selectedTextColor;
 
     CGFloat buttonSize = (SCREEN_WIDTH-40.0)/4.0;
     CGFloat buttonSpacing = (SCREEN_WIDTH - buttonSize*4 - 16)/3;
-    NSLog(@"%f", buttonSpacing);
 
     for (NSLayoutConstraint* constraint in self.buttonSizeConstraints)
     {

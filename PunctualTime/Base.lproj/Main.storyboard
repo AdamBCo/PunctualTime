@@ -65,14 +65,14 @@
                                             <action selector="onTImeButtonPressed:" destination="NNb-Hq-cvw" eventType="touchUpInside" id="EHR-x7-4HL"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Event Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FAQ-lh-NOg">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Event Name" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FAQ-lh-NOg">
                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                         <color key="backgroundColor" red="1" green="0.48627450979999998" blue="0.070588235289999995" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="bcz-eC-4dT"/>
                                         </constraints>
                                         <color key="textColor" red="0.11764705882352941" green="0.12941176470588237" blue="0.16078431372549021" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="30"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -89,7 +89,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="118" id="xeE-Kp-qix">
-                                                <variation key="widthClass=compact" constant="80"/>
+                                                <variation key="widthClass=compact" constant="60"/>
                                             </constraint>
                                         </constraints>
                                         <variation key="default">
@@ -132,7 +132,7 @@
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="hd5-Qk-rVt"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="nyQ-xG-tiY"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
                                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title=" Destination">
@@ -286,7 +286,9 @@
                                     <constraint firstItem="Wd5-2M-TRB" firstAttribute="top" secondItem="WUP-5h-hpk" secondAttribute="bottom" id="EpQ-s3-O5y"/>
                                     <constraint firstAttribute="centerX" secondItem="5pu-bG-ddc" secondAttribute="centerX" id="Ewm-le-ctw"/>
                                     <constraint firstItem="WUP-5h-hpk" firstAttribute="top" secondItem="Wd5-2M-TRB" secondAttribute="bottom" constant="8" id="GjX-Si-9eh"/>
-                                    <constraint firstItem="Sbu-ny-EOS" firstAttribute="top" secondItem="FAQ-lh-NOg" secondAttribute="bottom" constant="8" id="HK8-1D-xk4"/>
+                                    <constraint firstItem="Sbu-ny-EOS" firstAttribute="top" secondItem="FAQ-lh-NOg" secondAttribute="bottom" constant="8" id="HK8-1D-xk4">
+                                        <variation key="widthClass=compact" constant="16"/>
+                                    </constraint>
                                     <constraint firstItem="e6u-2e-g6X" firstAttribute="top" secondItem="8be-e6-iBw" secondAttribute="bottom" constant="8" id="JLL-6Z-IWz">
                                         <variation key="widthClass=compact" constant="2"/>
                                     </constraint>
@@ -312,7 +314,7 @@
                                     <constraint firstAttribute="centerX" secondItem="8be-e6-iBw" secondAttribute="centerX" id="YxD-y0-d4A"/>
                                     <constraint firstItem="5pu-bG-ddc" firstAttribute="leading" secondItem="uzn-S6-b8D" secondAttribute="leading" id="ZUB-d3-fXf"/>
                                     <constraint firstItem="5pu-bG-ddc" firstAttribute="top" secondItem="Nio-dM-nth" secondAttribute="bottom" constant="8" id="b7e-Z9-0sM">
-                                        <variation key="widthClass=compact" constant="25"/>
+                                        <variation key="widthClass=compact" constant="16"/>
                                     </constraint>
                                     <constraint firstAttribute="trailing" secondItem="FAQ-lh-NOg" secondAttribute="trailing" id="bgq-Sk-r7V"/>
                                     <constraint firstItem="Nio-dM-nth" firstAttribute="top" secondItem="WUP-5h-hpk" secondAttribute="bottom" constant="8" id="bxr-y6-Brg"/>
@@ -334,7 +336,9 @@
                                     <constraint firstItem="Sbu-ny-EOS" firstAttribute="leading" secondItem="uzn-S6-b8D" secondAttribute="leading" id="tAR-nl-gBV"/>
                                     <constraint firstItem="8be-e6-iBw" firstAttribute="leading" secondItem="uzn-S6-b8D" secondAttribute="leading" id="u95-p0-Jhi"/>
                                     <constraint firstItem="BfN-IL-mfm" firstAttribute="trailing" secondItem="vDb-hh-txw" secondAttribute="trailing" id="v6s-dr-mUR"/>
-                                    <constraint firstItem="WUP-5h-hpk" firstAttribute="top" secondItem="vDb-hh-txw" secondAttribute="bottom" constant="8" id="wXE-Yx-LH2"/>
+                                    <constraint firstItem="WUP-5h-hpk" firstAttribute="top" secondItem="vDb-hh-txw" secondAttribute="bottom" constant="8" id="wXE-Yx-LH2">
+                                        <variation key="widthClass=compact" constant="16"/>
+                                    </constraint>
                                     <constraint firstAttribute="trailing" secondItem="WUP-5h-hpk" secondAttribute="trailing" id="xMi-HP-lgN"/>
                                 </constraints>
                                 <variation key="default">
@@ -570,13 +574,16 @@
                                     <rect key="frame" x="0.0" y="-64" width="0.0" height="0.0"/>
                                 </variation>
                             </tableView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="uUP-7S-Exv">
+                            <searchBar opaque="NO" contentMode="redraw" placeholder="Search for destination" translatesAutoresizingMaskIntoConstraints="NO" id="uUP-7S-Exv">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="jcI-Qp-nmh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchCell" textLabel="Idv-g7-GZt" detailTextLabel="iez-3e-GUO" style="IBUITableViewCellStyleSubtitle" id="RHU-pa-Hv0">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -604,6 +611,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -612,7 +620,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="jcI-Qp-nmh" firstAttribute="leading" secondItem="QeB-02-t5p" secondAttribute="leading" id="1Hb-9v-UJk"/>
                             <constraint firstItem="Mah-ur-5dD" firstAttribute="top" secondItem="jcI-Qp-nmh" secondAttribute="bottom" id="CMn-TA-As8"/>
