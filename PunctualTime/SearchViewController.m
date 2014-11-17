@@ -105,10 +105,10 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 }
 
 
-- (void)searchAutocompleteLocationsWithSubstring:(NSString *)substring{
+- (void)searchAutocompleteLocationsWithSubstring:(NSString *)substring
+{
     [self.localSearchQueries removeAllObjects];
-
-
+    [self.tableView reloadData];
 
     if (![self.pastSearchWords containsObject:self.substring]) {
         [self.pastSearchWords addObject:self.substring];

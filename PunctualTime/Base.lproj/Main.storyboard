@@ -287,7 +287,7 @@
                                     <constraint firstAttribute="centerX" secondItem="5pu-bG-ddc" secondAttribute="centerX" id="Ewm-le-ctw"/>
                                     <constraint firstItem="WUP-5h-hpk" firstAttribute="top" secondItem="Wd5-2M-TRB" secondAttribute="bottom" constant="8" id="GjX-Si-9eh"/>
                                     <constraint firstItem="Sbu-ny-EOS" firstAttribute="top" secondItem="FAQ-lh-NOg" secondAttribute="bottom" constant="8" id="HK8-1D-xk4">
-                                        <variation key="widthClass=compact" constant="16"/>
+                                        <variation key="widthClass=compact" constant="8"/>
                                     </constraint>
                                     <constraint firstItem="e6u-2e-g6X" firstAttribute="top" secondItem="8be-e6-iBw" secondAttribute="bottom" constant="8" id="JLL-6Z-IWz">
                                         <variation key="widthClass=compact" constant="2"/>
@@ -337,7 +337,7 @@
                                     <constraint firstItem="8be-e6-iBw" firstAttribute="leading" secondItem="uzn-S6-b8D" secondAttribute="leading" id="u95-p0-Jhi"/>
                                     <constraint firstItem="BfN-IL-mfm" firstAttribute="trailing" secondItem="vDb-hh-txw" secondAttribute="trailing" id="v6s-dr-mUR"/>
                                     <constraint firstItem="WUP-5h-hpk" firstAttribute="top" secondItem="vDb-hh-txw" secondAttribute="bottom" constant="8" id="wXE-Yx-LH2">
-                                        <variation key="widthClass=compact" constant="16"/>
+                                        <variation key="widthClass=compact" constant="8"/>
                                     </constraint>
                                     <constraint firstAttribute="trailing" secondItem="WUP-5h-hpk" secondAttribute="trailing" id="xMi-HP-lgN"/>
                                 </constraints>
