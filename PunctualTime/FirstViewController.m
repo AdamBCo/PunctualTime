@@ -38,6 +38,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property UIView *sunView;
 @property UIView *skyView;
 @property UIView *bottomView;
+@property UIView *textLabelView;
+@property UILabel *eventName;
+@property UILabel *eventTime;
 
 @end
 
@@ -46,8 +49,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.eventNameLabel.alpha =0;
-    self.timeTillEvent.alpha = 0;
+
+    self.eventName.alpha = 0;
+    self.eventTime.alpha = 0;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
@@ -75,38 +79,38 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
 
-//    //Star Drawing
-//
-//    CAShapeLayer *star = [CAShapeLayer layer];
-//    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
-//    int r1 = self.animationShapeView.frame.size.width/2;
-//    int r2 = r1 - 20;
-//    int numberOfPoints =    60;//60
-//    float TWOPI = 2 * M_PI;
-//    CGMutablePathRef drawStarPath = CGPathCreateMutable();
-//    for (float n=0; n < numberOfPoints; n+=3)
-//    {
-//        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
-//        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
-//        if (n==0){
-//
-//            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
-//        }else {
-//            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
-//            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
-//            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
-//            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
-//            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
-//            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
-//            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
-//        }
-//    }
-//    CGPathCloseSubpath(drawStarPath);
-//
-//    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
-//    star.fillColor = [UIColor clearColor].CGColor;
-//    star.strokeColor = [UIColor whiteColor].CGColor;
-//    star.lineWidth = 5;
+    //    //Star Drawing
+    //
+    //    CAShapeLayer *star = [CAShapeLayer layer];
+    //    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
+    //    int r1 = self.animationShapeView.frame.size.width/2;
+    //    int r2 = r1 - 20;
+    //    int numberOfPoints =    60;//60
+    //    float TWOPI = 2 * M_PI;
+    //    CGMutablePathRef drawStarPath = CGPathCreateMutable();
+    //    for (float n=0; n < numberOfPoints; n+=3)
+    //    {
+    //        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
+    //        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
+    //        if (n==0){
+    //
+    //            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
+    //        }else {
+    //            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
+    //            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
+    //            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
+    //            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
+    //            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
+    //            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
+    //            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
+    //        }
+    //    }
+    //    CGPathCloseSubpath(drawStarPath);
+    //
+    //    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
+    //    star.fillColor = [UIColor clearColor].CGColor;
+    //    star.strokeColor = [UIColor whiteColor].CGColor;
+    //    star.lineWidth = 5;
 
     self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.skyView];
@@ -114,18 +118,22 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.sunView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2,self.view.bounds.size.height/4, self.view.bounds.size.width,self.view.bounds.size.height/2)];
     [self.view addSubview:self.sunView];
 
+
     self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.chicagoAnimationView];
 
-//
-//    FBShimmeringView *shimmeringView = [[FBShimmeringView alloc] initWithFrame:self.eventNameLabel.bounds];
-//    s
-//    shimmeringView.shimmering = YES;
 
 
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height*.80, self.view.bounds.size.width, self.view.bounds.size.height *.2)];
     self.bottomView.backgroundColor = [UIColor orangeColor];
     [self.view addSubview:self.bottomView];
+
+
+    self.textLabelView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.bounds.size.height/2)];
+    [self.view addSubview:self.textLabelView];
+
+
+
 
 
     //Sun
@@ -148,6 +156,29 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
 
 
+    self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/4-10, self.textLabelView.frame.size.width, 30)];
+    [self.eventName setTextColor:[UIColor whiteColor]];
+    [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
+    self.eventName.textAlignment = NSTextAlignmentCenter;
+    self.eventName.text = @"Place";
+    self.eventName.adjustsFontSizeToFitWidth = YES;
+
+
+    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/2 -50, self.textLabelView.frame.size.width, 30)];
+    [self.eventTime setTextColor:[UIColor whiteColor]];
+    [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
+    self.eventTime.textAlignment = NSTextAlignmentCenter;
+    self.eventTime.text = @"Time";
+    self.eventTime.adjustsFontSizeToFitWidth = YES;
+
+    [self.textLabelView addSubview:self.eventName];
+    [self.textLabelView addSubview:self.eventTime];
+
+
+
+
+
+
     //Animate Sun Moving from Bottom View
     [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
@@ -157,8 +188,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     //Animate Text Alpha
     [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.eventNameLabel.alpha = 1;
-        self.timeTillEvent.alpha = 1;
+        self.eventName.alpha = 1;
+        self.eventTime.alpha = 1;
     } completion:^(BOOL finished) {
 
     }];
@@ -388,14 +419,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.chicagoAnimationView.layer addSublayer:ground];
     [self.skyView.layer addSublayer:sky];
     [self.skyView.layer addSublayer:skyTwo];
-//    [self.skyView.layer addSublayer:birdOne];
-//    [self.skyView.layer addSublayer:birdTwo];
+    //    [self.skyView.layer addSublayer:birdOne];
+    //    [self.skyView.layer addSublayer:birdTwo];
     [self.chicagoAnimationView.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
 
 
     [UIView animateWithDuration:20 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-//        self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
+        //        self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
     } completion:^(BOOL finished) {
     }];
 
@@ -423,7 +454,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 {
 
     int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
-    
+
     if(seconds > 0)
     {
         seconds -- ;
@@ -432,6 +463,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
         seconds = (seconds %3600) % 60;
         self.eventNameLabel.text = self.selectedEvent.eventName;
         self.timeTillEvent.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+
+        ///////////
+        self.eventName.text = self.selectedEvent.eventName;
+        self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+
     }
 }
 
@@ -552,7 +588,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
             [self.blurView removeFromSuperview];
         }];
     }
-
+    
 }
 
 #pragma mark - Navigation
