@@ -24,6 +24,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet UIToolbar *addButtonToolbar;
 @property EventManager *sharedEventManager;
+@property EventTableViewController* eventTableViewVC;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
 @property CircularTimer *cirularTimer;
@@ -496,8 +497,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
         // Set blurView alpha
         CGPoint location = [gesture locationInView:self.view];
-        self.blurView.alpha = 1.06 - (location.y/self.view.frame.size.height);
-
+        self.blurView.alpha = 1.06 - (location.y/SCREEN_HEIGHT);
     }
 
     else if (UIGestureRecognizerStateEnded == gesture.state)
@@ -511,21 +511,21 @@ static CGFloat INITIAL_CONTAINER_LOC;
             } completion:^(BOOL finished) {
                 [self.blurView removeFromSuperview];
             }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
         }
         else // User was panning up so finish opening
         {
-
             self.containerViewHeightConstraint.constant = self.view.frame.size.height;
             [UIView animateWithDuration:0.2 animations:^{
                 [self.view layoutIfNeeded];
                 self.blurView.alpha = 1.0;
-                
             }];
-            
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
         }
-        
     }
-    
+
     else // Gesture was cancelled or failed so animate back to original location
     {
         self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
@@ -542,14 +542,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"EventTableVC"]){
-        
-        EventTableViewController* eventTableVC = segue.destinationViewController;
-        eventTableVC.delegate = self;
-        
+    if ([segue.identifier isEqualToString:@"EventTableVC"])
+    {
+        self.eventTableViewVC = segue.destinationViewController;
+        self.eventTableViewVC.delegate = self;
     }
-    if ([segue.identifier isEqualToString:@"CreateEventVC"]){
-
+    if ([segue.identifier isEqualToString:@"CreateEventVC"])
+    {
         self.navigationController.navigationBar.hidden = NO;
     }
 }

@@ -15,6 +15,8 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIImageView *dragImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *arrowImageView;
+@property (strong, nonatomic) IBOutlet UIView *panView;
 @property EventManager *sharedEventManager;
 
 @end
@@ -31,7 +33,7 @@
     self.sharedEventManager = [EventManager sharedEventManager];
 
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
-    [self.dragImageView addGestureRecognizer:panGesture];
+    [self.panView addGestureRecognizer:panGesture];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:self.sharedEventManager
@@ -49,6 +51,13 @@
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     
     [super viewWillAppear:animated];
+}
+
+- (void)rotateArrowImageToDegrees:(CGFloat)degrees
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.arrowImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+    }];
 }
 
 

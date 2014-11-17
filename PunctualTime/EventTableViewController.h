@@ -18,5 +18,7 @@
 
 @property id<EventTableViewDelegate> delegate;
 
+- (void)rotateArrowImageToDegrees:(CGFloat)degrees;
+
 @end
 
