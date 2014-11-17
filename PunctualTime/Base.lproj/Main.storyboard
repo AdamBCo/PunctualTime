@@ -15,7 +15,7 @@
                         <viewControllerLayoutGuide type="bottom" id="LOd-Yk-LvC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="FGA-MB-bzh">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="886"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="916"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uzn-S6-b8D">
@@ -222,7 +222,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <segue destination="os6-hQ-Duq" kind="embed" id="HHk-Rm-kXY"/>
+                                            <segue destination="os6-hQ-Duq" kind="embed" identifier="RemindersVC" id="HHk-Rm-kXY"/>
                                         </connections>
                                     </containerView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First reminder:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e6u-2e-g6X">
@@ -564,14 +564,14 @@
                         <viewControllerLayoutGuide type="bottom" id="Mah-ur-5dD"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QeB-02-t5p">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="886"/>
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="916"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="nyo-dZ-yON">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="-64" width="0.0" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
                             </tableView>
                             <searchBar opaque="NO" contentMode="redraw" placeholder="Search for destination" translatesAutoresizingMaskIntoConstraints="NO" id="uUP-7S-Exv">
@@ -790,14 +790,14 @@
                                 <exclude reference="cXb-Yz-yyN"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Vgy-ZC-f7R"/>
+                                <exclude reference="aXQ-m7-b0d"/>
+                                <exclude reference="j06-QD-PcV"/>
                                 <exclude reference="dfG-TK-lhJ"/>
                                 <exclude reference="e6I-29-S47"/>
                                 <exclude reference="n5z-AE-mdh"/>
-                                <exclude reference="aXQ-m7-b0d"/>
-                                <exclude reference="j06-QD-PcV"/>
                                 <exclude reference="Ez7-ii-4xZ"/>
                                 <exclude reference="hBl-e3-781"/>
-                                <exclude reference="Vgy-ZC-f7R"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -807,14 +807,14 @@
                                 <include reference="cXb-Yz-yyN"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Vgy-ZC-f7R"/>
+                                <include reference="aXQ-m7-b0d"/>
+                                <include reference="j06-QD-PcV"/>
                                 <include reference="dfG-TK-lhJ"/>
                                 <include reference="e6I-29-S47"/>
                                 <include reference="n5z-AE-mdh"/>
-                                <include reference="aXQ-m7-b0d"/>
-                                <include reference="j06-QD-PcV"/>
                                 <include reference="Ez7-ii-4xZ"/>
                                 <include reference="hBl-e3-781"/>
-                                <include reference="Vgy-ZC-f7R"/>
                             </mask>
                         </variation>
                     </view>

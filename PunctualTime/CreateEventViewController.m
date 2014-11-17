@@ -191,7 +191,6 @@
     {
         if (error)
         {
-            NSLog(@"Error making notification: %@", error.userInfo);
             [self makeAlertForErrorCode:error.code errorUserInfo:error.userInfo];
         }
         else
@@ -207,6 +206,7 @@
 {
     self.titleTextField.text = @"";
     self.datePicker.date = [NSDate date];
+    self.locationInfo = nil;
 }
 
 - (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
@@ -270,6 +270,7 @@
 - (void)reminderSelected:(NSString *)reminderCategory
 {
     self.initialNotificationCategory = reminderCategory;
+    NSLog(@"reminder selected: %@", reminderCategory);
 }
 
 
