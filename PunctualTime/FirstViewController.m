@@ -14,6 +14,7 @@
 #import "EventManager.h"
 #import "Event.h"
 #import "CircularTimer.h"
+#import "FBShimmeringView.h"
 
 static CGFloat INITIAL_CONTAINER_LOC;
 
@@ -45,17 +46,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [super viewDidLoad];
     self.eventNameLabel.alpha =0;
     self.timeTillEvent.alpha = 0;
-    self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
-    self.timeTillEvent.center = self.view.center;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
-
     for (Event *event in self.sharedEventManager.events) {
         NSLog(@"Event: %@\n DesiredTime: %@\n Recurrence %u\n",event.eventName, event.desiredArrivalTime, event.recurrenceInterval);
     }
-
 
     NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
 
@@ -66,9 +63,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                                       self.selectedEvent = self.sharedEventManager.events.firstObject;
                                                   }];
 
-    self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 100);
-    self.timeTillEvent.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height + 100);
-
     self.animationShapeView = [[UIView alloc]initWithFrame:CGRectMake(0 ,self.view.bounds.size.height/6, self.view.bounds.size.width, self.view.bounds.size.width)];
 
     self.navigationItem.title = @"Cancel"; // For the back button on CreateEventVC
@@ -78,18 +72,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
-//    //Circle Drawing
-//
-//    int radius = 120;
-//
-//    CAShapeLayer *circle = [CAShapeLayer layer];
-//    circle.position = CGPointMake(self.view.frame.size.width, self.view.frame.size.height);
-//    circle.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius-20, 2.0*radius-20)
-//                                             cornerRadius:radius].CGPath;
-//    circle.fillColor = [UIColor blueColor].CGColor;
-//    circle.strokeColor = [UIColor whiteColor].CGColor;
-//    circle.lineWidth = 5;
-//
+
 //    //Star Drawing
 //
 //    CAShapeLayer *star = [CAShapeLayer layer];
@@ -122,6 +105,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 //    star.fillColor = [UIColor clearColor].CGColor;
 //    star.strokeColor = [UIColor whiteColor].CGColor;
 //    star.lineWidth = 5;
+
     self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.skyView];
 
@@ -130,6 +114,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.chicagoAnimationView];
+
+//
+//    FBShimmeringView *shimmeringView = [[FBShimmeringView alloc] initWithFrame:self.eventNameLabel.bounds];
+//    s
+//    shimmeringView.shimmering = YES;
+
 
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height*.80, self.view.bounds.size.width, self.view.bounds.size.height *.2)];
     self.bottomView.backgroundColor = [UIColor orangeColor];
