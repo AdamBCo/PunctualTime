@@ -90,7 +90,7 @@ static UIColor* initialButtonTextColor;
     initialButtonTextColor = [self.reminderButtons.firstObject titleColorForState:UIControlStateNormal];
 
     // Reminder buttons
-    CGFloat buttonSize = SCREEN_WIDTH/6.5;
+    CGFloat buttonSize = (SCREEN_WIDTH-48)/5.0;
 
     for (NSLayoutConstraint* constraint in self.reminderButtonConstraints)
     {
@@ -104,10 +104,7 @@ static UIColor* initialButtonTextColor;
         button.layer.borderColor = [initialButtonTextColor CGColor];
     }
 
-    // Recurrence buttons
-    buttonSize = SCREEN_WIDTH/4.0;
 
-    
 
     if (self.locationInfo.name.length > 0) {
         MKCoordinateRegion mapRegion;
