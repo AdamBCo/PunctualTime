@@ -31,6 +31,12 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property LFGlassView* blurView;
 @property UIView *animationShapeView;
 
+@property UIView *chicagoAnimationView;
+@property UIView *sunView;
+@property UIView *skyView;
+@property UIView *bottomView;
+
+
 @property BOOL animating;
 
 @end
@@ -40,27 +46,19 @@ static CGFloat INITIAL_CONTAINER_LOC;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-//    UIView *test = [[UIView alloc] initWithFrame:self.view.bounds];
-//    test.backgroundColor = [UIColor purpleColor];
-//
-//    [self.view addSubview:test];
-//
-//
-//    UIBezierPath *myClippingPath = [UIBezierPath bezierPath];
-//    [myClippingPath moveToPoint:CGPointMake(100, 100)];
-//    [myClippingPath addCurveToPoint:CGPointMake(200, 200) controlPoint1:CGPointMake(self.view.frame.size.width, 0) controlPoint2:CGPointMake(self.self.view.frame.size.width, 50)];
-//    [myClippingPath closePath];
-//
-//    CAShapeLayer *mask = [CAShapeLayer layer];
-//    mask.path = myClippingPath.CGPath;
-//
-//    self.view.layer.mask = mask;
-
-
+    self.eventNameLabel.alpha =0;
+    self.timeTillEvent.alpha = 0;
+    self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
+    self.timeTillEvent.center = self.view.center;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
+
+
+    for (Event *event in self.sharedEventManager.events) {
+        NSLog(@"Event: %@\n DesiredTime: %@\n Recurrence %u\n",event.eventName, event.desiredArrivalTime, event.recurrenceInterval);
+    }
+
 
     NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
 
@@ -82,17 +80,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
-
-
-    [UIView animateWithDuration:3 delay:0 usingSpringWithDamping:1.0 initialSpringVelocity:0.03 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-
-        self.eventNameLabel.center = CGPointMake(self.view.frame.size.width/2, 300);
-
-        self.timeTillEvent.center = self.view.center;
-
-    } completion:^(BOOL finished) {
-
-    }];
 
 //    //Circle Drawing
 //
@@ -138,18 +125,60 @@ static CGFloat INITIAL_CONTAINER_LOC;
 //    star.fillColor = [UIColor clearColor].CGColor;
 //    star.strokeColor = [UIColor whiteColor].CGColor;
 //    star.lineWidth = 5;
+    self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:self.skyView];
+
+    self.sunView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2,self.view.bounds.size.height/4, self.view.bounds.size.width,self.view.bounds.size.height/2)];
+    [self.view addSubview:self.sunView];
+
+    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:self.chicagoAnimationView];
+
+    self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height*.80, self.view.bounds.size.width, self.view.bounds.size.height *.2)];
+    self.bottomView.backgroundColor = [UIColor orangeColor];
+    [self.view addSubview:self.bottomView];
+
 
     //Sun
     int radius = self.view.frame.size.width*.23;
     CAShapeLayer *sun = [CAShapeLayer new];
-    sun.position = CGPointMake(self.view.frame.size.width*.28, self.view.frame.size.height*.28);
+    sun.position = CGPointMake(self.sunView.frame.size.width/2-radius, self.sunView.frame.size.height/4);
     sun.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
-                                             cornerRadius:radius].CGPath;
-    sun.fillColor = [UIColor greenColor].CGColor;
+                                          cornerRadius:radius].CGPath;
+    sun.fillColor = [UIColor orangeColor].CGColor;
     sun.strokeColor = [UIColor whiteColor].CGColor;
     sun.lineWidth = 5;
+    self.sunView.center = CGPointMake(0, self.view.bounds.size.height);
+    [self.sunView.layer addSublayer:sun];
+
+    CABasicAnimation* sunRotationAnimation;
+    sunRotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    sunRotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+    sunRotationAnimation.duration = 1000;
+    sunRotationAnimation.repeatCount = INFINITY;
+    [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
+
+
+    //Animate Sun Moving from Bottom View
+    [UIView animateWithDuration:6.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
+    } completion:^(BOOL finished) {
+
+    }];
+
+    //Animate Text Alpha
+    [UIView animateWithDuration:2.5 delay:5.5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.eventNameLabel.alpha = 1;
+        self.timeTillEvent.alpha = 1;
+    } completion:^(BOOL finished) {
+
+    }];
+
 
     //Ground
+    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:self.chicagoAnimationView];
+
     CAShapeLayer *ground = [CAShapeLayer new];
     CGMutablePathRef background = CGPathCreateMutable();
     CGPathMoveToPoint(background, nil, 0, self.view.bounds.size.height*.80);
@@ -159,7 +188,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     ground.strokeColor = [UIColor whiteColor].CGColor;
     ground.lineWidth = 5;
 
-    //SKY
+    //Sky
     CAShapeLayer *sky = [CAShapeLayer new];
     CGMutablePathRef skyPath = CGPathCreateMutable();
     CGPathMoveToPoint(skyPath, nil, 0, self.view.bounds.size.height*.25);
@@ -204,30 +233,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 
 
-
-
     //Buildings
-
     CAShapeLayer *buildings = [CAShapeLayer new];
     CGMutablePathRef chicago = CGPathCreateMutable();
-    CGPathMoveToPoint(chicago, nil, 0, self.view.bounds.size.height*.65);//Starting Point
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.64);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.06, self.view.bounds.size.height*.62);//Arc Begin
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.07, self.view.bounds.size.height*.60);//Arch End
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);//Top of Building One
-//
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.62);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.18, self.view.bounds.size.height*.65);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.20, self.view.bounds.size.height*.65);
-//
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height *.65);
-//
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60); //Building Two
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.60);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.40, self.view.bounds.size.height*.80);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.45, self.view.bounds.size.height*.80);//Space
-
+    CGPathMoveToPoint(chicago, nil, 0, self.view.bounds.size.height*.80);//Starting Point
+    CGPathAddLineToPoint(chicago, nil, 0, self.view.bounds.size.height*.65);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.80);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.08, self.view.bounds.size.height*.55);
@@ -268,22 +278,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.65);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.80);
 
-
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.75);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60);//Slit
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);//Corner
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);
-//    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.80);
-
-
-
-
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.68);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.41, self.view.bounds.size.height*.67);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.46, self.view.bounds.size.height*.67);
@@ -319,19 +313,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);
-
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.75);
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.60);//Slit
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.55);//Point
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);//Corner
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.17, self.view.bounds.size.height*.60);
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.64);//Bottom of Diamond
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.60);
-    //    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.32, self.view.bounds.size.height*.80);
-
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);//Building Five
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.70);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.70);
@@ -373,71 +354,71 @@ static CGFloat INITIAL_CONTAINER_LOC;
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.91, self.view.bounds.size.height*.65);
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.65);
 
-
-
     CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);//End of Drawing
 
     CGPathRetain(chicago);
     buildings.path = [UIBezierPath bezierPathWithCGPath:chicago].CGPath;
     buildings.strokeColor = [UIColor whiteColor].CGColor;
-    buildings.fillColor = [UIColor clearColor].CGColor;
+    buildings.fillColor = [UIColor orangeColor].CGColor;
     buildings.lineWidth = 2;
 
 
 
     // Configure animation
-
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = 2.0; // "animate over 10 seconds or so.."
-    drawAnimation.repeatCount         = 1.0;  // Animate only once..
+    drawAnimation.duration            = 2.0;
+    drawAnimation.repeatCount         = 1.0;
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    [sun addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-//    [star addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [ground addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [buildings addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [sky addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [skyTwo addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [birdOne addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
-    [birdTwo addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
 
+    [sun addAnimation:drawAnimation forKey:@"drawSunAnimation"];
+    [ground addAnimation:drawAnimation forKey:@"drawGroundAnimation"];
+    [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
+    [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
+    [skyTwo addAnimation:drawAnimation forKey:@"drawSkyTwoAnimation"];
+    [birdOne addAnimation:drawAnimation forKey:@"drawBirdOneAnimation"];
+    [birdTwo addAnimation:drawAnimation forKey:@"drawBirdTwoAnimation"];
 
     CABasicAnimation* rotationAnimation;
-    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"Move"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:1000];
     rotationAnimation.duration = 10;
     rotationAnimation.repeatCount = INFINITY;
-//    [sun addAnimation:rotationAnimation forKey:@"rotationAnimation"];
 
-    //Add layers to Animation View
+#warning This is the new view
+//    UIView *greatness = [[UIView alloc] initWithFrame:self.view.bounds];
+//    [self.view addSubview:greatness];
+//    [greatness.layer addSublayer:sky];
+//    [greatness.layer addSublayer:skyTwo];
 
-//    [self.animationShapeView.layer addSublayer:star];
-    [self.view.layer addSublayer:sky];
-    [self.view.layer addSublayer:skyTwo];
-    [self.view.layer addSublayer:ground];
-    [self.view.layer addSublayer:sun];
-    [self.view.layer addSublayer:birdOne];
-    [self.view.layer addSublayer:birdTwo];
-    [self.view.layer addSublayer:buildings];
+//    [UIView animateWithDuration:10.0 //10seconds
+//                          delay: 0
+//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+//                     animations:^{
+//                         greatness.center = CGPointMake(0, greatness.center.y);
+//                     }
+//                     completion:nil];
+
+
+//    [self runSpinAnimationOnView:sunView duration:3 rotations:1 repeat:INFINITY];
+
+    [self.chicagoAnimationView.layer addSublayer:ground];
+    [self.skyView.layer addSublayer:sky];
+    [self.skyView.layer addSublayer:skyTwo];
+    [self.skyView.layer addSublayer:birdOne];
+    [self.skyView.layer addSublayer:birdTwo];
+    [self.chicagoAnimationView.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
-//    [self runSpinAnimationOnView:self.animationShapeView duration:3 rotations:1 repeat:1];
+
+
+    [UIView animateWithDuration:20 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//        self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
+    } completion:^(BOOL finished) {
+    }];
 
 }
 
-- (void)runSpinAnimationOnView:(UIView*)view duration:(CGFloat)duration rotations:(CGFloat)rotations repeat:(float)repeat
-{
-
-    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    rotationAnimation.toValue = [NSNumber numberWithFloat: M_PI * 2.0 /* full rotation*/ * rotations * duration ];
-    rotationAnimation.duration = duration;
-    rotationAnimation.cumulative = YES;
-    rotationAnimation.repeatCount = repeat;
-
-    [view.layer addAnimation:rotationAnimation forKey:@"rotationAnimation"];
-
-}
 
 -(void)viewWillAppear:(BOOL)animated
 {
