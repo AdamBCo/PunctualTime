@@ -15,6 +15,7 @@
 #import "Event.h"
 #import "CircularTimer.h"
 #import "FBShimmeringView.h"
+#import "PlaneView.h"
 
 BOOL isOpeningEventTable;
 static CGFloat INITIAL_CONTAINER_LOC;
@@ -37,10 +38,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property UIView *chicagoAnimationView;
 @property UIView *sunView;
 @property UIView *skyView;
+@property UIView *birds;
 @property UIView *bottomView;
 @property UIView *textLabelView;
 @property UILabel *eventName;
 @property UILabel *eventTime;
+
+@property PlaneView *planeView;
 
 @end
 
@@ -49,9 +53,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.eventName.alpha = 0;
-    self.eventTime.alpha = 0;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
@@ -79,41 +80,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
 
-    //    //Star Drawing
-    //
-    //    CAShapeLayer *star = [CAShapeLayer layer];
-    //    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
-    //    int r1 = self.animationShapeView.frame.size.width/2;
-    //    int r2 = r1 - 20;
-    //    int numberOfPoints =    60;//60
-    //    float TWOPI = 2 * M_PI;
-    //    CGMutablePathRef drawStarPath = CGPathCreateMutable();
-    //    for (float n=0; n < numberOfPoints; n+=3)
-    //    {
-    //        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
-    //        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
-    //        if (n==0){
-    //
-    //            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
-    //        }else {
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
-    //            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
-    //            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
-    //            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
-    //            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
-    //        }
-    //    }
-    //    CGPathCloseSubpath(drawStarPath);
-    //
-    //    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
-    //    star.fillColor = [UIColor clearColor].CGColor;
-    //    star.strokeColor = [UIColor whiteColor].CGColor;
-    //    star.lineWidth = 5;
+    /////////////ANIMATION///////////////
 
     self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.skyView];
+
+    self.birds = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width*1.5, 0, self.view.bounds.size.width,self.view.bounds.size.height)];
+    [self.view addSubview:self.birds];
 
     self.sunView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2,self.view.bounds.size.height/4, self.view.bounds.size.width,self.view.bounds.size.height/2)];
     [self.view addSubview:self.sunView];
@@ -132,8 +105,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.textLabelView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.bounds.size.height/2)];
     [self.view addSubview:self.textLabelView];
 
-
-
+    self.planeView = [[PlaneView alloc] initWithFrame:self.view.bounds];
+    [self.planeView drawPlane];
+    self.planeView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.planeView];
 
 
     //Sun
@@ -162,6 +137,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.eventName.textAlignment = NSTextAlignmentCenter;
     self.eventName.text = @"Place";
     self.eventName.adjustsFontSizeToFitWidth = YES;
+    self.eventName.alpha = 0;
 
 
     self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/2 -50, self.textLabelView.frame.size.width, 30)];
@@ -170,6 +146,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.eventTime.textAlignment = NSTextAlignmentCenter;
     self.eventTime.text = @"Time";
     self.eventTime.adjustsFontSizeToFitWidth = YES;
+    self.eventTime.alpha = 0;
 
     [self.textLabelView addSubview:self.eventName];
     [self.textLabelView addSubview:self.eventTime];
@@ -197,7 +174,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     //Ground
     self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.chicagoAnimationView];
-
     CAShapeLayer *ground = [CAShapeLayer new];
     CGMutablePathRef background = CGPathCreateMutable();
     CGPathMoveToPoint(background, nil, 0, self.view.bounds.size.height*.80);
@@ -218,6 +194,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     sky.strokeColor = [UIColor whiteColor].CGColor;
     sky.fillColor = [UIColor clearColor].CGColor;
     sky.lineWidth = 2;
+
 
     //SkyTwo
     CAShapeLayer *skyTwo = [CAShapeLayer new];
@@ -251,7 +228,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     birdTwo.strokeColor = [UIColor whiteColor].CGColor;
     birdTwo.fillColor = [UIColor clearColor].CGColor;
     birdTwo.lineWidth = 2;
-
 
 
     //Buildings
@@ -397,8 +373,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
     [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
     [skyTwo addAnimation:drawAnimation forKey:@"drawSkyTwoAnimation"];
-    [birdOne addAnimation:drawAnimation forKey:@"drawBirdOneAnimation"];
-    [birdTwo addAnimation:drawAnimation forKey:@"drawBirdTwoAnimation"];
 
     CABasicAnimation* rotationAnimation;
     rotationAnimation = [CABasicAnimation animationWithKeyPath:@"Move"];
@@ -415,12 +389,21 @@ static CGFloat INITIAL_CONTAINER_LOC;
                      }
                      completion:nil];
 
+    //BIRds Animation
+    [UIView animateWithDuration:20.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
+                     }
+                     completion:nil];
+
 
     [self.chicagoAnimationView.layer addSublayer:ground];
     [self.skyView.layer addSublayer:sky];
     [self.skyView.layer addSublayer:skyTwo];
-    //    [self.skyView.layer addSublayer:birdOne];
-    //    [self.skyView.layer addSublayer:birdTwo];
+    [self.birds.layer addSublayer:birdOne];
+    [self.birds.layer addSublayer:birdTwo];
     [self.chicagoAnimationView.layer addSublayer:buildings];
     [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
 
@@ -588,7 +571,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
             [self.blurView removeFromSuperview];
         }];
     }
-    
+
 }
 
 #pragma mark - Navigation

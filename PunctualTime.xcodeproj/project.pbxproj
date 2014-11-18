@@ -31,6 +31,7 @@
 		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
 		667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799031A1A8803000FD20D /* FBShimmeringLayer.m */; };
 		667799071A1A8803000FD20D /* FBShimmeringView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799051A1A8803000FD20D /* FBShimmeringView.m */; };
+		6677990D1A1ADDDB000FD20D /* PlaneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6677990C1A1ADDDB000FD20D /* PlaneView.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
@@ -101,6 +102,8 @@
 		667799031A1A8803000FD20D /* FBShimmeringLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringLayer.m; sourceTree = "<group>"; };
 		667799041A1A8803000FD20D /* FBShimmeringView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmeringView.h; sourceTree = "<group>"; };
 		667799051A1A8803000FD20D /* FBShimmeringView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringView.m; sourceTree = "<group>"; };
+		6677990B1A1ADDDB000FD20D /* PlaneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaneView.h; sourceTree = "<group>"; };
+		6677990C1A1ADDDB000FD20D /* PlaneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaneView.m; sourceTree = "<group>"; };
 		66AEFC381A0EF91900DE871B /* DatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
 		66AEFC391A0EF91900DE871B /* DatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -337,6 +340,8 @@
 		E9D79C371A046E1D00C9D65F /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				6677990B1A1ADDDB000FD20D /* PlaneView.h */,
+				6677990C1A1ADDDB000FD20D /* PlaneView.m */,
 				E9D79C341A046DE600C9D65F /* Event.h */,
 				E9D79C351A046DE600C9D65F /* Event.m */,
 				6649BF431A09A3BD007B447B /* LocationInfo.h */,
@@ -470,6 +475,7 @@
 				6649BF041A080367007B447B /* SearchViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
+				6677990D1A1ADDDB000FD20D /* PlaneView.m in Sources */,
 				667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */,
 				6616C67E1A13232A00D8C872 /* SIAlertView.m in Sources */,
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
