@@ -20,8 +20,6 @@ BOOL isOpeningEventTable;
 static CGFloat INITIAL_CONTAINER_LOC;
 
 @interface FirstViewController () <EventTableViewDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *containerViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet UIToolbar *addButtonToolbar;
@@ -458,13 +456,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
         int hours = (seconds / 3600);
         int minutes = (seconds % 3600) / 60;
         seconds = (seconds %3600) % 60;
-        self.eventNameLabel.text = self.selectedEvent.eventName;
-        self.timeTillEvent.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
 
         ///////////
         self.eventName.text = self.selectedEvent.eventName;
         self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
-
     }
 }
 

@@ -7,86 +7,89 @@
 //
 
 #import "UserLocationManager.h"
+#import "EventManager.h"
 #import <CoreMotion/CoreMotion.h>
 
 @interface UserLocationManager ()<CLLocationManagerDelegate>
+
 @property (strong, nonatomic) CLLocationManager *userLocationManager;
+@property EventManager* sharedEventManager;
+@property NSDate* lastLocationUpdateTime;
+
 @end
 
 @implementation UserLocationManager
 
--(void)updateLocation {
-    [self.userLocationManager startUpdatingLocation];
-}
+- (instancetype)init
+{
+    self = [super init];
 
+    self.userLocationManager = [[CLLocationManager alloc] init];
+    self.userLocationManager.delegate = self;
+
+    [_userLocationManager requestAlwaysAuthorization];
+
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
+    {
+        [self.userLocationManager startMonitoringSignificantLocationChanges];
+    }
+
+    self.sharedEventManager = [EventManager sharedEventManager];
+
+    return self;
+}
 
 -(void)dealloc
 {
     [self.userLocationManager setDelegate:nil];
 }
 
-#pragma mark - Location
-
 + (BOOL)canGetLocation
 {
-    if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusRestricted) {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
         return YES;
     }
     return NO;
 }
 
-- (void)setLocationAccuracyBestAndUpdate{
-    [self.userLocationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-    [self.userLocationManager setDistanceFilter:kCLDistanceFilterNone];
-    [self.userLocationManager startUpdatingLocation];
-    NSLog(@"The location accuracy has been set to Best");
-}
 
+#pragma mark - CLLocationManagerDelegate
 
-- (CLLocationManager *)userLocationManager {
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    NSLog(@"location update received");
+    self.location = [locations lastObject]; // Grab the most recent location update
 
-    if (!_userLocationManager) {
-        CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-        locationManager.delegate = self;
-        self.userLocationManager = locationManager;
+    // Only ping Google if it has been more than 5 minutes since the last update
+    if ([NSDate date].timeIntervalSince1970 - self.lastLocationUpdateTime.timeIntervalSince1970 > (5*60))
+    {
+        [self.sharedEventManager refreshEventsWithCompletion:^(UIBackgroundFetchResult fetchResult){
+            if (fetchResult == UIBackgroundFetchResultNewData)
+            {
+                self.lastLocationUpdateTime = [NSDate date];
+            }
+        }];
     }
-    [_userLocationManager requestAlwaysAuthorization];
-
-    return _userLocationManager;
 }
 
-
-- (void)startStandardLocationUpdates {
-
-    self.userLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.userLocationManager startUpdatingLocation];
-}
-
-
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-
-        CLLocation *newLocation = [locations firstObject];
-        CLLocation *oldLocation;
-        if (locations.count > 1) {
-            oldLocation = [locations objectAtIndex:locations.count-2];
-        } else {
-            oldLocation = nil;
-        }
-    self.location = newLocation;
-}
-
-
-
--(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Failure" message:@"We failed to find your current location?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [alert addButtonWithTitle:@"Close"];
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't get location"
+                                                    message:@"Make sure Punctual can use your location in Settings"
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     [alert show];
     NSLog(@"Error: %@", error.userInfo);
-
 }
 
-
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    if (status == kCLAuthorizationStatusAuthorizedAlways)
+    {
+        [self.userLocationManager startMonitoringSignificantLocationChanges];
+    }
+}
 
 
 @end

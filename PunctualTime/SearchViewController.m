@@ -47,7 +47,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self.applicationDelegate.userLocationManager updateLocation];
     [self.searchTextField becomeFirstResponder];
     [self.localSearchQueries removeAllObjects];
     [self.pastSearchResults removeAllObjects];

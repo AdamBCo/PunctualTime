@@ -357,7 +357,6 @@
 {
     SearchViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
-    [self.applicationDelegate.userLocationManager updateLocation];
     [self enableSaveButtonIfReady];
 }
 
