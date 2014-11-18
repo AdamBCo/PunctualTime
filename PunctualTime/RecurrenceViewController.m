@@ -30,7 +30,7 @@ static UIColor* initialTextColor;
 
     for (UIButton* button in self.buttons)
     {
-        button.layer.borderWidth = 2.0;
+        button.layer.borderWidth = 1.0;
         button.layer.borderColor = [initialTextColor CGColor];
     }
 }

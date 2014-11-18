@@ -14,6 +14,9 @@ static UIColor* selectedTextColor;
 
 @interface ModesOfTransportationViewController ()
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttons;
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *buttonSizeConstraints;
+@property (strong, nonatomic) IBOutletCollection(NSLayoutConstraint) NSArray *buttonSpaceConstraints;
+
 
 @end
 
@@ -26,9 +29,24 @@ static UIColor* selectedTextColor;
     initialTextColor = [self.buttons.firstObject titleColorForState:UIControlStateNormal];
     selectedTextColor = [UIColor colorWithRed:0.071 green:0.871 blue:1.000 alpha:1.000];
 
+    CGFloat buttonSize = (SCREEN_WIDTH-40.0)/4.0;
+    CGFloat buttonSpacing = (SCREEN_WIDTH - buttonSize*4 - 16)/3;
+    [self.delegate transportationButtonHeightWasSet:buttonSize];
+
+    for (NSLayoutConstraint* constraint in self.buttonSizeConstraints)
+    {
+        constraint.constant = buttonSize;
+    }
+
+    for (NSLayoutConstraint* constraint in self.buttonSpaceConstraints)
+    {
+        constraint.constant = buttonSpacing;
+    }
+
     for (UIButton* button in self.buttons)
     {
-        button.layer.borderWidth = 2.0;
+        button.layer.borderWidth = 1.0;
+        button.layer.cornerRadius = buttonSize/2.0;
         button.layer.borderColor = [initialTextColor CGColor];
     }
 

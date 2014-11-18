@@ -8,6 +8,7 @@
 
 #import "SIAlertView.h"
 #import "UIWindow+SIUtils.h"
+#import "LiveFrost.h"
 #import <QuartzCore/QuartzCore.h>
 
 NSString *const SIAlertViewWillShowNotification = @"SIAlertViewWillShowNotification";
@@ -17,9 +18,9 @@ NSString *const SIAlertViewDidDismissNotification = @"SIAlertViewDidDismissNotif
 
 #define DEBUG_LAYOUT 0
 
-#define MESSAGE_MIN_LINE_COUNT 2
+#define MESSAGE_MIN_LINE_COUNT 3
 #define MESSAGE_MAX_LINE_COUNT 5
-#define GAP 10
+#define GAP 5
 #define CANCEL_BUTTON_PADDING_TOP 5
 #define CONTENT_PADDING_LEFT 10
 #define CONTENT_PADDING_TOP 10
@@ -37,6 +38,8 @@ static NSMutableArray *__si_alert_queue;
 static BOOL __si_alert_animating;
 static SIAlertBackgroundWindow *__si_alert_background_window;
 static SIAlertView *__si_alert_current_view;
+
+static LFGlassView* blurView;
 
 @interface SIAlertView ()
 
@@ -123,9 +126,8 @@ static SIAlertView *__si_alert_current_view;
         }
         case SIAlertViewBackgroundStyleBlur:
         {
-            UIVisualEffectView* blurView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-            blurView.frame = self.frame;
-            [self addSubview:blurView];
+            blurView = [[LFGlassView alloc] initWithFrame:self.bounds];
+            [[[UIApplication sharedApplication].windows firstObject] addSubview:blurView];
             break;
         }
     }
@@ -247,9 +249,9 @@ static SIAlertView *__si_alert_current_view;
 
 #pragma mark TODO:setting appearance properties
     SIAlertView *appearance = [self appearance];
-    appearance.viewBackgroundColor = [UIColor whiteColor];
-    appearance.titleColor = [UIColor blackColor];
-    appearance.messageColor = [UIColor darkGrayColor];
+    appearance.viewBackgroundColor = [UIColor colorWithRed:0.000 green:0.604 blue:0.698 alpha:1.000];
+    appearance.titleColor = [UIColor whiteColor];
+    appearance.messageColor = [UIColor whiteColor];
     appearance.titleFont = [UIFont boldSystemFontOfSize:20];
     appearance.messageFont = [UIFont systemFontOfSize:16];
     appearance.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
@@ -534,6 +536,7 @@ static SIAlertView *__si_alert_current_view;
     }
     [window makeKeyWindow];
     window.hidden = NO;
+    [blurView removeFromSuperview];
 }
 
 #pragma mark - Transitions
@@ -880,7 +883,7 @@ static SIAlertView *__si_alert_current_view;
     if (self.messageLabel) {
         CGFloat maxHeight = MESSAGE_MAX_LINE_COUNT * self.messageLabel.font.lineHeight;
         
-        #ifdef __IPHONE_7_0
+//        #ifdef __IPHONE_7_0
             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
             paragraphStyle.lineBreakMode = self.messageLabel.lineBreakMode;
             
@@ -895,13 +898,13 @@ static SIAlertView *__si_alert_current_view;
                                                              context:nil];
             
             return MAX(minHeight, ceil(rect.size.height));
-        #else
-            CGSize size = [self.message sizeWithFont:self.messageLabel.font
-                                   constrainedToSize:CGSizeMake(CONTAINER_WIDTH - CONTENT_PADDING_LEFT * 2, maxHeight)
-                                       lineBreakMode:self.messageLabel.lineBreakMode];
-            
-            return MAX(minHeight, size.height);
-        #endif
+//        #else
+//            CGSize size = [self.message sizeWithFont:self.messageLabel.font
+//                                   constrainedToSize:CGSizeMake(CONTAINER_WIDTH - CONTENT_PADDING_LEFT * 2, maxHeight)
+//                                       lineBreakMode:self.messageLabel.lineBreakMode];
+//            
+//            return MAX(minHeight, size.height);
+//        #endif
     }
     
     return minHeight;
@@ -971,6 +974,7 @@ static SIAlertView *__si_alert_current_view;
 
 - (void)updateMessageLabel
 {
+#pragma mark - Message Label Stuff
     if (self.message) {
         if (!self.messageLabel) {
             self.messageLabel = [[UILabel alloc] initWithFrame:self.bounds];
@@ -1223,27 +1227,27 @@ static SIAlertView *__si_alert_current_view;
 #ifdef __IPHONE_7_0
 - (void)addParallaxEffect
 {
-    if (_enabledParallaxEffect && NSClassFromString(@"UIInterpolatingMotionEffect"))
-    {
-        UIInterpolatingMotionEffect *effectHorizontal = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"position.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-        UIInterpolatingMotionEffect *effectVertical = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"position.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-        [effectHorizontal setMaximumRelativeValue:@(20.0f)];
-        [effectHorizontal setMinimumRelativeValue:@(-20.0f)];
-        [effectVertical setMaximumRelativeValue:@(50.0f)];
-        [effectVertical setMinimumRelativeValue:@(-50.0f)];
-        [self.containerView addMotionEffect:effectHorizontal];
-        [self.containerView addMotionEffect:effectVertical];
-    }
+//    if (_enabledParallaxEffect && NSClassFromString(@"UIInterpolatingMotionEffect"))
+//    {
+//        UIInterpolatingMotionEffect *effectHorizontal = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"position.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+//        UIInterpolatingMotionEffect *effectVertical = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"position.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+//        [effectHorizontal setMaximumRelativeValue:@(20.0f)];
+//        [effectHorizontal setMinimumRelativeValue:@(-20.0f)];
+//        [effectVertical setMaximumRelativeValue:@(50.0f)];
+//        [effectVertical setMinimumRelativeValue:@(-50.0f)];
+//        [self.containerView addMotionEffect:effectHorizontal];
+//        [self.containerView addMotionEffect:effectVertical];
+//    }
 }
 
 - (void)removeParallaxEffect
 {
-    if (_enabledParallaxEffect && NSClassFromString(@"UIInterpolatingMotionEffect"))
-    {
-        [self.containerView.motionEffects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [self.containerView removeMotionEffect:obj];
-        }];
-    }
+//    if (_enabledParallaxEffect && NSClassFromString(@"UIInterpolatingMotionEffect"))
+//    {
+//        [self.containerView.motionEffects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            [self.containerView removeMotionEffect:obj];
+//        }];
+//    }
 }
 #endif
 

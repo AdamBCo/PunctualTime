@@ -76,8 +76,10 @@
     }
 }
 
-- (void)refreshEventsWithCompletion:(void (^)(void))completion // Updates events or removes/reschedules them if expired
+- (void)refreshEventsWithCompletion:(void (^)(UIBackgroundFetchResult fetchResult))completion // Updates events or removes/reschedules them if expired
 {
+    __block UIBackgroundFetchResult fetchResult = UIBackgroundFetchResultNoData;
+
     if (self.events.count > 0)
     {
         NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
@@ -90,7 +92,7 @@
                     if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
                     {
                         [self sortEvents];
-                        completion();
+                        completion(fetchResult);
                     }
                 }];
             }
@@ -102,6 +104,8 @@
                 [event makeLocalNotificationWithCategoryIdentifier:event.currentNotificationCategory completion:^(NSError *error) {
                     if (!error)
                     {
+                        fetchResult = UIBackgroundFetchResultNewData;
+
                         if (notification)
                         {
                             [[UIApplication sharedApplication] cancelLocalNotification:notification];
@@ -111,7 +115,7 @@
                     if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
                     {
                         [self sortEvents];
-                        completion();
+                        completion(fetchResult);
                     }
                 }];
             }
@@ -119,7 +123,7 @@
     }
     else
     {
-        completion();
+        completion(fetchResult);
     }
 }
 

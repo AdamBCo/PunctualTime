@@ -43,15 +43,13 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *recurrenceContainerHeight;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *transportationContainerHeight;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *reminderContainerHeight;
 
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *destinationButton;
+
 
 @end
 
@@ -68,17 +66,23 @@
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
+    self.datePicker.backgroundColor = [UIColor colorWithRed:1.000 green:0.486 blue:0.071 alpha:1.000];
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
 
     self.blackView = [[UIView alloc] initWithFrame: self.view.bounds];
 
+
     [self.view addSubview:self.blackView];
+<<<<<<< HEAD
+
+=======
+>>>>>>> d4310fc3f25de9c3b7c5e2dc04f2816ecfd96bff
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
+-(void)viewWillAppear:(BOOL)animated{
+
     [super viewWillAppear:animated];
 
     [self enableSaveButtonIfReady];
@@ -87,6 +91,7 @@
         MKCoordinateRegion mapRegion;
         mapRegion.center = self.locationInfo.locationCoordinates;
         mapRegion.span = MKCoordinateSpanMake(0.005, 0.005);
+        self.destinationButton.titleLabel.text = [NSString stringWithFormat:@"Location: %@",self.locationInfo.name];;
         [self.mapView setRegion:mapRegion animated: NO];
         self.isMapExpanded = YES;
         [self expandMap];
@@ -95,10 +100,6 @@
         [self expandMap];
     }
 
-    self.datePickerButton.layer.borderColor = [self.datePickerButton.titleLabel.textColor CGColor];
-    self.datePickerButton.layer.borderWidth = 1.0;
-    self.destinationButton.layer.borderColor = [self.destinationButton.titleLabel.textColor CGColor];
-    self.destinationButton.layer.borderWidth = 1.0;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -123,7 +124,7 @@
         self.datePickerHeightConstraint.constant = 0;
         self.datePicker.alpha = 0.0;
     }
-    [UIView animateWithDuration:0.3
+    [UIView animateWithDuration:0.7
                           delay:0.0
                         options:UIViewAnimationOptionAllowUserInteraction
                      animations:^{
@@ -176,8 +177,8 @@
                              MKPointAnnotation *point = [MKPointAnnotation new];
                              point.coordinate = self.locationInfo.locationCoordinates;
                              [self.mapView addAnnotation:point];
-                             NSString *location = [NSString stringWithFormat:@" %@",self.locationInfo.name];
-                             self.destinationButton.titleLabel.adjustsFontSizeToFitWidth = TRUE;
+                             NSString *location = [NSString stringWithFormat:@"%@",self.locationInfo.name];
+                                 self.destinationButton.titleLabel.adjustsFontSizeToFitWidth = TRUE;
                              [self.destinationButton setTitle:location forState:UIControlStateNormal];
                          }
                          nil;
@@ -197,6 +198,7 @@
     {
         if (error)
         {
+            NSLog(@"Error making notification: %@", error.userInfo);
             [self makeAlertForErrorCode:error.code errorUserInfo:error.userInfo];
         }
         else
@@ -212,7 +214,6 @@
 {
     self.titleTextField.text = @"";
     self.datePicker.date = [NSDate date];
-    self.locationInfo = nil;
 }
 
 - (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
@@ -225,21 +226,7 @@
     }
     else
     {
-        [self.saveButton setTitle:@"Need:" forState:UIControlStateDisabled];
         self.saveButton.enabled = NO;
-
-        if ([self.titleTextField.text isEqualToString:@""])
-        {
-            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Name"] forState:UIControlStateDisabled];
-        }
-        if (self.datePicker.date.timeIntervalSince1970 < [NSDate date].timeIntervalSince1970)
-        {
-            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Date"] forState:UIControlStateDisabled];
-        }
-        if (self.locationInfo == nil)
-        {
-            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Destination"] forState:UIControlStateDisabled];
-        }
     }
 }
 
@@ -256,7 +243,7 @@
             break;
         default:
             alertTitle = @"Dangit...";
-            alertMessage = @"Either we couldn't connect or there is no data for your destination via the selected transportation.";
+            alertMessage = @"There was a network problem or the selected destination and transportation are incompatible. Please try again.";
             break;
     }
 
@@ -272,9 +259,7 @@
 }
 
 
-#pragma mark - TextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     [self.blackView removeFromSuperview];
@@ -282,15 +267,8 @@
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
     [self.view bringSubviewToFront:self.blackView];
-}
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    return (newLength > 15) ? NO : YES;
 }
 
 
@@ -299,11 +277,6 @@
 - (void)reminderSelected:(NSString *)reminderCategory
 {
     self.initialNotificationCategory = reminderCategory;
-}
-
-- (void)reminderButtonHeightWasSet:(CGFloat)height
-{
-    self.reminderContainerHeight.constant = height;
 }
 
 
@@ -320,11 +293,6 @@
 - (void)modeOfTransportationSelected:(NSString *)transportationType
 {
     self.transportationType = transportationType;
-}
-
-- (void)transportationButtonHeightWasSet:(CGFloat)height
-{
-    self.transportationContainerHeight.constant = height;
 }
 
 
@@ -351,6 +319,7 @@
         RecurrenceViewController* recurrenceVC = segue.destinationViewController;
         recurrenceVC.delegate = self;
     }
+
 }
 
 -(IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
@@ -359,6 +328,7 @@
     self.locationInfo = viewController.locationInfo;
     [self.applicationDelegate.userLocationManager updateLocation];
     [self enableSaveButtonIfReady];
+    NSLog(@"Pictures: %f",self.locationInfo.locationCoordinates.latitude);
 }
 
 @end

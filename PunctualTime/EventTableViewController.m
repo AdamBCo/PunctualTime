@@ -15,6 +15,8 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIImageView *dragImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *arrowImageView;
+@property (strong, nonatomic) IBOutlet UIView *panView;
 @property EventManager *sharedEventManager;
 
 @end
@@ -31,7 +33,8 @@
     self.sharedEventManager = [EventManager sharedEventManager];
 
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
-    [self.dragImageView addGestureRecognizer:panGesture];
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGestureDetected:)];
+    [self.panView setGestureRecognizers:@[panGesture, tapGesture]];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:self.sharedEventManager
@@ -51,6 +54,13 @@
     [super viewWillAppear:animated];
 }
 
+- (void)rotateArrowImageToDegrees:(CGFloat)degrees
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.arrowImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+    }];
+}
+
 
 #pragma mark - Private methods
 
@@ -58,6 +68,12 @@
 {
     [self.tableView setEditing:NO animated:YES];
     [self.delegate panGestureDetected:panGesture];
+}
+
+- (IBAction)onTapGestureDetected:(UITapGestureRecognizer *)tapGesture
+{
+    [self.tableView setEditing:NO animated:YES];
+    [self.delegate tapGestureDetected:tapGesture];
 }
 
 
