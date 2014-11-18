@@ -19,7 +19,7 @@
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
 
-@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate, AppSwitcherViewDelegate>
+@interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
@@ -33,7 +33,6 @@
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
 @property PTEventRecurrenceOption recurrenceOption;
-@property UIView* appSwitcherView;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
@@ -100,9 +99,6 @@
     self.datePickerButton.layer.borderWidth = 1.0;
     self.destinationButton.layer.borderColor = [self.destinationButton.titleLabel.textColor CGColor];
     self.destinationButton.layer.borderWidth = 1.0;
-
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    delegate.appSwitcherViewDelegate = self;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -329,35 +325,6 @@
 - (void)transportationButtonHeightWasSet:(CGFloat)height
 {
     self.transportationContainerHeight.constant = height;
-}
-
-
-#pragma mark - AppSwitcherViewDelegate
-
-- (void)showSwipeView
-{
-    self.appSwitcherView = [[UIView alloc] initWithFrame:self.view.frame];
-    self.appSwitcherView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
-
-    UILabel* textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT/5, SCREEN_WIDTH, 400)];
-    textLabel.text = @"Swiper No Swiping";
-    textLabel.textColor = [UIColor whiteColor];
-    textLabel.font = [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:100.0];
-    textLabel.textAlignment = NSTextAlignmentCenter;
-    textLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    textLabel.numberOfLines = 3;
-
-    [self.appSwitcherView addSubview:textLabel];
-    [self.view addSubview:self.appSwitcherView];
-}
-
-- (void)hideSwipeView
-{
-    [UIView animateWithDuration:0.3 animations:^{
-        self.appSwitcherView.alpha = 0.0;
-    }completion:^(BOOL finished) {
-        [self.appSwitcherView removeFromSuperview];
-    }];
 }
 
 
