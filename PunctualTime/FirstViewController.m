@@ -60,6 +60,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                                        queue:nil
                                                   usingBlock:^(NSNotification *note) {
                                                       self.selectedEvent = self.sharedEventManager.events.firstObject;
+                                                      if (!self.selectedEvent)
+                                                      {
+                                                          self.eventName.text = @"Just";
+                                                          self.eventTime.text = @"Chillax";
+                                                      }
                                                   }];
 
     self.animationShapeView = [[UIView alloc]initWithFrame:CGRectMake(0 ,self.view.bounds.size.height/6, self.view.bounds.size.width, self.view.bounds.size.width)];
