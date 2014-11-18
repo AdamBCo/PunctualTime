@@ -9,6 +9,7 @@
 
 #import "FirstViewController.h"
 #import "EventTableViewController.h"
+#import "AppDelegate.h"
 #import "Constants.h"
 #import "LiveFrost.h"
 #import "EventManager.h"
@@ -19,7 +20,7 @@
 BOOL isOpeningEventTable;
 static CGFloat INITIAL_CONTAINER_LOC;
 
-@interface FirstViewController () <EventTableViewDelegate>
+@interface FirstViewController () <EventTableViewDelegate, AppSwitcherViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeTillEvent;
 @property (strong, nonatomic) IBOutlet UIView *containerView;
@@ -33,6 +34,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
 @property UIView *animationShapeView;
+@property UIView* appSwitcherView;
 
 @property UIView *chicagoAnimationView;
 @property UIView *sunView;
@@ -53,7 +55,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
-    NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
+    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+    delegate.appSwitcherViewDelegate = self;
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:nil
@@ -588,6 +591,35 @@ static CGFloat INITIAL_CONTAINER_LOC;
         }];
     }
     
+}
+
+
+#pragma mark - AppSwitcherViewDelegate
+
+- (void)showSwipeView
+{
+    self.appSwitcherView = [[UIView alloc] initWithFrame:self.view.frame];
+    self.appSwitcherView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+
+    UILabel* textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT/5, SCREEN_WIDTH, 400)];
+    textLabel.text = @"Swiper No Swiping";
+    textLabel.textColor = [UIColor whiteColor];
+    textLabel.font = [UIFont fontWithName:@"HelveticaNeue-CondensedBold" size:100.0];
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    textLabel.numberOfLines = 3;
+
+    [self.appSwitcherView addSubview:textLabel];
+    [self.view addSubview:self.appSwitcherView];
+}
+
+- (void)hideSwipeView
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.appSwitcherView.alpha = 0.0;
+    }completion:^(BOOL finished) {
+        [self.appSwitcherView removeFromSuperview];
+    }];
 }
 
 #pragma mark - Navigation

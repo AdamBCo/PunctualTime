@@ -117,6 +117,7 @@
 		E9ACBB7D1A05753000F56EBA /* UserLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLocationManager.h; sourceTree = "<group>"; };
 		E9ACBB7E1A05753000F56EBA /* UserLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserLocationManager.m; sourceTree = "<group>"; };
 		E9BECF311A0983CF006ABCF9 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		E9C95DCC1A1AF80A00183924 /* AppSwitcherViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSwitcherViewDelegate.h; sourceTree = "<group>"; };
 		E9D79C341A046DE600C9D65F /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		E9D79C351A046DE600C9D65F /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -172,6 +173,7 @@
 				661078E51A044D830096479F /* AppDelegate.m */,
 				6660ED401A1070BC007C5D90 /* CircularTimer.h */,
 				6660ED411A1070BC007C5D90 /* CircularTimer.m */,
+				E9C95DCC1A1AF80A00183924 /* AppSwitcherViewDelegate.h */,
 				E9ACBB7C1A054E7400F56EBA /* View Controllers */,
 				E9ACBB7B1A054E6000F56EBA /* Data Controllers */,
 				E9D79C371A046E1D00C9D65F /* Model */,
