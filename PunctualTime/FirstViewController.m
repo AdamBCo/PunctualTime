@@ -80,11 +80,64 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     [self startAnimations];
 
+
+
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
 
 
+    //SkyView Animation
+    [UIView animateWithDuration:10.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.skyView.center.y);
+                         NSLog(@"SkyView TWO: %@",NSStringFromCGRect(self.view.bounds));
+                     }
+                     completion:nil];
 
+    //BIRds Animation
+    [UIView animateWithDuration:20.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.birds.center.y);
+                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.planeView.center.y);
+                     }
+                     completion:nil];
+
+    self.navigationController.navigationBar.hidden = YES;
+    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
+
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
+
+    [NSTimer scheduledTimerWithTimeInterval:1.0
+                                     target:self
+                                   selector:@selector(updateCounter)
+                                   userInfo:nil
+                                    repeats:YES];
+}
+
+- (void)updateCounter
+{
+
+    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
+
+    if(seconds > 0)
+    {
+        seconds -- ;
+        int hours = (seconds / 3600);
+        int minutes = (seconds % 3600) / 60;
+        seconds = (seconds %3600) % 60;
+        self.eventName.text = self.selectedEvent.eventName;
+        self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+        
+    }
+}
 
 -(void)startAnimations {
 
@@ -380,26 +433,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     rotationAnimation.duration = 10;
     rotationAnimation.repeatCount = INFINITY;
 
-//    //SkyView Animation
-//    [UIView animateWithDuration:10.0
-//                          delay: 0
-//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-//                     animations:^{
-//                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.view.bounds.size.height/2);
-//                     }
-//                     completion:nil];
-//
-//    //BIRds Animation
-//    [UIView animateWithDuration:20.0
-//                          delay: 0
-//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-//                     animations:^{
-//                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
-//                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
-//                     }
-//                     completion:nil];
-
-
     [self.chicagoAnimationView.layer addSublayer:ground];
     [self.skyView.layer addSublayer:sky];
     [self.skyView.layer addSublayer:skyTwo];
@@ -414,63 +447,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     } completion:^(BOOL finished) {
     }];
 
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
-
-
-    //SkyView Animation
-    [UIView animateWithDuration:10.0
-                          delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-                     animations:^{
-                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.skyView.center.y);
-//                        self.skyView.center = CGPointMake(self.view.window.frame.size.width+self.view.window.frame.size.width*1.5, self.skyView.center.y);
-                        NSLog(@"SkyView TWO: %@",NSStringFromCGRect(self.view.bounds));
-                     }
-                     completion:nil];
-
-    //BIRds Animation
-    [UIView animateWithDuration:20.0
-                          delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-                     animations:^{
-                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.birds.center.y);
-                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.planeView.center.y);
-                     }
-                     completion:nil];
-
-    self.navigationController.navigationBar.hidden = YES;
-    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
-
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
-
-    [NSTimer scheduledTimerWithTimeInterval:1.0
-                                     target:self
-                                   selector:@selector(updateCounter)
-                                   userInfo:nil
-                                    repeats:YES];
-}
-
-- (void)updateCounter
-{
-
-    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
-
-    if(seconds > 0)
-    {
-        seconds -- ;
-        int hours = (seconds / 3600);
-        int minutes = (seconds % 3600) / 60;
-        seconds = (seconds %3600) % 60;
-        self.eventName.text = self.selectedEvent.eventName;
-        self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
-
-    }
 }
 
 
