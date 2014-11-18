@@ -55,9 +55,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-    delegate.appSwitcherViewDelegate = self;
-
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:nil
                                                        queue:nil
@@ -450,6 +447,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                    selector:@selector(updateCounter)
                                    userInfo:nil
                                     repeats:YES];
+
+    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+    delegate.appSwitcherViewDelegate = self;
 }
 
 - (void)updateCounter
