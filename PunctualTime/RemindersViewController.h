@@ -11,6 +11,7 @@
 @protocol RemindersViewControllerDelegate <NSObject>
 
 - (void)reminderSelected:(NSString *)reminderCategory;
+- (void)reminderButtonHeightWasSet:(CGFloat)height;
 
 @end
 

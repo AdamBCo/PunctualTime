@@ -43,6 +43,9 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *recurrenceContainerHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *transportationContainerHeight;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *reminderContainerHeight;
 
 @property UIView *blackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
@@ -65,7 +68,6 @@
     self.datePicker.minimumDate = [NSDate date];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
-    self.datePicker.backgroundColor = [UIColor colorWithRed:1.000 green:0.486 blue:0.071 alpha:1.000];
     self.isDatePickerExpanded = NO;
     self.datePickerHeightConstraint.constant = 0;
     self.datePicker.alpha = 0;
@@ -93,6 +95,10 @@
         [self expandMap];
     }
 
+    self.datePickerButton.layer.borderColor = [self.datePickerButton.titleLabel.textColor CGColor];
+    self.datePickerButton.layer.borderWidth = 1.0;
+    self.destinationButton.layer.borderColor = [self.destinationButton.titleLabel.textColor CGColor];
+    self.destinationButton.layer.borderWidth = 1.0;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -170,8 +176,8 @@
                              MKPointAnnotation *point = [MKPointAnnotation new];
                              point.coordinate = self.locationInfo.locationCoordinates;
                              [self.mapView addAnnotation:point];
-                             NSString *location = [NSString stringWithFormat:@"%@",self.locationInfo.name];
-                                 self.destinationButton.titleLabel.adjustsFontSizeToFitWidth = TRUE;
+                             NSString *location = [NSString stringWithFormat:@" %@",self.locationInfo.name];
+                             self.destinationButton.titleLabel.adjustsFontSizeToFitWidth = TRUE;
                              [self.destinationButton setTitle:location forState:UIControlStateNormal];
                          }
                          nil;
@@ -219,7 +225,21 @@
     }
     else
     {
+        [self.saveButton setTitle:@"Need:" forState:UIControlStateDisabled];
         self.saveButton.enabled = NO;
+
+        if ([self.titleTextField.text isEqualToString:@""])
+        {
+            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Name"] forState:UIControlStateDisabled];
+        }
+        if (self.datePicker.date.timeIntervalSince1970 < [NSDate date].timeIntervalSince1970)
+        {
+            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Date"] forState:UIControlStateDisabled];
+        }
+        if (self.locationInfo == nil)
+        {
+            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Destination"] forState:UIControlStateDisabled];
+        }
     }
 }
 
@@ -252,7 +272,9 @@
 }
 
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField
+#pragma mark - TextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     [self.blackView removeFromSuperview];
@@ -260,8 +282,15 @@
     return YES;
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)textField{
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
     [self.view bringSubviewToFront:self.blackView];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 15) ? NO : YES;
 }
 
 
@@ -270,7 +299,11 @@
 - (void)reminderSelected:(NSString *)reminderCategory
 {
     self.initialNotificationCategory = reminderCategory;
-    NSLog(@"reminder selected: %@", reminderCategory);
+}
+
+- (void)reminderButtonHeightWasSet:(CGFloat)height
+{
+    self.reminderContainerHeight.constant = height;
 }
 
 
@@ -287,6 +320,11 @@
 - (void)modeOfTransportationSelected:(NSString *)transportationType
 {
     self.transportationType = transportationType;
+}
+
+- (void)transportationButtonHeightWasSet:(CGFloat)height
+{
+    self.transportationContainerHeight.constant = height;
 }
 
 

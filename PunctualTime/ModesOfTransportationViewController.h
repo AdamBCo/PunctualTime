@@ -11,6 +11,7 @@
 @protocol ModesOfTransportationDelegate
 
 -(void)modeOfTransportationSelected:(NSString *)transportationType;
+- (void)transportationButtonHeightWasSet:(CGFloat)height;
 
 @end
 
