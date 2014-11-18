@@ -272,7 +272,9 @@
 }
 
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField
+#pragma mark - TextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     [self.blackView removeFromSuperview];
@@ -280,8 +282,15 @@
     return YES;
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)textField{
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
     [self.view bringSubviewToFront:self.blackView];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    return (newLength > 15) ? NO : YES;
 }
 
 
