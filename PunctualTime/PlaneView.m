@@ -166,6 +166,26 @@
 
 }
 
+-(void)drawBanner{
+
+    CAShapeLayer *banner = [CAShapeLayer new];
+    CGMutablePathRef bannerPath = CGPathCreateMutable();
+
+    CGPathMoveToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.35, self.bounds.size.height*.20);
+    CGPathAddQuadCurveToPoint(bannerPath, nil, self.bounds.size.width*.40, self.bounds.size.height*.22, self.bounds.size.width*.45, self.bounds.size.height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.45, self.bounds.size.height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.75, self.bounds.size.height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.30);
+    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
+    banner.path = [UIBezierPath bezierPathWithCGPath:bannerPath].CGPath;
+    banner.strokeColor = [UIColor whiteColor].CGColor;
+    banner.fillColor = [UIColor clearColor].CGColor;
+    banner.lineWidth = 2;
+    [self.layer addSublayer:banner];
+
+    
+}
 
 
 

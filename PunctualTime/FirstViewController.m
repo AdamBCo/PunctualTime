@@ -85,9 +85,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 
 
+
 -(void)startAnimations {
+
     self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.skyView];
+
+    NSLog(@"SkyView: %@",NSStringFromCGRect(self.view.bounds));
 
     self.birds = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width*1.5, 0, self.view.bounds.size.width,self.view.bounds.size.height)];
     [self.view addSubview:self.birds];
@@ -202,6 +206,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
     skyTwo.strokeColor = [UIColor whiteColor].CGColor;
     skyTwo.fillColor = [UIColor clearColor].CGColor;
     skyTwo.lineWidth = 2;
+
+    //CGPath
+    //CGRectGetWidth
 
     //Birds
     CAShapeLayer *birdOne = [CAShapeLayer new];
@@ -373,24 +380,24 @@ static CGFloat INITIAL_CONTAINER_LOC;
     rotationAnimation.duration = 10;
     rotationAnimation.repeatCount = INFINITY;
 
-    //SkyView Animation
-    [UIView animateWithDuration:10.0
-                          delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-                     animations:^{
-                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.view.bounds.size.height/2);
-                     }
-                     completion:nil];
-
-    //BIRds Animation
-    [UIView animateWithDuration:20.0
-                          delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-                     animations:^{
-                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
-                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
-                     }
-                     completion:nil];
+//    //SkyView Animation
+//    [UIView animateWithDuration:10.0
+//                          delay: 0
+//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+//                     animations:^{
+//                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.view.bounds.size.height/2);
+//                     }
+//                     completion:nil];
+//
+//    //BIRds Animation
+//    [UIView animateWithDuration:20.0
+//                          delay: 0
+//                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+//                     animations:^{
+//                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
+//                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.view.bounds.size.height/2);
+//                     }
+//                     completion:nil];
 
 
     [self.chicagoAnimationView.layer addSublayer:ground];
@@ -409,11 +416,33 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 }
 
-
 -(void)viewWillAppear:(BOOL)animated
 {
 
     [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
+
+
+    //SkyView Animation
+    [UIView animateWithDuration:10.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.skyView.center.y);
+//                        self.skyView.center = CGPointMake(self.view.window.frame.size.width+self.view.window.frame.size.width*1.5, self.skyView.center.y);
+                        NSLog(@"SkyView TWO: %@",NSStringFromCGRect(self.view.bounds));
+                     }
+                     completion:nil];
+
+    //BIRds Animation
+    [UIView animateWithDuration:20.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.birds.center.y);
+                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.planeView.center.y);
+                     }
+                     completion:nil];
 
     self.navigationController.navigationBar.hidden = YES;
     INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
