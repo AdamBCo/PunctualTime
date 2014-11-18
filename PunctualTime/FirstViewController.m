@@ -50,15 +50,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
 {
     [super viewDidLoad];
 
-    self.eventName.alpha = 0;
-    self.eventTime.alpha = 0;
-
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
-
-    for (Event *event in self.sharedEventManager.events) {
-        NSLog(@"Event: %@\n DesiredTime: %@\n Recurrence %u\n",event.eventName, event.desiredArrivalTime, event.recurrenceInterval);
-    }
 
     NSLog(@"Seconds: %@",self.selectedEvent.lastLeaveTime);
 
@@ -160,16 +153,17 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.eventName setTextColor:[UIColor whiteColor]];
     [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventName.textAlignment = NSTextAlignmentCenter;
-    self.eventName.text = @"Place";
+    self.eventName.text = @"Just";
     self.eventName.adjustsFontSizeToFitWidth = YES;
-
+    self.eventName.alpha = 0.0;
 
     self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/2 -50, self.textLabelView.frame.size.width, 30)];
     [self.eventTime setTextColor:[UIColor whiteColor]];
     [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventTime.textAlignment = NSTextAlignmentCenter;
-    self.eventTime.text = @"Time";
+    self.eventTime.text = @"Chillax";
     self.eventTime.adjustsFontSizeToFitWidth = YES;
+    self.eventTime.alpha = 0.0;
 
     [self.textLabelView addSubview:self.eventName];
     [self.textLabelView addSubview:self.eventTime];
