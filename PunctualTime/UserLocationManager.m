@@ -57,7 +57,6 @@
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    NSLog(@"location update received");
     self.location = [locations lastObject]; // Grab the most recent location update
 
     // Only ping Google if it has been more than 5 minutes since the last update
