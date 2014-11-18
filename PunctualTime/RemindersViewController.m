@@ -28,6 +28,7 @@ static UIColor* initialTextColor;
     initialTextColor = [self.buttons.firstObject titleColorForState:UIControlStateNormal];
 
     CGFloat buttonSize = (SCREEN_WIDTH-48)/5.0;
+    [self.delegate reminderButtonHeightWasSet:buttonSize];
 
     for (NSLayoutConstraint* constraint in self.buttonSizeConstraints)
     {
