@@ -27,9 +27,7 @@ NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 typedef NS_ENUM(NSUInteger, TableViewSection){
     TableViewSectionStatic,
     TableViewSectionMain,
-
     TableViewSectionCount
-
 };
 
 @implementation SearchViewController
@@ -47,7 +45,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self.applicationDelegate.userLocationManager updateLocation];
     [self.searchTextField becomeFirstResponder];
     [self.localSearchQueries removeAllObjects];
     [self.pastSearchResults removeAllObjects];

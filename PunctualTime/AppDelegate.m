@@ -34,8 +34,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
 
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
-
     //Ask the user permission to send them Local Push LocalNotifications
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
@@ -67,9 +65,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 
-    // If the app is active and the location manager has been created, I start updating the users location.
-    [self.userLocationManager updateLocation];
-
     // Check if any events have expired
     for (Event* event in self.sharedEventManager.events)
     {
@@ -99,16 +94,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     }
 
     return nil;
-}
-
-
-#pragma mark - Background refresh
-
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    [self.sharedEventManager refreshEventsWithCompletion:^(UIBackgroundFetchResult fetchResult){
-        completionHandler(fetchResult);
-    }];
 }
 
 
