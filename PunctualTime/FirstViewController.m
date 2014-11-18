@@ -600,6 +600,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 {
     self.appSwitcherView = [[UIView alloc] initWithFrame:self.view.frame];
     self.appSwitcherView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7];
+    self.appSwitcherView.alpha = 0.0;
 
     UILabel* textLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT/5, SCREEN_WIDTH, 400)];
     textLabel.text = @"Swiper No Swiping";
@@ -611,6 +612,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     [self.appSwitcherView addSubview:textLabel];
     [self.view addSubview:self.appSwitcherView];
+
+    [UIView animateWithDuration:1.0 animations:^{
+        self.appSwitcherView.alpha = 1.0;
+    }];
 }
 
 - (void)hideSwipeView
