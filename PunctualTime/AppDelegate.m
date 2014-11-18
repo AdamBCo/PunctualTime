@@ -52,8 +52,9 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
-                                                           [UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0], NSFontAttributeName, nil]];
+                                                           [UIFont fontWithName:@"HelveticaNeue-Thin" size:22.0], NSFontAttributeName, nil]];
 
+    [[UIBarButtonItem appearance] setTintColor:[UIColor greenColor]];
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0],
                                                           NSFontAttributeName, nil] forState:UIControlStateNormal];

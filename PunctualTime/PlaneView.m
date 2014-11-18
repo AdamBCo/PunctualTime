@@ -134,6 +134,26 @@
     [self.layer addSublayer:braceTwo];
 
 
+    CAShapeLayer *braceThree = [CAShapeLayer new];
+    CGMutablePathRef braceThreePath = CGPathCreateMutable();
+    CGPathMoveToPoint(braceThreePath, nil, self.bounds.size.width*.39, self.bounds.size.height*.17);
+    CGPathAddLineToPoint(braceThreePath, nil, self.bounds.size.width*.42, self.bounds.size.height*.225);
+    braceThree.path = [UIBezierPath bezierPathWithCGPath:braceThreePath].CGPath;
+    braceThree.strokeColor = [UIColor whiteColor].CGColor;
+    braceThree.fillColor = [UIColor clearColor].CGColor;
+    braceThree.lineWidth = 2;
+    [self.layer addSublayer:braceThree];
+
+    CAShapeLayer *braceFour = [CAShapeLayer new];
+    CGMutablePathRef braceFourPath = CGPathCreateMutable();
+    CGPathMoveToPoint(braceFourPath, nil, self.bounds.size.width*.37, self.bounds.size.height*.17);
+    CGPathAddLineToPoint(braceFourPath, nil, self.bounds.size.width*.40, self.bounds.size.height*.225);
+    braceFour.path = [UIBezierPath bezierPathWithCGPath:braceFourPath].CGPath;
+    braceFour.strokeColor = [UIColor whiteColor].CGColor;
+    braceFour.fillColor = [UIColor clearColor].CGColor;
+    braceFour.lineWidth = 2;
+    [self.layer addSublayer:braceFour];
+    
 
     CAShapeLayer *wingTwo = [CAShapeLayer new];
     wingTwo.position = CGPointMake(self.frame.size.width*.30, self.frame.size.height*.225);
