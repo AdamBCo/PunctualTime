@@ -78,184 +78,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
-
     [self startAnimations];
 
-
-
 }
 
 
 
--(void)viewWillAppear:(BOOL)animated
-{
 
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
-    self.selectedEvent = self.sharedEventManager.events.firstObject;
-    [NSTimer scheduledTimerWithTimeInterval:1.0
-                                     target:self
-                                   selector:@selector(updateCounter)
-                                   userInfo:nil
-                                    repeats:YES];
-}
-
-- (void)updateCounter
-{
-
-    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
-
-    if(seconds > 0)
-    {
-        seconds -- ;
-        int hours = (seconds / 3600);
-        int minutes = (seconds % 3600) / 60;
-        seconds = (seconds %3600) % 60;
-        self.eventName.text = self.selectedEvent.eventName;
-        self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
-
-    }
-}
-
-
-#pragma mark - EventTableViewControllerDelegate
-
-- (void)panGestureDetected:(UIPanGestureRecognizer *)gesture
-{
-    if (UIGestureRecognizerStateBegan == gesture.state)
-    {
-        if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
-        {
-            // Create blur view to animate
-            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
-            self.blurView.alpha = 0.0;
-            [self.view insertSubview:self.blurView belowSubview:self.containerView];
-        }
-    }
-    else if (UIGestureRecognizerStateChanged == gesture.state)
-    {
-        CGPoint translation = [gesture translationInView:gesture.view];
-        self.containerViewHeightConstraint.constant -= translation.y;
-        [gesture setTranslation:CGPointMake(0, 0) inView:gesture.view];
-        self.lastYTranslation = translation.y;
-
-        // Set blurView alpha
-        CGPoint location = [gesture locationInView:self.view];
-        self.blurView.alpha = 1.06 - (location.y/SCREEN_HEIGHT);
-    }
-
-    else if (UIGestureRecognizerStateEnded == gesture.state)
-    {
-        if (self.lastYTranslation > 0) // User was panning down so finish closing
-        {
-            self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
-            [UIView animateWithDuration:0.2 animations:^{
-                [self.view layoutIfNeeded];
-                self.blurView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                [self.blurView removeFromSuperview];
-            }];
-
-            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
-        }
-        else // User was panning up so finish opening
-        {
-            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
-            [UIView animateWithDuration:0.2 animations:^{
-                [self.view layoutIfNeeded];
-                self.blurView.alpha = 1.0;
-            }];
-
-            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
-        }
-    }
-
-    else // Gesture was cancelled or failed so animate back to original location
-    {
-        self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.view layoutIfNeeded];
-            self.blurView.alpha = 0.0;
-        } completion:^(BOOL finished) {
-            [self.blurView removeFromSuperview];
-        }];
-    }
-}
-
-- (void)tapGestureDetected:(UITapGestureRecognizer *)gesture
-{
-    if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
-    {
-        isOpeningEventTable = YES;
-
-        // Create blur view to animate
-        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
-        self.blurView.alpha = 0.0;
-        [self.view insertSubview:self.blurView belowSubview:self.containerView];
-    }
-    else
-    {
-        isOpeningEventTable = NO;
-    }
-
-    if (UIGestureRecognizerStateEnded == gesture.state)
-    {
-        if (!isOpeningEventTable)
-        {
-            self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
-            [UIView animateWithDuration:0.3 animations:^{
-                [self.view layoutIfNeeded];
-                self.blurView.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                [self.blurView removeFromSuperview];
-            }];
-
-            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
-        }
-        else
-        {
-            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
-            [UIView animateWithDuration:0.3 animations:^{
-                [self.view layoutIfNeeded];
-                self.blurView.alpha = 1.0;
-            }];
-
-            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
-        }
-    }
-
-    else // Gesture was cancelled or failed so animate back to original location
-    {
-        self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
-        [UIView animateWithDuration:0.2 animations:^{
-            [self.view layoutIfNeeded];
-            self.blurView.alpha = 0.0;
-        } completion:^(BOOL finished) {
-            [self.blurView removeFromSuperview];
-        }];
-    }
-
-}
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"EventTableVC"])
-    {
-        self.eventTableViewVC = segue.destinationViewController;
-        self.eventTableViewVC.delegate = self;
-    }
-    if ([segue.identifier isEqualToString:@"CreateEventVC"])
-    {
-        self.navigationController.navigationBar.hidden = NO;
-    }
-}
-
-
-
-#pragma mark - Animations
 -(void)startAnimations {
     self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.skyView];
@@ -302,12 +131,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
     sunRotationAnimation.repeatCount = INFINITY;
     [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
 
-    //Animate Sun Moving from Bottom View
-    [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
-    } completion:^(BOOL finished) {
-
-    }];
 
     self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/4-10, self.textLabelView.frame.size.width, 30)];
     [self.eventName setTextColor:[UIColor whiteColor]];
@@ -327,6 +150,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.eventTime.adjustsFontSizeToFitWidth = YES;
     self.eventTime.alpha = 0.0;
     [self.textLabelView addSubview:self.eventTime];
+
+    //Animate Sun Moving from Bottom View
+    [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
+    } completion:^(BOOL finished) {
+
+    }];
 
     //Animate Text Alpha
     [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -531,6 +361,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+
     [ground addAnimation:drawAnimation forKey:@"drawGroundAnimation"];
     [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
     [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
@@ -575,7 +406,177 @@ static CGFloat INITIAL_CONTAINER_LOC;
         //        self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
     } completion:^(BOOL finished) {
     }];
-    
+
+}
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+
+    [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.hidden = YES;
+    INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
+
+    self.selectedEvent = self.sharedEventManager.events.firstObject;
+
+    [NSTimer scheduledTimerWithTimeInterval:1.0
+                                     target:self
+                                   selector:@selector(updateCounter)
+                                   userInfo:nil
+                                    repeats:YES];
+}
+
+- (void)updateCounter
+{
+
+    int seconds = -[[NSDate date] timeIntervalSinceDate:self.selectedEvent.lastLeaveTime];
+
+    if(seconds > 0)
+    {
+        seconds -- ;
+        int hours = (seconds / 3600);
+        int minutes = (seconds % 3600) / 60;
+        seconds = (seconds %3600) % 60;
+        self.eventName.text = self.selectedEvent.eventName;
+        self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+
+    }
+}
+
+
+#pragma mark - EventTableViewControllerDelegate
+
+- (void)panGestureDetected:(UIPanGestureRecognizer *)gesture
+{
+    if (UIGestureRecognizerStateBegan == gesture.state)
+    {
+        if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
+        {
+            // Create blur view to animate
+            self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
+            self.blurView.alpha = 0.0;
+            [self.view insertSubview:self.blurView belowSubview:self.containerView];
+        }
+    }
+    else if (UIGestureRecognizerStateChanged == gesture.state)
+    {
+        CGPoint translation = [gesture translationInView:gesture.view];
+        self.containerViewHeightConstraint.constant -= translation.y;
+        [gesture setTranslation:CGPointMake(0, 0) inView:gesture.view];
+        self.lastYTranslation = translation.y;
+
+        // Set blurView alpha
+        CGPoint location = [gesture locationInView:self.view];
+        self.blurView.alpha = 1.06 - (location.y/SCREEN_HEIGHT);
+    }
+
+    else if (UIGestureRecognizerStateEnded == gesture.state)
+    {
+        if (self.lastYTranslation > 0) // User was panning down so finish closing
+        {
+            self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.blurView removeFromSuperview];
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
+        }
+        else // User was panning up so finish opening
+        {
+            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
+            [UIView animateWithDuration:0.2 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 1.0;
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
+        }
+    }
+
+    else // Gesture was cancelled or failed so animate back to original location
+    {
+        self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view layoutIfNeeded];
+            self.blurView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.blurView removeFromSuperview];
+        }];
+    }
+}
+
+- (void)tapGestureDetected:(UITapGestureRecognizer *)gesture
+{
+    if (self.containerViewHeightConstraint.constant == INITIAL_CONTAINER_LOC) // Container is being moved up
+    {
+        isOpeningEventTable = YES;
+
+        // Create blur view to animate
+        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
+        self.blurView.alpha = 0.0;
+        [self.view insertSubview:self.blurView belowSubview:self.containerView];
+    }
+    else
+    {
+        isOpeningEventTable = NO;
+    }
+
+    if (UIGestureRecognizerStateEnded == gesture.state)
+    {
+        if (!isOpeningEventTable)
+        {
+            self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [self.blurView removeFromSuperview];
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:0.0];
+        }
+        else
+        {
+            self.containerViewHeightConstraint.constant = SCREEN_HEIGHT;
+            [UIView animateWithDuration:0.3 animations:^{
+                [self.view layoutIfNeeded];
+                self.blurView.alpha = 1.0;
+            }];
+
+            [self.eventTableViewVC rotateArrowImageToDegrees:180.0];
+        }
+    }
+
+    else // Gesture was cancelled or failed so animate back to original location
+    {
+        self.containerViewHeightConstraint.constant = INITIAL_CONTAINER_LOC;
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.view layoutIfNeeded];
+            self.blurView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.blurView removeFromSuperview];
+        }];
+    }
+
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"EventTableVC"])
+    {
+        self.eventTableViewVC = segue.destinationViewController;
+        self.eventTableViewVC.delegate = self;
+    }
+    if ([segue.identifier isEqualToString:@"CreateEventVC"])
+    {
+        self.navigationController.navigationBar.hidden = NO;
+    }
 }
 
 @end
