@@ -126,10 +126,10 @@
 {
     if (self.isDatePickerExpanded == YES) {
         self.datePickerHeightConstraint.constant = 162;
-//        self.datePicker.alpha = 1.0;
+        self.datePicker.alpha = 1.0;
     } else {
         self.datePickerHeightConstraint.constant = 0;
-//        self.datePicker.alpha = 0.0;
+        self.datePicker.alpha = 0.0;
     }
     [UIView animateWithDuration:0.3
                           delay:0.0

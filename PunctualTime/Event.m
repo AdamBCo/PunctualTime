@@ -189,12 +189,15 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
     {
         case PTEventRecurrenceOptionDaily:
             self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + daysSinceEvent + dayInterval)];
+            NSLog(@"Daily %@",self.desiredArrivalTime);
             break;
         case PTEventRecurrenceOptionWeekdays:
             self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + weekdayInterval)];
+                NSLog(@"Weekday %@",self.desiredArrivalTime);
             break;
         case PTEventRecurrenceOptionWeekly:
             self.desiredArrivalTime = [NSDate dateWithTimeIntervalSince1970:(self.desiredArrivalTime.timeIntervalSince1970 + daysSinceEvent + (dayInterval*7))];
+                NSLog(@"Weekly %@",self.desiredArrivalTime);
             break;
 
         default:
