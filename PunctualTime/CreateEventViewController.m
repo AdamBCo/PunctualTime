@@ -10,6 +10,7 @@
 #import "EventManager.h"
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "MaxDatePickerViewController.h"
 #import "LocationSearchController.h"
 #import "SearchViewController.h"
 #import "RemindersViewController.h"
@@ -18,6 +19,7 @@
 #import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
+#import "LiveFrost.h"
 
 @interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
@@ -52,6 +54,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *destinationButton;
+
+@property LFGlassView* blurView;
 
 @end
 
@@ -359,13 +363,35 @@
         RecurrenceViewController* recurrenceVC = segue.destinationViewController;
         recurrenceVC.delegate = self;
     }
+    else if ([segue.identifier isEqualToString:@"DatePickerVC"])
+    {
+        MaxDatePickerViewController* datePickerVC = segue.destinationViewController;
+        [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
+
+        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
+        self.blurView.alpha = 0.0;
+        [self.view addSubview:self.blurView];
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.blurView.alpha = 0.75;
+        }];
+    }
 }
 
--(IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
+- (IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
 {
     SearchViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self enableSaveButtonIfReady];
+}
+
+- (IBAction)unwindeFromDatePickerViewController:(UIStoryboardSegue *)segue
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.blurView.alpha = 0.0;
+    }completion:^(BOOL finished) {
+        [self.blurView removeFromSuperview];
+    }];
 }
 
 @end

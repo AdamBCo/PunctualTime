@@ -8,8 +8,10 @@
 
 #import "MaxDatePickerViewController.h"
 #import "UIButton+UIButton_Position.h"
+#import "LiveFrost.h"
 
 @interface MaxDatePickerViewController ()
+
 @property UIView *datePickerView;
 @property UIDatePicker *datePicker;
 @property UILabel *monthLabel;
@@ -19,23 +21,19 @@
 @property UIButton *closeViewButton;
 @property NSArray *months;
 
-
 @end
 
 @implementation MaxDatePickerViewController
 
-
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-    [blurEffectView setFrame:self.view.frame];
-    [self.view addSubview:blurEffectView];
+
+    // Create blur view
+
     [self createDatePickerView];
 
     [self datePickerValueChanged:self];
-
-
 }
 
 - (void)datePickerValueChanged:(id)sender
@@ -44,10 +42,10 @@
     [dateFormatter setDateFormat:@"MMMM YYYY"];
     dateFormatter.timeZone = [NSTimeZone localTimeZone];
     self.monthLabel.text =[dateFormatter stringFromDate:self.datePicker.date];
-
 }
 
--(void)createDatePickerView{
+-(void)createDatePickerView
+{
     self.datePickerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height*.2, self.view.frame.size.width, self.view.frame.size.height*.6)];
     self.datePickerView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.datePickerView];
@@ -117,11 +115,14 @@
 }
 
 
--(void)closeView{
+-(void)closeView
+{
     [self dismissViewControllerAnimated:YES completion:nil];
+    [self performSegueWithIdentifier:@"UnwindToCreateVC" sender:self];
 }
 
--(void)onRightArrowButtonPressed{
+-(void)onRightArrowButtonPressed
+{
 
     NSCalendar *calendar = [NSCalendar currentCalendar];
 
@@ -137,8 +138,8 @@
 }
 
 
--(void)onLeftArrowButtonPressed{
-
+-(void)onLeftArrowButtonPressed
+{
     NSCalendar *calendar = [NSCalendar currentCalendar];
 
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -146,21 +147,22 @@
 
     NSDate *newDate = [calendar dateByAddingComponents:components toDate:self.datePicker.date options:0];
 
-    if (newDate < [NSDate date]) {
+    if (newDate < [NSDate date])
+    {
         self.datePicker.date = [NSDate date];
         [self datePickerValueChanged:self];
-
-    } else {
+    }
+    else
+    {
         self.datePicker.date = newDate;
         [self datePickerValueChanged:self];
     }
-    
 }
 
 
 
--(void)drawOutlineOfDatePicker{
-
+-(void)drawOutlineOfDatePicker
+{
     CAShapeLayer *outlineRectOval = [CAShapeLayer new];
     outlineRectOval.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.datePickerView.frame.size.width, self.datePickerView.frame.size.height)
                                                  byRoundingCorners:UIRectCornerAllCorners
@@ -180,10 +182,18 @@
     lineSeperator.strokeColor = [UIColor whiteColor].CGColor;
     lineSeperator.fillColor = [UIColor clearColor].CGColor;
     [self.datePickerView.layer addSublayer:lineSeperator];
-
 }
 
 
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"UnwindToCreateVC"])
+    {
+        //
+    }
+}
 
 @end
 
