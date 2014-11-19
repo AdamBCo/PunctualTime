@@ -29,8 +29,9 @@
 		6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED411A1070BC007C5D90 /* CircularTimer.m */; };
 		6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED4D1A11B553007C5D90 /* HourViewController.m */; };
 		6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6660ED501A11B7DD007C5D90 /* MinutesViewController.m */; };
-		667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799031A1A8803000FD20D /* FBShimmeringLayer.m */; };
-		667799071A1A8803000FD20D /* FBShimmeringView.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799051A1A8803000FD20D /* FBShimmeringView.m */; };
+		6666E28F1A1C93F800B99BA2 /* MaxDatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6666E28E1A1C93F800B99BA2 /* MaxDatePickerViewController.m */; };
+		6666E2951A1CD9D600B99BA2 /* UIButton+UIButton_Position.m in Sources */ = {isa = PBXBuildFile; fileRef = 6666E2941A1CD9D600B99BA2 /* UIButton+UIButton_Position.m */; };
+		6666E2991A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 6666E2981A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m */; };
 		6677990D1A1ADDDB000FD20D /* PlaneView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6677990C1A1ADDDB000FD20D /* PlaneView.m */; };
 		667799131A1BCB3C000FD20D /* IntroViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 667799121A1BCB3C000FD20D /* IntroViewController.m */; };
 		66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66AEFC391A0EF91900DE871B /* DatePickerViewController.m */; };
@@ -97,12 +98,12 @@
 		6660ED4D1A11B553007C5D90 /* HourViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HourViewController.m; sourceTree = "<group>"; };
 		6660ED4F1A11B7DD007C5D90 /* MinutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinutesViewController.h; sourceTree = "<group>"; };
 		6660ED501A11B7DD007C5D90 /* MinutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MinutesViewController.m; sourceTree = "<group>"; };
-		667799001A1A8803000FD20D /* FBShimmering-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FBShimmering-Prefix.pch"; sourceTree = "<group>"; };
-		667799011A1A8803000FD20D /* FBShimmering.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmering.h; sourceTree = "<group>"; };
-		667799021A1A8803000FD20D /* FBShimmeringLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmeringLayer.h; sourceTree = "<group>"; };
-		667799031A1A8803000FD20D /* FBShimmeringLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringLayer.m; sourceTree = "<group>"; };
-		667799041A1A8803000FD20D /* FBShimmeringView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBShimmeringView.h; sourceTree = "<group>"; };
-		667799051A1A8803000FD20D /* FBShimmeringView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBShimmeringView.m; sourceTree = "<group>"; };
+		6666E28D1A1C93F800B99BA2 /* MaxDatePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaxDatePickerViewController.h; sourceTree = "<group>"; };
+		6666E28E1A1C93F800B99BA2 /* MaxDatePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaxDatePickerViewController.m; sourceTree = "<group>"; };
+		6666E2931A1CD9D600B99BA2 /* UIButton+UIButton_Position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+UIButton_Position.h"; sourceTree = "<group>"; };
+		6666E2941A1CD9D600B99BA2 /* UIButton+UIButton_Position.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+UIButton_Position.m"; sourceTree = "<group>"; };
+		6666E2971A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+UIDatePickerTextColor.h"; sourceTree = "<group>"; };
+		6666E2981A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+UIDatePickerTextColor.m"; sourceTree = "<group>"; };
 		6677990B1A1ADDDB000FD20D /* PlaneView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaneView.h; sourceTree = "<group>"; };
 		6677990C1A1ADDDB000FD20D /* PlaneView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaneView.m; sourceTree = "<group>"; };
 		667799111A1BCB3C000FD20D /* IntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntroViewController.h; sourceTree = "<group>"; };
@@ -153,7 +154,6 @@
 		661078D41A044D830096479F = {
 			isa = PBXGroup;
 			children = (
-				667798FF1A1A8803000FD20D /* FBShimmering */,
 				661078DF1A044D830096479F /* PunctualTime */,
 				661078F91A044D830096479F /* PunctualTimeTests */,
 				661078DE1A044D830096479F /* Products */,
@@ -179,6 +179,7 @@
 				6660ED401A1070BC007C5D90 /* CircularTimer.h */,
 				6660ED411A1070BC007C5D90 /* CircularTimer.m */,
 				E9ACBB7C1A054E7400F56EBA /* View Controllers */,
+				6666E2961A1CF16600B99BA2 /* Views */,
 				E9ACBB7B1A054E6000F56EBA /* Data Controllers */,
 				E9D79C371A046E1D00C9D65F /* Model */,
 				E948211C1A13E1EC00DAAC63 /* LiveFrost */,
@@ -230,17 +231,13 @@
 			name = "Custom Date Picker";
 			sourceTree = "<group>";
 		};
-		667798FF1A1A8803000FD20D /* FBShimmering */ = {
+		6666E2961A1CF16600B99BA2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				667799001A1A8803000FD20D /* FBShimmering-Prefix.pch */,
-				667799011A1A8803000FD20D /* FBShimmering.h */,
-				667799021A1A8803000FD20D /* FBShimmeringLayer.h */,
-				667799031A1A8803000FD20D /* FBShimmeringLayer.m */,
-				667799041A1A8803000FD20D /* FBShimmeringView.h */,
-				667799051A1A8803000FD20D /* FBShimmeringView.m */,
+				6666E2971A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.h */,
+				6666E2981A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m */,
 			);
-			path = FBShimmering;
+			name = Views;
 			sourceTree = "<group>";
 		};
 		E90100DD1A046D2E00D44789 /* Frameworks */ = {
@@ -333,8 +330,12 @@
 				664978541A0ACCF90081EA43 /* FirstViewController.m */,
 				667799111A1BCB3C000FD20D /* IntroViewController.h */,
 				667799121A1BCB3C000FD20D /* IntroViewController.m */,
+				6666E28D1A1C93F800B99BA2 /* MaxDatePickerViewController.h */,
+				6666E28E1A1C93F800B99BA2 /* MaxDatePickerViewController.m */,
 				6649BF3D1A0966EF007B447B /* CreateEventViewController.h */,
 				6649BF3E1A0966EF007B447B /* CreateEventViewController.m */,
+				6666E2931A1CD9D600B99BA2 /* UIButton+UIButton_Position.h */,
+				6666E2941A1CD9D600B99BA2 /* UIButton+UIButton_Position.m */,
 				6649BF021A080367007B447B /* SearchViewController.h */,
 				6649BF031A080367007B447B /* SearchViewController.m */,
 				E98ED0D31A14638400F0078C /* Container View Controllers */,
@@ -467,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6616C6791A12FE3200D8C872 /* ModesOfTransportationViewController.m in Sources */,
+				6666E2991A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m in Sources */,
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				E9A624721A150AFA009C57B2 /* RecurrenceViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
@@ -477,17 +479,17 @@
 				66AEFC3A1A0EF91900DE871B /* DatePickerViewController.m in Sources */,
 				667799131A1BCB3C000FD20D /* IntroViewController.m in Sources */,
 				E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */,
+				6666E28F1A1C93F800B99BA2 /* MaxDatePickerViewController.m in Sources */,
 				E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */,
 				6649BF041A080367007B447B /* SearchViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
 				6677990D1A1ADDDB000FD20D /* PlaneView.m in Sources */,
-				667799061A1A8803000FD20D /* FBShimmeringLayer.m in Sources */,
 				6616C67E1A13232A00D8C872 /* SIAlertView.m in Sources */,
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				6660ED421A1070BC007C5D90 /* CircularTimer.m in Sources */,
-				667799071A1A8803000FD20D /* FBShimmeringView.m in Sources */,
+				6666E2951A1CD9D600B99BA2 /* UIButton+UIButton_Position.m in Sources */,
 				6660ED4E1A11B553007C5D90 /* HourViewController.m in Sources */,
 				E9ACBB7F1A05753000F56EBA /* UserLocationManager.m in Sources */,
 				6660ED511A11B7DD007C5D90 /* MinutesViewController.m in Sources */,

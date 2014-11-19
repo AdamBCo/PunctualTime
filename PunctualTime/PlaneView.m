@@ -10,47 +10,29 @@
 
 @implementation PlaneView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-
 -(void)drawPlane{
 
-//CAShapeLayer *plane = [CAShapeLayer new];
-//CGMutablePathRef planePath = CGPathCreateMutable();
-//CGPathMoveToPoint(planePath, nil, self.bounds.size.width*.44, self.bounds.size.height*.24);
-//CGPathAddQuadCurveToPoint(planePath, nil, self.bounds.size.width*.47, self.bounds.size.height*.22, self.bounds.size.width*.49, self.bounds.size.height*.24);
-//CGPathAddQuadCurveToPoint(planePath, nil, self.bounds.size.width*.50, self.bounds.size.height*.22, self.bounds.size.width*.54, self.bounds.size.height*.24);
-//plane.path = [UIBezierPath bezierPathWithCGPath:planePath].CGPath;
-//plane.strokeColor = [UIColor whiteColor].CGColor;
-//plane.fillColor = [UIColor clearColor].CGColor;
-//plane.lineWidth = 2;
 
     [self drawBody];
     [self drawProp];
     [self drawWheel];
     [self drawTail];
     [self drawWings];
-//    [self.layer addSublayer:plane];
-
 
 }
 
 -(void)drawBody{
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
     CAShapeLayer *body = [CAShapeLayer new];
     CGMutablePathRef bodyPath = CGPathCreateMutable();
-
-    CGPathMoveToPoint(bodyPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bodyPath, nil, self.bounds.size.width*.35, self.bounds.size.height*.20);
-    CGPathAddQuadCurveToPoint(bodyPath, nil, self.bounds.size.width*.40, self.bounds.size.height*.22, self.bounds.size.width*.45, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bodyPath, nil, self.bounds.size.width*.45, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bodyPath, nil, self.bounds.size.width*.75, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bodyPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.30);
-    CGPathAddLineToPoint(bodyPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
+    CGPathMoveToPoint(bodyPath, nil, width*.25, height*.20);
+    CGPathAddLineToPoint(bodyPath, nil, width*.35, height*.20);
+    CGPathAddQuadCurveToPoint(bodyPath, nil, width*.40, height*.22, width*.45, height*.20);
+    CGPathAddLineToPoint(bodyPath, nil, width*.45, height*.20);
+    CGPathAddLineToPoint(bodyPath, nil, width*.75, height*.20);
+    CGPathAddLineToPoint(bodyPath, nil, width*.25, height*.30);
+    CGPathAddLineToPoint(bodyPath, nil, width*.25, height*.20);
     body.path = [UIBezierPath bezierPathWithCGPath:bodyPath].CGPath;
     body.strokeColor = [UIColor whiteColor].CGColor;
     body.fillColor = [UIColor clearColor].CGColor;
@@ -61,13 +43,15 @@
 
 -(void)drawProp{
 
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
     CAShapeLayer *prop = [CAShapeLayer new];
     CGMutablePathRef propPath = CGPathCreateMutable();
 
-    CGPathMoveToPoint(propPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.25);
-    CGPathAddLineToPoint(propPath, nil, self.bounds.size.width*.23, self.bounds.size.height*.25);
-    CGPathAddLineToPoint(propPath, nil, self.bounds.size.width*.23, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(propPath, nil, self.bounds.size.width*.23, self.bounds.size.height*.30);
+    CGPathMoveToPoint(propPath, nil, width*.25, height*.25);
+    CGPathAddLineToPoint(propPath, nil, width*.23, height*.25);
+    CGPathAddLineToPoint(propPath, nil, width*.23, height*.20);
+    CGPathAddLineToPoint(propPath, nil, width*.23, height*.30);
     prop.path = [UIBezierPath bezierPathWithCGPath:propPath].CGPath;
     prop.strokeColor = [UIColor whiteColor].CGColor;
     prop.fillColor = [UIColor clearColor].CGColor;
@@ -78,10 +62,12 @@
 
 
 -(void)drawWheel{
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
 
     int radius = self.frame.size.width*.05;
     CAShapeLayer *wheel = [CAShapeLayer new];
-    wheel.position = CGPointMake(self.frame.size.width/3-radius, self.frame.size.height/3.5);
+    wheel.position = CGPointMake(width/3-radius, height/3.5);
     wheel.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
                                           cornerRadius:radius].CGPath;
     wheel.strokeColor = [UIColor whiteColor].CGColor;
@@ -92,10 +78,13 @@
 }
 
 -(void)drawTail{
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
+
     CAShapeLayer *tail = [CAShapeLayer new];
     CGMutablePathRef tailPath = CGPathCreateMutable();
-    CGPathMoveToPoint(tailPath, nil, self.bounds.size.width*.65, self.bounds.size.height*.20);
-    CGPathAddQuadCurveToPoint(tailPath, nil, self.bounds.size.width*.70, self.bounds.size.height*.135, self.bounds.size.width*.75, self.bounds.size.height*.20);
+    CGPathMoveToPoint(tailPath, nil, width*.65, height*.20);
+    CGPathAddQuadCurveToPoint(tailPath, nil, width*.70, height*.135, width*.75, height*.20);
     tail.path = [UIBezierPath bezierPathWithCGPath:tailPath].CGPath;
     tail.strokeColor = [UIColor whiteColor].CGColor;
     tail.fillColor = [UIColor clearColor].CGColor;
@@ -104,9 +93,12 @@
 }
 
 -(void)drawWings{
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
+
     CAShapeLayer *wingOne = [CAShapeLayer new];
     wingOne.position = CGPointMake(self.frame.size.width*.25, self.frame.size.height*.15);
-    wingOne.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, self.bounds.size.width*.18,self.bounds.size.height*.02)].CGPath;
+    wingOne.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, width*.18,height*.02)].CGPath;
     wingOne.strokeColor = [UIColor whiteColor].CGColor;
     wingOne.fillColor = [UIColor clearColor].CGColor;
     wingOne.lineWidth = 2;
@@ -115,8 +107,8 @@
 
     CAShapeLayer *braceOne = [CAShapeLayer new];
     CGMutablePathRef braceOnePath = CGPathCreateMutable();
-    CGPathMoveToPoint(braceOnePath, nil, self.bounds.size.width*.31, self.bounds.size.height*.17);
-    CGPathAddLineToPoint(braceOnePath, nil, self.bounds.size.width*.34, self.bounds.size.height*.23);
+    CGPathMoveToPoint(braceOnePath, nil, width*.31, height*.17);
+    CGPathAddLineToPoint(braceOnePath, nil, width*.34, height*.23);
     braceOne.path = [UIBezierPath bezierPathWithCGPath:braceOnePath].CGPath;
     braceOne.strokeColor = [UIColor whiteColor].CGColor;
     braceOne.fillColor = [UIColor clearColor].CGColor;
@@ -125,8 +117,8 @@
 
     CAShapeLayer *braceTwo = [CAShapeLayer new];
     CGMutablePathRef braceTwoPath = CGPathCreateMutable();
-    CGPathMoveToPoint(braceTwoPath, nil, self.bounds.size.width*.33, self.bounds.size.height*.17);
-    CGPathAddLineToPoint(braceTwoPath, nil, self.bounds.size.width*.36, self.bounds.size.height*.225);
+    CGPathMoveToPoint(braceTwoPath, nil, width*.33, height*.17);
+    CGPathAddLineToPoint(braceTwoPath, nil, width*.36, height*.225);
     braceTwo.path = [UIBezierPath bezierPathWithCGPath:braceTwoPath].CGPath;
     braceTwo.strokeColor = [UIColor whiteColor].CGColor;
     braceTwo.fillColor = [UIColor clearColor].CGColor;
@@ -136,8 +128,8 @@
 
     CAShapeLayer *braceThree = [CAShapeLayer new];
     CGMutablePathRef braceThreePath = CGPathCreateMutable();
-    CGPathMoveToPoint(braceThreePath, nil, self.bounds.size.width*.39, self.bounds.size.height*.17);
-    CGPathAddLineToPoint(braceThreePath, nil, self.bounds.size.width*.42, self.bounds.size.height*.225);
+    CGPathMoveToPoint(braceThreePath, nil, width*.39, height*.17);
+    CGPathAddLineToPoint(braceThreePath, nil, width*.42, height*.225);
     braceThree.path = [UIBezierPath bezierPathWithCGPath:braceThreePath].CGPath;
     braceThree.strokeColor = [UIColor whiteColor].CGColor;
     braceThree.fillColor = [UIColor clearColor].CGColor;
@@ -146,8 +138,8 @@
 
     CAShapeLayer *braceFour = [CAShapeLayer new];
     CGMutablePathRef braceFourPath = CGPathCreateMutable();
-    CGPathMoveToPoint(braceFourPath, nil, self.bounds.size.width*.37, self.bounds.size.height*.17);
-    CGPathAddLineToPoint(braceFourPath, nil, self.bounds.size.width*.40, self.bounds.size.height*.225);
+    CGPathMoveToPoint(braceFourPath, nil, width*.37, height*.17);
+    CGPathAddLineToPoint(braceFourPath, nil, width*.40, height*.225);
     braceFour.path = [UIBezierPath bezierPathWithCGPath:braceFourPath].CGPath;
     braceFour.strokeColor = [UIColor whiteColor].CGColor;
     braceFour.fillColor = [UIColor clearColor].CGColor;
@@ -157,7 +149,7 @@
 
     CAShapeLayer *wingTwo = [CAShapeLayer new];
     wingTwo.position = CGPointMake(self.frame.size.width*.30, self.frame.size.height*.225);
-    wingTwo.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, self.bounds.size.width*.18,self.bounds.size.height*.02)].CGPath;
+    wingTwo.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, width*.18,height*.02)].CGPath;
     wingTwo.strokeColor = [UIColor whiteColor].CGColor;
     wingTwo.fillColor = [UIColor clearColor].CGColor;
     wingTwo.lineWidth = 2;
@@ -167,17 +159,19 @@
 }
 
 -(void)drawBanner{
+    CGFloat const width = self.frame.size.width;
+    CGFloat const height = self.frame.size.height;
 
     CAShapeLayer *banner = [CAShapeLayer new];
     CGMutablePathRef bannerPath = CGPathCreateMutable();
 
-    CGPathMoveToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.35, self.bounds.size.height*.20);
-    CGPathAddQuadCurveToPoint(bannerPath, nil, self.bounds.size.width*.40, self.bounds.size.height*.22, self.bounds.size.width*.45, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.45, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.75, self.bounds.size.height*.20);
-    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.30);
-    CGPathAddLineToPoint(bannerPath, nil, self.bounds.size.width*.25, self.bounds.size.height*.20);
+    CGPathMoveToPoint(bannerPath, nil, width*.25, height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, width*.35, height*.20);
+    CGPathAddQuadCurveToPoint(bannerPath, nil, width*.40, height*.22, width*.45, height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, width*.45, height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, width*.75, height*.20);
+    CGPathAddLineToPoint(bannerPath, nil, width*.25, height*.30);
+    CGPathAddLineToPoint(bannerPath, nil, width*.25, height*.20);
     banner.path = [UIBezierPath bezierPathWithCGPath:bannerPath].CGPath;
     banner.strokeColor = [UIColor whiteColor].CGColor;
     banner.fillColor = [UIColor clearColor].CGColor;

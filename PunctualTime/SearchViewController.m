@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     [self createFooterViewForTable];
 
     self.searchTextField.searchBarStyle = UISearchBarStyleProminent;
+
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -262,6 +263,11 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
+            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0];
+            cell.textLabel.textColor = [UIColor whiteColor];
+            
+            cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0];
+            cell.detailTextLabel.textColor = [UIColor blackColor];
         }break;
 
         default:

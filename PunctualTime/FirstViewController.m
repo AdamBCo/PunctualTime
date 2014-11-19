@@ -97,7 +97,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
 
 
-#warning Ask mask why this doesn't work properly.
+#warning Ask Max why this doesn't work properly.
     //SkyView Animation
     [UIView animateWithDuration:10.0
                           delay: 0

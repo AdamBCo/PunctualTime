@@ -25,6 +25,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 @property EventManager* sharedEventManager;
 @property UIWindow* notificationWindow;
 
+
 @end
 
 @implementation AppDelegate
@@ -33,6 +34,8 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
+
+
 
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
 

@@ -631,7 +631,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Create Event" id="H8Z-UK-dVU"/>
+                    <navigationItem key="navigationItem" title="Create Event" id="H8Z-UK-dVU">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="Tnc-I5-xQl">
+                            <connections>
+                                <segue destination="V8s-Ti-BQ1" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="GV5-Pl-m01"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="400" height="1000"/>
                     <connections>
@@ -1230,6 +1236,23 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OI6-2H-iBL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4923" y="-2296"/>
+        </scene>
+        <!--Max Date Picker View Controller-->
+        <scene sceneID="l8V-zJ-a15">
+            <objects>
+                <viewController id="V8s-Ti-BQ1" customClass="MaxDatePickerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Tuv-py-hPU"/>
+                        <viewControllerLayoutGuide type="bottom" id="1qL-Pz-MVU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="WjP-IC-zfi">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dfp-G3-zSY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5071.5" y="-939"/>
         </scene>
         <!--Reminders-->
         <scene sceneID="zx8-yt-S0l">
