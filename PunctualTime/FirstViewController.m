@@ -128,11 +128,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                     repeats:YES];
 
     // Check if any events have expired
-    for (Event* event in self.sharedEventManager.events)
+    if (self.sharedEventManager.events.count > 0)
     {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        for (Event* event in self.sharedEventManager.events)
         {
-            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+            if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+            {
+                [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+            }
         }
     }
 }
@@ -459,7 +462,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 //                self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
 //    } completion:^(BOOL finished) {
 //    }];
-
 }
 
 #pragma mark - EventTableViewControllerDelegate
