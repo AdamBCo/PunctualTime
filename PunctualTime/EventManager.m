@@ -48,20 +48,20 @@
 
 - (void)removeEvent:(Event *)event
 {
-    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-    UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
-
-    if (notification)
-    {
-        [[UIApplication sharedApplication] cancelLocalNotification:notification];
-    }
-
     [self.events removeObject:event];
     [self saveEvents];
 }
 
 - (void)handleExpiredEvent:(Event *)event completion:(void (^)())completion
 {
+    // Remove any lingering notification
+    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
+    if (notification)
+    {
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    }
+
     if (event.recurrenceInterval == PTEventRecurrenceOptionNone) // Remove the event
     {
         [self removeEvent:event];
@@ -203,20 +203,20 @@
         [self.events addObject:event];
     }
 
-    NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
-
-    for (Event* event in eventsCopy)
-    {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
-        {
-            [self handleExpiredEvent:event completion:^{
-                if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
-                {
-                    [self sortEvents];
-                }
-            }];
-        }
-    }
+//    NSArray* eventsCopy = [NSArray arrayWithArray:self.events];
+//
+//    for (Event* event in eventsCopy)
+//    {
+//        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+//        {
+//            [self handleExpiredEvent:event completion:^{
+//                if ([event isEqual:eventsCopy.lastObject]) // End of array so finish up
+//                {
+//                    [self sortEvents];
+//                }
+//            }];
+//        }
+//    }
 }
 
 
