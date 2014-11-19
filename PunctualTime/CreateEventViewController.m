@@ -63,6 +63,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //The arrow
+    [self.navigationController.navigationBar.subviews.lastObject setTintColor:[UIColor whiteColor]];
+
+    //Cancel
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+
+
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.datePicker.minimumDate = [NSDate date];

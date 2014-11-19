@@ -25,7 +25,6 @@
 NSString *const apiKey = @"AIzaSyBB2Uc2kK0P3zDKwgyYlyC8ivdDCSyy4xg";
 
 typedef NS_ENUM(NSUInteger, TableViewSection){
-    TableViewSectionStatic,
     TableViewSectionMain,
     TableViewSectionCount
 };
@@ -41,6 +40,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.locationInfo = [LocationInfo new];
     [self createFooterViewForTable];
+
+    self.searchTextField.searchBarStyle = UISearchBarStyleProminent;
 
 }
 
@@ -90,6 +91,11 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     return YES;
 }
 
+
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+    [self.searchTextField resignFirstResponder];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)runScript{
 
@@ -212,9 +218,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    return self.pastSearchQueries.count;
     switch (section) {
-        case TableViewSectionStatic:
-            return 1;
-            break;
         case TableViewSectionMain:
             return self.localSearchQueries.count;
             break;
@@ -224,23 +227,12 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    CLLocation *userLocation = self.applicationDelegate.userLocationManager.location;
-    NSString *currentLatitude = [NSString stringWithFormat:@"%f,",userLocation.coordinate.latitude];
-    NSString *currentLongitude = [NSString stringWithFormat:@"%f",userLocation.coordinate.longitude];
-
     switch (indexPath.section) {
-        case TableViewSectionStatic: {
-            self.locationInfo.name = @"Current Name";
-            self.locationInfo.address = @"Current Address";
-            self.locationInfo.locationCoordinates = CLLocationCoordinate2DMake(currentLatitude.doubleValue, currentLongitude.doubleValue);
-            [self performSegueWithIdentifier:@"BackToTheMapSegue" sender:self];
-
-
-        }    break;
         case TableViewSectionMain: {
             //this is where it broke
             NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             NSString *placeID = [searchResult objectForKey:@"place_id"];
+            [self.searchTextField resignFirstResponder];
             [self retrieveJSONDetailsAbout:placeID withCompletion:^(NSArray *place) {
                         //NSLog(@"Place %@", place);
                 self.locationInfo.name = [place valueForKey:@"name"];
@@ -264,15 +256,15 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SearchCell" forIndexPath:indexPath];
     switch (indexPath.section) {
-        case TableViewSectionStatic: {
-            cell.imageView.image = [UIImage imageNamed:@"cursor6"];
-            cell.textLabel.text = @"My Current Location";
-        }    break;
-
         case TableViewSectionMain: {
             NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
+            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0];
+            cell.textLabel.textColor = [UIColor whiteColor];
+            
+            cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0];
+            cell.detailTextLabel.textColor = [UIColor blackColor];
         }break;
 
         default:
@@ -284,7 +276,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)createFooterViewForTable{
     UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-non-white"]];
     imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     imageView.frame = CGRectMake(110,10,85,12);
     [footerView addSubview:imageView];
