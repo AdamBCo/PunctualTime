@@ -19,6 +19,7 @@
 #define TEN_MINUTE_ACTION (@"TenMinuteAction")
 #define FIVE_MINUTE_ACTION (@"FiveMinuteAction")
 #define ZERO_MINUTE_ACTION (@"ZeroMinuteAction")
+#define STOP_ACTION (@"StopAction")
 
 // Notification body trailing string
 #define NOTIFICATION_TRAILING_TEXT (@" Slide to snooze")

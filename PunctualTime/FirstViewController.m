@@ -444,11 +444,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                     repeats:YES];
 
     // Check if any events have expired
-    for (Event* event in self.sharedEventManager.events)
+    if (self.sharedEventManager.events.count > 0)
     {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        for (Event* event in self.sharedEventManager.events)
         {
-            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+            if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+            {
+                [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+            }
         }
     }
 }
