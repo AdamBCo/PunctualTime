@@ -54,6 +54,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
+    self.addButtonToolbar.alpha = 0;
+    self.containerView.alpha = 0;
+
     [self.view updateConstraints];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
@@ -240,7 +243,9 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.eventName.alpha = 1;
         self.eventTime.alpha = 1;
-    } completion:^(BOOL finished) {
+        self.addButtonToolbar.alpha = 1;
+        self.containerView.alpha = 1;
+    } completion:^(BOOL finished){
 
     }];
 
