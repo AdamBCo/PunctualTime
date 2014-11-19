@@ -94,13 +94,6 @@
                                                                     timeStyle:NSDateFormatterShortStyle];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"Leave: %@", formattedLeaveDate];
 
-#warning Font Updates: Size changes 
-//    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:28.0];
-//    cell.textLabel.textColor = [UIColor whiteColor];
-//
-//    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:14.0];
-//    cell.detailTextLabel.textColor = [UIColor blackColor];
-
     return cell;
 }
 
