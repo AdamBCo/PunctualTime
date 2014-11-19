@@ -54,6 +54,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
+    [self.view updateConstraints];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:nil
                                                        queue:nil
@@ -94,11 +96,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
 
 
-#warning Ask Max why this doesn't work properly.
     //SkyView Animation
     [UIView animateWithDuration:10.0
                           delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
                      animations:^{
                          self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.skyView.center.y);
                      }
@@ -115,7 +116,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
                      completion:nil];
 
 
-#warning if line is deleted, animations act weird. Why?
     self.navigationController.navigationBar.hidden = YES;
     INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
 
@@ -215,7 +215,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.textLabelView addSubview:self.eventName];
 
 
-    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.38, self.textLabelView.frame.size.width, 30)];
+    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33+25, self.textLabelView.frame.size.width, 30)];
     [self.eventTime setTextColor:[UIColor whiteColor]];
     [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventTime.textAlignment = NSTextAlignmentCenter;
@@ -223,6 +223,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
     self.eventTime.adjustsFontSizeToFitWidth = YES;
     self.eventTime.alpha = 0.0;
     [self.textLabelView addSubview:self.eventTime];
+
+
 
     //Animate Sun Moving from Bottom View
     [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -596,6 +598,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
         self.navigationController.navigationBar.hidden = NO;
     }
 }
+
 
 @end
 
