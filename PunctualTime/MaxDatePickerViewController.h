@@ -10,4 +10,6 @@
 
 @interface MaxDatePickerViewController : UIViewController
 
+@property NSDate* selectedDate;
+
 @end
