@@ -46,7 +46,7 @@
 -(void)createDatePickerView
 {
     // Date picker view
-    self.datePickerView = [[UIView alloc] initWithFrame:CGRectMake(5, self.view.frame.size.height*.2, self.view.frame.size.width-10, self.view.frame.size.height*.6)];
+    self.datePickerView = [[UIView alloc] initWithFrame:CGRectMake(5, self.view.frame.size.height*.2, self.view.frame.size.width-10, self.view.frame.size.height*.525)];
     self.datePickerView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.datePickerView];
 
@@ -84,7 +84,7 @@
     [self.datePickerView addSubview:self.rightArrowButton];
 
     // Confirm button
-    self.confirmDateButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
+    self.confirmDateButton = [[UIButton alloc] initWithFrame:CGRectMake(self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
     [self.confirmDateButton setTitle:@"Confirm" forState:UIControlStateNormal];
     [self.confirmDateButton addTarget:self action:@selector(confirmDate) forControlEvents:UIControlEventTouchUpInside];
     self.confirmDateButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0];
@@ -92,7 +92,7 @@
     [self.datePickerView addSubview:self.confirmDateButton];
 
     // Close button
-    self.closeViewButton = [[UIButton alloc] initWithFrame:CGRectMake(self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
+    self.closeViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
     [self.closeViewButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.closeViewButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.closeViewButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
@@ -103,7 +103,7 @@
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, self.datePickerView.frame.size.height*.20, self.datePickerView.frame.size.width, 0)];
 
     self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-    self.datePicker.date = [NSDate date];
+    self.datePicker.date = self.selectedDate;
     self.datePicker.minimumDate = [NSDate date];
     [self.datePicker addTarget:self
                         action:@selector(datePickerValueChanged:)
