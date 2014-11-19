@@ -179,9 +179,9 @@
 				6660ED401A1070BC007C5D90 /* CircularTimer.h */,
 				6660ED411A1070BC007C5D90 /* CircularTimer.m */,
 				E9ACBB7C1A054E7400F56EBA /* View Controllers */,
-				6666E2961A1CF16600B99BA2 /* Views */,
 				E9ACBB7B1A054E6000F56EBA /* Data Controllers */,
 				E9D79C371A046E1D00C9D65F /* Model */,
+				6666E2961A1CF16600B99BA2 /* Views */,
 				E948211C1A13E1EC00DAAC63 /* LiveFrost */,
 				E910C8201A0D4E7700CDD64D /* SIAlertView */,
 				E9558B2E1A04636200A45E87 /* Storyboard */,
@@ -234,6 +234,8 @@
 		6666E2961A1CF16600B99BA2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6666E2931A1CD9D600B99BA2 /* UIButton+UIButton_Position.h */,
+				6666E2941A1CD9D600B99BA2 /* UIButton+UIButton_Position.m */,
 				6666E2971A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.h */,
 				6666E2981A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m */,
 			);
@@ -334,8 +336,6 @@
 				6666E28E1A1C93F800B99BA2 /* MaxDatePickerViewController.m */,
 				6649BF3D1A0966EF007B447B /* CreateEventViewController.h */,
 				6649BF3E1A0966EF007B447B /* CreateEventViewController.m */,
-				6666E2931A1CD9D600B99BA2 /* UIButton+UIButton_Position.h */,
-				6666E2941A1CD9D600B99BA2 /* UIButton+UIButton_Position.m */,
 				6649BF021A080367007B447B /* SearchViewController.h */,
 				6649BF031A080367007B447B /* SearchViewController.m */,
 				E98ED0D31A14638400F0078C /* Container View Controllers */,
