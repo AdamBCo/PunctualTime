@@ -14,4 +14,6 @@
 
 @property CLLocation *location;
 
++ (UserLocationManager *)sharedLocationManager;
+
 @end

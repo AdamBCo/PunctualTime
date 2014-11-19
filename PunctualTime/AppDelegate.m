@@ -29,10 +29,9 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.userLocationManager = [UserLocationManager new];
     self.sharedEventManager = [EventManager sharedEventManager];
+    self.userLocationManager = [UserLocationManager sharedLocationManager];
 
     //Ask the user permission to send them Local Push LocalNotifications
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
@@ -64,15 +63,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-
-    // Check if any events have expired
-    for (Event* event in self.sharedEventManager.events)
-    {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
-        {
-            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
-        }
-    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -179,7 +169,6 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
             [alertView addButtonWithTitle:inertButtonText
                                      type:SIAlertViewButtonTypeCancel
                                   handler:^(SIAlertView *alert) {
-                                      [[UIApplication sharedApplication] cancelLocalNotification:notification]; // dismiss from notification center
                                   }];
         }
         

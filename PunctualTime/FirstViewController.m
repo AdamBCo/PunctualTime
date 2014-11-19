@@ -430,7 +430,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 -(void)viewWillAppear:(BOOL)animated
 {
-
     [super viewWillAppear:animated];
 
     self.navigationController.navigationBar.hidden = YES;
@@ -443,6 +442,15 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                    selector:@selector(updateCounter)
                                    userInfo:nil
                                     repeats:YES];
+
+    // Check if any events have expired
+    for (Event* event in self.sharedEventManager.events)
+    {
+        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+        {
+            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+        }
+    }
 }
 
 - (void)updateCounter

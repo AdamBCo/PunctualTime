@@ -20,6 +20,19 @@
 
 @implementation UserLocationManager
 
++ (UserLocationManager *)sharedLocationManager // Returns persistent instance
+{
+    static UserLocationManager* _default = nil;
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^(void)
+                  {
+                      _default = [[UserLocationManager alloc] init];
+                  });
+
+    return _default;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -59,7 +72,7 @@
 {
     self.location = [locations lastObject]; // Grab the most recent location update
 
-    // Only ping Google if it has been more than 5 minutes since the last update
+    // Only ping Google if it has been more than 5 minutes since the last update or this is a cold launch
     if ([NSDate date].timeIntervalSince1970 - self.lastLocationUpdateTime.timeIntervalSince1970 > (5*60))
     {
         [self.sharedEventManager refreshEventsWithCompletion:^(UIBackgroundFetchResult fetchResult){
