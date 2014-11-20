@@ -55,7 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		661078DD1A044D830096479F /* PunctualTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PunctualTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		661078DD1A044D830096479F /* Punctual.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Punctual.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		661078E11A044D830096479F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		661078E21A044D830096479F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		661078E41A044D830096479F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		661078DE1A044D830096479F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				661078DD1A044D830096479F /* PunctualTime.app */,
+				661078DD1A044D830096479F /* Punctual.app */,
 				661078F61A044D830096479F /* PunctualTimeTests.xctest */,
 			);
 			name = Products;
@@ -362,7 +362,7 @@
 			);
 			name = Punctual;
 			productName = PunctualTime;
-			productReference = 661078DD1A044D830096479F /* PunctualTime.app */;
+			productReference = 661078DD1A044D830096479F /* Punctual.app */;
 			productType = "com.apple.product-type.application";
 		};
 		661078F51A044D830096479F /* PunctualTimeTests */ = {
