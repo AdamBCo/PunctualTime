@@ -19,6 +19,7 @@
 #define TEN_MINUTE_ACTION (@"TenMinuteAction")
 #define FIVE_MINUTE_ACTION (@"FiveMinuteAction")
 #define ZERO_MINUTE_ACTION (@"ZeroMinuteAction")
+#define STOP_ACTION (@"StopAction")
 
 // Notification body trailing string
 #define NOTIFICATION_TRAILING_TEXT (@" Slide to snooze")
@@ -35,3 +36,5 @@
 // Screen size
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+/// The height (in points) of an iPhone 4
+#define kiPhone4Height 480

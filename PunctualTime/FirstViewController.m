@@ -14,7 +14,7 @@
 #import "EventManager.h"
 #import "Event.h"
 #import "CircularTimer.h"
-#import "FBShimmeringView.h"
+#import "PlaneView.h"
 
 BOOL isOpeningEventTable;
 static CGFloat INITIAL_CONTAINER_LOC;
@@ -35,10 +35,13 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property UIView *chicagoAnimationView;
 @property UIView *sunView;
 @property UIView *skyView;
+@property UIView *birds;
 @property UIView *bottomView;
 @property UIView *textLabelView;
 @property UILabel *eventName;
 @property UILabel *eventTime;
+
+@property PlaneView *planeView;
 
 @end
 
@@ -50,6 +53,8 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
     self.sharedEventManager = [EventManager sharedEventManager];
     self.selectedEvent = self.sharedEventManager.events.firstObject;
+
+    [self.view updateConstraints];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:nil
@@ -63,7 +68,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                                       }
                                                   }];
 
-    self.animationShapeView = [[UIView alloc]initWithFrame:CGRectMake(0 ,self.view.bounds.size.height/6, self.view.bounds.size.width, self.view.bounds.size.width)];
+    self.animationShapeView = [[UIView alloc]initWithFrame:CGRectMake(0 ,self.view.frame.size.height/6, self.view.frame.size.width, self.view.frame.size.width)];
 
     self.navigationItem.title = @"Cancel"; // For the back button on CreateEventVC
 
@@ -72,365 +77,44 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.addButtonToolbar setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [self.addButtonToolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
 
+    [self startAnimations];
 
-    //    //Star Drawing
-    //
-    //    CAShapeLayer *star = [CAShapeLayer layer];
-    //    CGPoint offset = CGPointMake(self.animationShapeView.frame.size.width/2, self.animationShapeView.frame.size.height/2);
-    //    int r1 = self.animationShapeView.frame.size.width/2;
-    //    int r2 = r1 - 20;
-    //    int numberOfPoints =    60;//60
-    //    float TWOPI = 2 * M_PI;
-    //    CGMutablePathRef drawStarPath = CGPathCreateMutable();
-    //    for (float n=0; n < numberOfPoints; n+=3)
-    //    {
-    //        int x1 = offset.x + sin((TWOPI/numberOfPoints) * n) * r2;
-    //        int y1 = offset.y + cos((TWOPI/numberOfPoints) * n) * r2;
-    //        if (n==0){
-    //
-    //            CGPathMoveToPoint(drawStarPath, NULL, x1, y1);
-    //        }else {
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x1, y1);
-    //            int x2 = offset.x + sin((TWOPI/numberOfPoints) * n+1) * r1;
-    //            int y2 = offset.y + cos((TWOPI/numberOfPoints) * n+1) * r1;
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x2, y2);
-    //            int x3 = offset.x + sin((TWOPI/numberOfPoints) * n+2) * r2;
-    //            int y3 = offset.y + cos((TWOPI/numberOfPoints) * n+2) * r2;
-    //            CGPathAddLineToPoint(drawStarPath, NULL, x3, y3);
-    //        }
-    //    }
-    //    CGPathCloseSubpath(drawStarPath);
-    //
-    //    star.path = [UIBezierPath bezierPathWithCGPath:drawStarPath].CGPath;
-    //    star.fillColor = [UIColor clearColor].CGColor;
-    //    star.strokeColor = [UIColor whiteColor].CGColor;
-    //    star.lineWidth = 5;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"introViewed"]) {
+        [self performSegueWithIdentifier:@"IntroSegue" sender:self];
+        [defaults setObject:@YES forKey:@"introViewed"];
+        [defaults synchronize];
+    }
 
-    self.skyView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:self.skyView];
 
-    self.sunView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2,self.view.bounds.size.height/4, self.view.bounds.size.width,self.view.bounds.size.height/2)];
-    [self.view addSubview:self.sunView];
-
-
-    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:self.chicagoAnimationView];
-
-
-
-    self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height*.80, self.view.bounds.size.width, self.view.bounds.size.height *.2)];
-    self.bottomView.backgroundColor = [UIColor orangeColor];
-    [self.view addSubview:self.bottomView];
-
-
-    self.textLabelView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/4, self.view.frame.size.width, self.view.bounds.size.height/2)];
-    [self.view addSubview:self.textLabelView];
-
-
-
-
-
-    //Sun
-    int radius = self.view.frame.size.width*.23;
-    CAShapeLayer *sun = [CAShapeLayer new];
-    sun.position = CGPointMake(self.sunView.frame.size.width/2-radius, self.sunView.frame.size.height/4);
-    sun.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
-                                          cornerRadius:radius].CGPath;
-    sun.fillColor = [UIColor orangeColor].CGColor;
-    sun.strokeColor = [UIColor whiteColor].CGColor;
-    sun.lineWidth = 5;
-    self.sunView.center = CGPointMake(0, self.view.bounds.size.height);
-    [self.sunView.layer addSublayer:sun];
-
-    CABasicAnimation* sunRotationAnimation;
-    sunRotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    sunRotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
-    sunRotationAnimation.duration = 1000;
-    sunRotationAnimation.repeatCount = INFINITY;
-    [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
-
-
-    self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/4-10, self.textLabelView.frame.size.width, 30)];
-    [self.eventName setTextColor:[UIColor whiteColor]];
-    [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
-    self.eventName.textAlignment = NSTextAlignmentCenter;
-    self.eventName.text = @"Just";
-    self.eventName.adjustsFontSizeToFitWidth = YES;
-    self.eventName.alpha = 0.0;
-
-    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.sunView.frame.size.height/2 -50, self.textLabelView.frame.size.width, 30)];
-    [self.eventTime setTextColor:[UIColor whiteColor]];
-    [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
-    self.eventTime.textAlignment = NSTextAlignmentCenter;
-    self.eventTime.text = @"Chillax";
-    self.eventTime.adjustsFontSizeToFitWidth = YES;
-    self.eventTime.alpha = 0.0;
-
-    [self.textLabelView addSubview:self.eventName];
-    [self.textLabelView addSubview:self.eventTime];
-
-
-
-
-
-
-    //Animate Sun Moving from Bottom View
-    [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.sunView.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height*.4);
-    } completion:^(BOOL finished) {
-
-    }];
-
-    //Animate Text Alpha
-    [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.eventName.alpha = 1;
-        self.eventTime.alpha = 1;
-    } completion:^(BOOL finished) {
-
-    }];
-
-    //Ground
-    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:self.chicagoAnimationView];
-
-    CAShapeLayer *ground = [CAShapeLayer new];
-    CGMutablePathRef background = CGPathCreateMutable();
-    CGPathMoveToPoint(background, nil, 0, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(background, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);
-    CGPathRetain(background);
-    ground.path = [UIBezierPath bezierPathWithCGPath:background].CGPath;
-    ground.strokeColor = [UIColor whiteColor].CGColor;
-    ground.lineWidth = 5;
-
-    //Sky
-    CAShapeLayer *sky = [CAShapeLayer new];
-    CGMutablePathRef skyPath = CGPathCreateMutable();
-    CGPathMoveToPoint(skyPath, nil, -self.view.bounds.size.width, self.view.bounds.size.height*.25);
-    CGPathAddCurveToPoint(skyPath, nil, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, 0, self.view.bounds.size.height*.25);
-    CGPathMoveToPoint(skyPath, nil, 0, self.view.bounds.size.height*.25);
-    CGPathAddCurveToPoint(skyPath, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.2, self.view.bounds.size.width*.5, self.view.bounds.size.height*.3, self.view.bounds.size.width, self.view.bounds.size.height*.25);
-    sky.path = [UIBezierPath bezierPathWithCGPath:skyPath].CGPath;
-    sky.strokeColor = [UIColor whiteColor].CGColor;
-    sky.fillColor = [UIColor clearColor].CGColor;
-    sky.lineWidth = 2;
-
-    //SkyTwo
-    CAShapeLayer *skyTwo = [CAShapeLayer new];
-    CGMutablePathRef skyPathTwo = CGPathCreateMutable();
-    CGPathMoveToPoint(skyPathTwo, nil, -self.view.bounds.size.width, self.view.bounds.size.height*.45);
-    CGPathAddCurveToPoint(skyPathTwo, nil, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, -self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, 0, self.view.bounds.size.height*.45);
-    CGPathMoveToPoint(skyPathTwo, nil, 0, self.view.bounds.size.height*.45);
-    CGPathAddCurveToPoint(skyPathTwo, nil, self.view.bounds.size.width*.5, self.view.bounds.size.height*.4, self.view.bounds.size.width*.5, self.view.bounds.size.height*.5, self.view.bounds.size.width, self.view.bounds.size.height*.45);
-    skyTwo.path = [UIBezierPath bezierPathWithCGPath:skyPathTwo].CGPath;
-    skyTwo.strokeColor = [UIColor whiteColor].CGColor;
-    skyTwo.fillColor = [UIColor clearColor].CGColor;
-    skyTwo.lineWidth = 2;
-
-    //Birds
-    CAShapeLayer *birdOne = [CAShapeLayer new];
-    CGMutablePathRef birdPath = CGPathCreateMutable();
-    CGPathMoveToPoint(birdPath, nil, self.view.bounds.size.width*.4, self.view.bounds.size.height*.20);
-    CGPathAddQuadCurveToPoint(birdPath, nil, self.view.bounds.size.width*.43, self.view.bounds.size.height*.18, self.view.bounds.size.width*.45, self.view.bounds.size.height*.20);
-    CGPathAddQuadCurveToPoint(birdPath, nil, self.view.bounds.size.width*.46, self.view.bounds.size.height*.18, self.view.bounds.size.width*.50, self.view.bounds.size.height*.20);
-    birdOne.path = [UIBezierPath bezierPathWithCGPath:birdPath].CGPath;
-    birdOne.strokeColor = [UIColor whiteColor].CGColor;
-    birdOne.fillColor = [UIColor clearColor].CGColor;
-    birdOne.lineWidth = 2;
-
-    CAShapeLayer *birdTwo = [CAShapeLayer new];
-    CGMutablePathRef birdPathTwo = CGPathCreateMutable();
-    CGPathMoveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.44, self.view.bounds.size.height*.24);
-    CGPathAddQuadCurveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.22, self.view.bounds.size.width*.49, self.view.bounds.size.height*.24);
-    CGPathAddQuadCurveToPoint(birdPathTwo, nil, self.view.bounds.size.width*.50, self.view.bounds.size.height*.22, self.view.bounds.size.width*.54, self.view.bounds.size.height*.24);
-    birdTwo.path = [UIBezierPath bezierPathWithCGPath:birdPathTwo].CGPath;
-    birdTwo.strokeColor = [UIColor whiteColor].CGColor;
-    birdTwo.fillColor = [UIColor clearColor].CGColor;
-    birdTwo.lineWidth = 2;
-
-
-
-    //Buildings
-    CAShapeLayer *buildings = [CAShapeLayer new];
-    CGMutablePathRef chicago = CGPathCreateMutable();
-    CGPathMoveToPoint(chicago, nil, 0, self.view.bounds.size.height*.80);//Starting Point
-    CGPathAddLineToPoint(chicago, nil, 0, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.65);//Building One
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.05, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.08, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.51);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.10, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.51);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.14, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.16, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.19, self.view.bounds.size.height*.80);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.19, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.21, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.21, self.view.bounds.size.height*.52);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.22, self.view.bounds.size.height*.52);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.22, self.view.bounds.size.height*.52);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.23, self.view.bounds.size.height*.52);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.23, self.view.bounds.size.height*.50);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.24, self.view.bounds.size.height*.50);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.50);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.46);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.25, self.view.bounds.size.height*.50);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.27, self.view.bounds.size.height*.50);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.27, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.80);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.29, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.80);
-
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.35, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.37, self.view.bounds.size.height*.60);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.80);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.39, self.view.bounds.size.height*.68);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.41, self.view.bounds.size.height*.67);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.46, self.view.bounds.size.height*.67);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.68);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.80);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.47, self.view.bounds.size.height*.74);//Merchant mart
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.485, self.view.bounds.size.height*.735);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.52, self.view.bounds.size.height*.735);//base
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.52, self.view.bounds.size.height*.73);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.53, self.view.bounds.size.height*.725);//Bridge
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.60, self.view.bounds.size.height*.725);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.61, self.view.bounds.size.height*.73);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.61, self.view.bounds.size.height*.735);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.645, self.view.bounds.size.height*.735);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.74);//base
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.80);
-
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.80);//Space
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.67);//Building Four
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.64);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.665);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.64);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.67);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.692);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.65, self.view.bounds.size.height*.67);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.70, self.view.bounds.size.height*.692);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.67);
-
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.80);//Building Five
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.75, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.70);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.80);
-
-    //Sears Tower
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.75);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.75);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.80, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.65);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.81, self.view.bounds.size.height*.55);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.82, self.view.bounds.size.height*.55);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.82, self.view.bounds.size.height*.45);//First Spike
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.45);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.35);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.83, self.view.bounds.size.height*.45);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);//Second Spike
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.35);//Top of Spike
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.85, self.view.bounds.size.height*.45);//Back To Bottom
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.45);//Top right Edge
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.86, self.view.bounds.size.height*.55);//First Down
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.55);//Edge
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.87, self.view.bounds.size.height*.65);//Third Down
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.65);//Third Edge
-
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.88, self.view.bounds.size.height*.75);//Fourth Edge
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.75);//
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.89, self.view.bounds.size.height*.80);//Bottom
-
-    //New Building
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.91, self.view.bounds.size.height*.80);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width*.91, self.view.bounds.size.height*.65);
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.65);
-
-    CGPathAddLineToPoint(chicago, nil, self.view.bounds.size.width, self.view.bounds.size.height*.80);//End of Drawing
-
-    CGPathRetain(chicago);
-    buildings.path = [UIBezierPath bezierPathWithCGPath:chicago].CGPath;
-    buildings.strokeColor = [UIColor whiteColor].CGColor;
-    buildings.fillColor = [UIColor orangeColor].CGColor;
-    buildings.lineWidth = 2;
-
-
-
-    // Configure animation
-    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.duration            = 2.0;
-    drawAnimation.repeatCount         = 1.0;
-    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
-    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
-    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-
-    [ground addAnimation:drawAnimation forKey:@"drawGroundAnimation"];
-    [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
-    [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
-    [skyTwo addAnimation:drawAnimation forKey:@"drawSkyTwoAnimation"];
-    [birdOne addAnimation:drawAnimation forKey:@"drawBirdOneAnimation"];
-    [birdTwo addAnimation:drawAnimation forKey:@"drawBirdTwoAnimation"];
-
-    CABasicAnimation* rotationAnimation;
-    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"Move"];
-    rotationAnimation.toValue = [NSNumber numberWithFloat:1000];
-    rotationAnimation.duration = 10;
-    rotationAnimation.repeatCount = INFINITY;
-
-    //SkyView Animation
-    [UIView animateWithDuration:10.0
-                          delay: 0
-                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
-                     animations:^{
-                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.view.bounds.size.height/2);
-                     }
-                     completion:nil];
-
-
-    [self.chicagoAnimationView.layer addSublayer:ground];
-    [self.skyView.layer addSublayer:sky];
-    [self.skyView.layer addSublayer:skyTwo];
-    //    [self.skyView.layer addSublayer:birdOne];
-    //    [self.skyView.layer addSublayer:birdTwo];
-    [self.chicagoAnimationView.layer addSublayer:buildings];
-    [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
-
-
-    [UIView animateWithDuration:20 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-        //        self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
-    } completion:^(BOOL finished) {
-    }];
 
 }
-
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
+
+
+    //SkyView Animation
+    [UIView animateWithDuration:10.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationCurveLinear
+                     animations:^{
+                         self.skyView.center = CGPointMake(self.view.frame.size.width + self.view.frame.size.width/2, self.skyView.center.y);
+                     }
+                     completion:nil];
+
+    //BIRds Animation
+    [UIView animateWithDuration:20.0
+                          delay: 0
+                        options: UIViewAnimationOptionRepeat | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         self.birds.center = CGPointMake(0 - self.view.frame.size.width*4, self.birds.center.y);
+                         self.planeView.center = CGPointMake(0 - self.view.frame.size.width*4, self.planeView.center.y);
+                     }
+                     completion:nil];
+
 
     self.navigationController.navigationBar.hidden = YES;
     INITIAL_CONTAINER_LOC = self.containerViewHeightConstraint.constant;
@@ -442,15 +126,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                    selector:@selector(updateCounter)
                                    userInfo:nil
                                     repeats:YES];
-
-    // Check if any events have expired
-    for (Event* event in self.sharedEventManager.events)
-    {
-        if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
-        {
-            [self.sharedEventManager handleExpiredEvent:event completion:^{}];
-        }
-    }
 }
 
 - (void)updateCounter
@@ -464,13 +139,328 @@ static CGFloat INITIAL_CONTAINER_LOC;
         int hours = (seconds / 3600);
         int minutes = (seconds % 3600) / 60;
         seconds = (seconds %3600) % 60;
-
-        ///////////
         self.eventName.text = self.selectedEvent.eventName;
         self.eventTime.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours, minutes, seconds];
+        
     }
 }
 
+-(void)startAnimations {
+
+
+    CGFloat const h = self.view.frame.size.height;
+    CGFloat const w = self.view.frame.size.width;
+
+    self.skyView = [[UIView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.skyView];
+
+    self.birds = [[UIView alloc] initWithFrame:CGRectMake(w*1.5, 0, w,h)];
+    [self.view addSubview:self.birds];
+
+    self.sunView = [[UIView alloc] initWithFrame:CGRectMake(w/2,h/4, w,h)];
+    [self.view addSubview:self.sunView];
+
+    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.chicagoAnimationView];
+
+    self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, h*.80, w, h *.2)];
+    self.bottomView.backgroundColor = [UIColor orangeColor];
+    [self.view addSubview:self.bottomView];
+
+    self.textLabelView = [[UIView alloc] initWithFrame:CGRectMake(0,0, w, h)];
+    [self.view addSubview:self.textLabelView];
+
+    self.planeView = [[PlaneView alloc] initWithFrame:CGRectMake(w*3, h/5, w/4, h/4)];
+    [self.planeView drawPlane];
+    self.planeView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.planeView];
+
+    //Sun
+    int radius = w*.23;
+    CAShapeLayer *sun = [CAShapeLayer new];
+    sun.position = CGPointMake(self.sunView.frame.size.width/2-radius, self.sunView.frame.size.height/8 + radius);
+    sun.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 2.0*radius, 2.0*radius)
+                                          cornerRadius:radius].CGPath;
+    sun.fillColor = [UIColor orangeColor].CGColor;
+    sun.strokeColor = [UIColor whiteColor].CGColor;
+    sun.lineWidth = 5;
+    self.sunView.center = CGPointMake(0, h);
+    [self.sunView.layer addSublayer:sun];
+
+//    CABasicAnimation* sunRotationAnimation;
+//    sunRotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+//    sunRotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
+//    sunRotationAnimation.duration = 1000;
+//    sunRotationAnimation.repeatCount = INFINITY;
+//    [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
+
+
+
+    self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33, self.textLabelView.frame.size.width, 30)];
+    if (SCREEN_HEIGHT == kiPhone4Height)// Temporary fix for 3.5" screens
+    {
+        self.eventName.frame = CGRectMake(0, (self.textLabelView.frame.size.height*.33)+25, self.textLabelView.frame.size.width, 30);
+    }
+    [self.eventName setTextColor:[UIColor whiteColor]];
+    [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
+    self.eventName.textAlignment = NSTextAlignmentCenter;
+    self.eventName.text = @"Just";
+    self.eventName.adjustsFontSizeToFitWidth = YES;
+    self.eventName.alpha = 0.0;
+    [self.textLabelView addSubview:self.eventName];
+
+
+    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, (self.textLabelView.frame.size.height*.33)+30+15, self.textLabelView.frame.size.width, 30)];
+    if (SCREEN_HEIGHT == kiPhone4Height) // Temporary fix for 3.5" screens
+    {
+        self.eventTime.frame = CGRectMake(0, (self.textLabelView.frame.size.height*.33)+48, self.textLabelView.frame.size.width, 30);
+    }
+    [self.eventTime setTextColor:[UIColor whiteColor]];
+    [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
+    self.eventTime.textAlignment = NSTextAlignmentCenter;
+    self.eventTime.text = @"Chillax";
+    self.eventTime.adjustsFontSizeToFitWidth = YES;
+    self.eventTime.alpha = 0.0;
+    [self.textLabelView addSubview:self.eventTime];
+
+
+
+    //Animate Sun Moving from Bottom View
+    [UIView animateWithDuration:3.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.sunView.center = CGPointMake(w/2, self.view.center.y);
+    } completion:^(BOOL finished) {
+
+    }];
+
+    //Animate Text Alpha
+    [UIView animateWithDuration:2.0 delay:2.20 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.eventName.alpha = 1;
+        self.eventTime.alpha = 1;
+    } completion:^(BOOL finished) {
+
+    }];
+
+    //Ground
+    self.chicagoAnimationView = [[UIView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.chicagoAnimationView];
+    CAShapeLayer *ground = [CAShapeLayer new];
+    CGMutablePathRef background = CGPathCreateMutable();
+    CGPathMoveToPoint(background, nil, 0, h*.80);
+    CGPathAddLineToPoint(background, nil, w, h*.80);
+    CGPathRetain(background);
+    ground.path = [UIBezierPath bezierPathWithCGPath:background].CGPath;
+    ground.strokeColor = [UIColor whiteColor].CGColor;
+    ground.lineWidth = 5;
+
+    //Sky
+    CAShapeLayer *sky = [CAShapeLayer new];
+    CGMutablePathRef skyPath = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPath, nil, -w, h*.25);
+    CGPathAddCurveToPoint(skyPath, nil, -w*.5, h*.2, -w*.5, h*.3, 0, h*.25);
+    CGPathMoveToPoint(skyPath, nil, 0, h*.25);
+    CGPathAddCurveToPoint(skyPath, nil, w*.5, h*.2, w*.5, h*.3, w, h*.25);
+    sky.path = [UIBezierPath bezierPathWithCGPath:skyPath].CGPath;
+    sky.strokeColor = [UIColor whiteColor].CGColor;
+    sky.fillColor = [UIColor clearColor].CGColor;
+    sky.lineWidth = 2;
+
+    //SkyTwo
+    CAShapeLayer *skyTwo = [CAShapeLayer new];
+    CGMutablePathRef skyPathTwo = CGPathCreateMutable();
+    CGPathMoveToPoint(skyPathTwo, nil, -w, h*.45);
+    CGPathAddCurveToPoint(skyPathTwo, nil, -w*.5, h*.4, -w*.5, h*.5, 0, h*.45);
+    CGPathMoveToPoint(skyPathTwo, nil, 0, h*.45);
+    CGPathAddCurveToPoint(skyPathTwo, nil, w*.5, h*.4, w*.5, h*.5, w, h*.45);
+    skyTwo.path = [UIBezierPath bezierPathWithCGPath:skyPathTwo].CGPath;
+    skyTwo.strokeColor = [UIColor whiteColor].CGColor;
+    skyTwo.fillColor = [UIColor clearColor].CGColor;
+    skyTwo.lineWidth = 2;
+
+    //Birds
+    CAShapeLayer *birdOne = [CAShapeLayer new];
+    CGMutablePathRef birdPath = CGPathCreateMutable();
+    CGPathMoveToPoint(birdPath, nil, w*.4, h*.20);
+    CGPathAddQuadCurveToPoint(birdPath, nil, w*.43, h*.18, w*.45, h*.20);
+    CGPathAddQuadCurveToPoint(birdPath, nil, w*.46, h*.18, w*.50, h*.20);
+    birdOne.path = [UIBezierPath bezierPathWithCGPath:birdPath].CGPath;
+    birdOne.strokeColor = [UIColor whiteColor].CGColor;
+    birdOne.fillColor = [UIColor clearColor].CGColor;
+    birdOne.lineWidth = 2;
+
+    CAShapeLayer *birdTwo = [CAShapeLayer new];
+    CGMutablePathRef birdPathTwo = CGPathCreateMutable();
+    CGPathMoveToPoint(birdPathTwo, nil, w*.44, h*.24);
+    CGPathAddQuadCurveToPoint(birdPathTwo, nil, w*.47, h*.22, w*.49, h*.24);
+    CGPathAddQuadCurveToPoint(birdPathTwo, nil, w*.50, h*.22, w*.54, h*.24);
+    birdTwo.path = [UIBezierPath bezierPathWithCGPath:birdPathTwo].CGPath;
+    birdTwo.strokeColor = [UIColor whiteColor].CGColor;
+    birdTwo.fillColor = [UIColor clearColor].CGColor;
+    birdTwo.lineWidth = 2;
+
+    //Buildings
+    CAShapeLayer *buildings = [CAShapeLayer new];
+    CGMutablePathRef chicago = CGPathCreateMutable();
+    CGPathMoveToPoint(chicago, nil, 0, h*.80);//Starting Point
+    CGPathAddLineToPoint(chicago, nil, 0, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.05, h*.65);//Building One
+
+    CGPathAddLineToPoint(chicago, nil, w*.05, h*.80);
+    CGPathAddLineToPoint(chicago, nil, w*.08, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.10, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.10, h*.51);
+    CGPathAddLineToPoint(chicago, nil, w*.10, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.14, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.14, h*.51);
+    CGPathAddLineToPoint(chicago, nil, w*.14, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.16, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.19, h*.80);
+
+    CGPathAddLineToPoint(chicago, nil, w*.19, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.21, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.21, h*.52);
+    CGPathAddLineToPoint(chicago, nil, w*.22, h*.52);
+    CGPathAddLineToPoint(chicago, nil, w*.22, h*.52);
+    CGPathAddLineToPoint(chicago, nil, w*.23, h*.52);
+    CGPathAddLineToPoint(chicago, nil, w*.23, h*.50);
+    CGPathAddLineToPoint(chicago, nil, w*.24, h*.50);
+    CGPathAddLineToPoint(chicago, nil, w*.25, h*.50);
+    CGPathAddLineToPoint(chicago, nil, w*.25, h*.46);
+    CGPathAddLineToPoint(chicago, nil, w*.25, h*.50);
+    CGPathAddLineToPoint(chicago, nil, w*.27, h*.50);
+    CGPathAddLineToPoint(chicago, nil, w*.27, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.29, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.29, h*.80);
+    CGPathAddLineToPoint(chicago, nil, w*.29, h*.80);
+
+    CGPathAddLineToPoint(chicago, nil, w*.29, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.35, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.35, h*.80);
+
+
+    CGPathAddLineToPoint(chicago, nil, w*.35, h*.80);
+    CGPathAddLineToPoint(chicago, nil, w*.35, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.37, h*.60);
+    CGPathAddLineToPoint(chicago, nil, w*.39, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.39, h*.80);
+
+    CGPathAddLineToPoint(chicago, nil, w*.39, h*.68);
+    CGPathAddLineToPoint(chicago, nil, w*.41, h*.67);
+    CGPathAddLineToPoint(chicago, nil, w*.46, h*.67);
+    CGPathAddLineToPoint(chicago, nil, w*.47, h*.68);
+    CGPathAddLineToPoint(chicago, nil, w*.47, h*.80);
+
+    CGPathAddLineToPoint(chicago, nil, w*.47, h*.74);//Merchant mart
+    CGPathAddLineToPoint(chicago, nil, w*.485, h*.735);
+
+    CGPathAddLineToPoint(chicago, nil, w*.52, h*.735);//base
+    CGPathAddLineToPoint(chicago, nil, w*.52, h*.73);
+    CGPathAddLineToPoint(chicago, nil, w*.53, h*.725);//Bridge
+    CGPathAddLineToPoint(chicago, nil, w*.60, h*.725);
+    CGPathAddLineToPoint(chicago, nil, w*.61, h*.73);
+    CGPathAddLineToPoint(chicago, nil, w*.61, h*.735);
+
+    CGPathAddLineToPoint(chicago, nil, w*.645, h*.735);
+    CGPathAddLineToPoint(chicago, nil, w*.65, h*.74);//base
+
+    CGPathAddLineToPoint(chicago, nil, w*.65, h*.80);
+
+
+    CGPathAddLineToPoint(chicago, nil, w*.65, h*.80);//Space
+    CGPathAddLineToPoint(chicago, nil, w*.65, h*.67);//Building Four
+    CGPathAddLineToPoint(chicago, nil, w*.70, h*.64);
+    CGPathAddLineToPoint(chicago, nil, w*.70, h*.665);
+    CGPathAddLineToPoint(chicago, nil, w*.70, h*.64);
+    CGPathAddLineToPoint(chicago, nil, w*.75, h*.67);
+    CGPathAddLineToPoint(chicago, nil, w*.70, h*.692);
+    CGPathAddLineToPoint(chicago, nil, w*.65, h*.67);
+    CGPathAddLineToPoint(chicago, nil, w*.70, h*.692);
+    CGPathAddLineToPoint(chicago, nil, w*.75, h*.67);
+
+
+    CGPathAddLineToPoint(chicago, nil, w*.75, h*.80);
+    CGPathAddLineToPoint(chicago, nil, w*.75, h*.80);//Building Five
+    CGPathAddLineToPoint(chicago, nil, w*.75, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.80, h*.70);
+    CGPathAddLineToPoint(chicago, nil, w*.80, h*.80);
+
+    //Sears Tower
+    CGPathAddLineToPoint(chicago, nil, w*.80, h*.75);
+    CGPathAddLineToPoint(chicago, nil, w*.80, h*.75);
+
+    CGPathAddLineToPoint(chicago, nil, w*.80, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w*.81, h*.65);
+
+    CGPathAddLineToPoint(chicago, nil, w*.81, h*.55);
+    CGPathAddLineToPoint(chicago, nil, w*.82, h*.55);
+
+    CGPathAddLineToPoint(chicago, nil, w*.82, h*.45);//First Spike
+    CGPathAddLineToPoint(chicago, nil, w*.83, h*.45);
+    CGPathAddLineToPoint(chicago, nil, w*.83, h*.35);
+    CGPathAddLineToPoint(chicago, nil, w*.83, h*.45);
+
+    CGPathAddLineToPoint(chicago, nil, w*.85, h*.45);//Second Spike
+    CGPathAddLineToPoint(chicago, nil, w*.85, h*.35);//Top of Spike
+    CGPathAddLineToPoint(chicago, nil, w*.85, h*.45);//Back To Bottom
+    CGPathAddLineToPoint(chicago, nil, w*.86, h*.45);//Top right Edge
+
+    CGPathAddLineToPoint(chicago, nil, w*.86, h*.55);//First Down
+    CGPathAddLineToPoint(chicago, nil, w*.87, h*.55);//Edge
+
+    CGPathAddLineToPoint(chicago, nil, w*.87, h*.65);//Third Down
+    CGPathAddLineToPoint(chicago, nil, w*.88, h*.65);//Third Edge
+
+
+    CGPathAddLineToPoint(chicago, nil, w*.88, h*.75);//Fourth Edge
+    CGPathAddLineToPoint(chicago, nil, w*.89, h*.75);//
+    CGPathAddLineToPoint(chicago, nil, w*.89, h*.80);//Bottom
+
+    //New Building
+    CGPathAddLineToPoint(chicago, nil, w*.91, h*.80);
+    CGPathAddLineToPoint(chicago, nil, w*.91, h*.65);
+    CGPathAddLineToPoint(chicago, nil, w, h*.65);
+
+    CGPathAddLineToPoint(chicago, nil, w, h*.80);//End of Drawing
+
+
+    CGPathRetain(chicago);
+    buildings.path = [UIBezierPath bezierPathWithCGPath:chicago].CGPath;
+    buildings.strokeColor = [UIColor whiteColor].CGColor;
+    buildings.fillColor = [UIColor orangeColor].CGColor;
+    buildings.lineWidth = 2;
+
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.duration            = 2.0;
+    drawAnimation.repeatCount         = 1.0;
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0f];
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+
+    [ground addAnimation:drawAnimation forKey:@"drawGroundAnimation"];
+    [buildings addAnimation:drawAnimation forKey:@"drawChicagoAnimation"];
+    [sky addAnimation:drawAnimation forKey:@"drawSkyAnimation"];
+    [skyTwo addAnimation:drawAnimation forKey:@"drawSkyTwoAnimation"];
+
+    CABasicAnimation* rotationAnimation;
+    rotationAnimation = [CABasicAnimation animationWithKeyPath:@"Move"];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:1000];
+    rotationAnimation.duration = 10;
+    rotationAnimation.repeatCount = INFINITY;
+
+    [self.chicagoAnimationView.layer addSublayer:ground];
+    [self.skyView.layer addSublayer:sky];
+    [self.skyView.layer addSublayer:skyTwo];
+    [self.birds.layer addSublayer:birdOne];
+    [self.birds.layer addSublayer:birdTwo];
+    [self.chicagoAnimationView.layer addSublayer:buildings];
+    [self.view insertSubview:self.animationShapeView aboveSubview:self.containerView];
+
+
+//    [UIView animateWithDuration:20 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//                self.view.backgroundColor = [UIColor colorWithRed:0.093 green:0.539 blue:1.000 alpha:1.000];
+//    } completion:^(BOOL finished) {
+//    }];
+}
 
 #pragma mark - EventTableViewControllerDelegate
 
@@ -588,7 +578,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
             [self.blurView removeFromSuperview];
         }];
     }
-    
+
 }
 
 
@@ -611,6 +601,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
 {
     //
 }
+
 
 @end
 

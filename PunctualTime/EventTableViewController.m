@@ -88,7 +88,6 @@
 {
     Event *event = [self.sharedEventManager.events objectAtIndex:indexPath.row];
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-
     cell.textLabel.text = event.eventName;
     NSString *formattedLeaveDate = [NSDateFormatter localizedStringFromDate:event.lastLeaveTime
                                                                     dateStyle:NSDateFormatterMediumStyle

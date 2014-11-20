@@ -10,6 +10,7 @@
 #import "EventManager.h"
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "MaxDatePickerViewController.h"
 #import "LocationSearchController.h"
 #import "SearchViewController.h"
 #import "RemindersViewController.h"
@@ -18,11 +19,11 @@
 #import "SIAlertView.h"
 #import <MapKit/MapKit.h>
 #import "ModesOfTransportationViewController.h"
+#import "LiveFrost.h"
 
 @interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, ModesOfTransportationDelegate, RemindersViewControllerDelegate, RecurrenceViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *titleTextField;
-@property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
 @property AppDelegate *applicationDelegate;
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
@@ -33,13 +34,13 @@
 @property LocationSearchController *locationSearchController;
 @property NSString* initialNotificationCategory;
 @property PTEventRecurrenceOption recurrenceOption;
+@property NSDate* selectedDate;
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property MKPointAnnotation *mapAnnotation;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property UITextView *animatedTextView;
 @property BOOL isMapExpanded;
-@property BOOL isDatePickerExpanded;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapViewHeightConstraint;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textViewHeightConstraint;
@@ -48,10 +49,11 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *reminderContainerHeight;
 
 @property UIView *blackView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *datePickerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *datePickerButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UIButton *destinationButton;
+
+@property LFGlassView* blurView;
 
 @end
 
@@ -63,14 +65,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //The arrow
+    [self.navigationController.navigationBar.subviews.lastObject setTintColor:[UIColor whiteColor]];
+
+    //Cancel
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
-    self.datePicker.minimumDate = [NSDate date];
     self.sharedEventManager = [EventManager sharedEventManager];
     self.titleTextField.delegate = self;
-    self.isDatePickerExpanded = NO;
-    self.datePickerHeightConstraint.constant = 0;
-    self.datePicker.alpha = 0;
 
     self.blackView = [[UIView alloc] initWithFrame: self.view.bounds];
 
@@ -108,55 +113,6 @@
     [self.blackView removeFromSuperview];
 }
 
-- (IBAction)onTImeButtonPressed:(id)sender
-{
-    self.isDatePickerExpanded = !self.isDatePickerExpanded;
-    [self expandDatePicker];
-}
-
--(void)expandDatePicker
-{
-    if (self.isDatePickerExpanded == YES) {
-        self.datePickerHeightConstraint.constant = 162;
-        self.datePicker.alpha = 1.0;
-    } else {
-        self.datePickerHeightConstraint.constant = 0;
-        self.datePicker.alpha = 0.0;
-    }
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         [self.view layoutIfNeeded];
-                     }
-                     completion:^(BOOL finished){
-
-                         [self.datePicker addTarget:self
-                                    action:@selector(datePickerValueChanged:)
-                          forControlEvents:UIControlEventValueChanged];
-                     }];
-}
-
-- (void)datePickerValueChanged:(id)sender
-{
-    [self enableSaveButtonIfReady];
-
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionAllowUserInteraction
-                     animations:^{
-                         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                         dateFormatter.timeZone = [NSTimeZone localTimeZone];
-                         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-                         dateFormatter.timeStyle = NSDateFormatterShortStyle;
-                         [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.datePicker.date] forState:UIControlStateNormal];
-                     }
-                     completion:^(BOOL finished){
-        
-                     }];
-}
-
-
 - (void) expandMap
 {
     [UIView animateWithDuration:0.5
@@ -188,7 +144,7 @@
 {
     Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
                                          endingAddress:self.locationInfo.locationCoordinates
-                                           arrivalTime:self.datePicker.date
+                                           arrivalTime:self.selectedDate
                                     transportationType:self.transportationType
                                   notificationCategory:self.initialNotificationCategory
                                             recurrence:self.recurrenceOption];
@@ -211,14 +167,15 @@
 - (void)resetTextFields
 {
     self.titleTextField.text = @"";
-    self.datePicker.date = [NSDate date];
+    [self.datePickerButton setTitle:@"Select time" forState:UIControlStateNormal];
+    [self.destinationButton setTitle:@" Search" forState:UIControlStateNormal];
     self.locationInfo = nil;
 }
 
 - (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
 {
     if (![self.titleTextField.text isEqualToString:@""] &&
-        self.datePicker.date.timeIntervalSince1970 > [NSDate date].timeIntervalSince1970 &&
+        self.selectedDate.timeIntervalSince1970 > [NSDate date].timeIntervalSince1970 &&
         self.locationInfo != nil)
     {
         self.saveButton.enabled = YES;
@@ -232,7 +189,7 @@
         {
             [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Name"] forState:UIControlStateDisabled];
         }
-        if (self.datePicker.date.timeIntervalSince1970 < [NSDate date].timeIntervalSince1970)
+        if (self.selectedDate.timeIntervalSince1970 < [NSDate date].timeIntervalSince1970)
         {
             [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Date"] forState:UIControlStateDisabled];
         }
@@ -351,13 +308,49 @@
         RecurrenceViewController* recurrenceVC = segue.destinationViewController;
         recurrenceVC.delegate = self;
     }
+    else if ([segue.identifier isEqualToString:@"DatePickerVC"])
+    {
+        MaxDatePickerViewController* datePickerVC = segue.destinationViewController;
+        [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
+        datePickerVC.selectedDate = self.selectedDate ?: [NSDate date];
+
+        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.bounds];
+        self.blurView.alpha = 0.0;
+        [self.view addSubview:self.blurView];
+
+        [UIView animateWithDuration:0.3 animations:^{
+            self.blurView.alpha = 1.0;
+        }];
+    }
 }
 
--(IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
+- (IBAction)unwindFromSearchViewController:(UIStoryboardSegue *)segue
 {
     SearchViewController *viewController = segue.sourceViewController;
     self.locationInfo = viewController.locationInfo;
     [self enableSaveButtonIfReady];
+}
+
+- (IBAction)unwindeFromDatePickerViewController:(UIStoryboardSegue *)segue
+{
+    self.selectedDate = ((MaxDatePickerViewController*)segue.sourceViewController).selectedDate ?: self.selectedDate;
+
+    if (self.selectedDate)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.timeZone = [NSTimeZone localTimeZone];
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        [self.datePickerButton setTitle:[dateFormatter stringFromDate:self.selectedDate] forState:UIControlStateNormal];
+    }
+
+    [self enableSaveButtonIfReady];
+
+    [UIView animateWithDuration:0.3 animations:^{
+        self.blurView.alpha = 0.0;
+    }completion:^(BOOL finished) {
+        [self.blurView removeFromSuperview];
+    }];
 }
 
 @end
