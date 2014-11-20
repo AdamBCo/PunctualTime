@@ -33,6 +33,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[UIBarButtonItem appearanceWhenContainedIn: [UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
     self.localSearchQueries = [NSMutableArray array];
     self.pastSearchWords = [NSMutableArray array];
     self.pastSearchResults = [NSMutableArray array];
