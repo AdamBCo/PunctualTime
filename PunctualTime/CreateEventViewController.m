@@ -313,12 +313,12 @@
         [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
         datePickerVC.selectedDate = self.selectedDate ?: [NSDate date];
 
-        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.frame];
+        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.bounds];
         self.blurView.alpha = 0.0;
         [self.view addSubview:self.blurView];
 
         [UIView animateWithDuration:0.3 animations:^{
-            self.blurView.alpha = 0.75;
+            self.blurView.alpha = 1.0;
         }];
     }
 }
