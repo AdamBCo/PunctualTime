@@ -8,19 +8,19 @@
 
 #import "MaxDatePickerViewController.h"
 #import "UIButton+UIButton_Position.h"
-#import "LiveFrost.h"
 #import "Constants.h"
 
 @interface MaxDatePickerViewController ()
 
-@property UIView *datePickerView;
-@property UIDatePicker *datePicker;
-@property UILabel *monthLabel;
-@property UIButton *rightArrowButton;
-@property UIButton *leftArrowButton;
-@property UIButton *confirmDateButton;
-@property UIButton *closeViewButton;
 @property NSArray *months;
+
+@property (strong, nonatomic) IBOutlet UIView *datePickerView;
+@property (strong, nonatomic) IBOutlet UIDatePicker *datePicker;
+@property (strong, nonatomic) IBOutlet UIButton *leftArrowButton;
+@property (strong, nonatomic) IBOutlet UIButton *confirmButton;
+@property (strong, nonatomic) IBOutlet UIButton *rightArrowButton;
+@property (strong, nonatomic) IBOutlet UIButton *cancelButton;
+@property (strong, nonatomic) IBOutlet UILabel *monthLabel;
 
 @end
 
@@ -29,10 +29,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
 
-    [self createDatePickerView];
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self setupDatePickerView];
 
     [self datePickerValueChanged:self];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    [self drawOutlineOfDatePicker];
 }
 
 - (void)datePickerValueChanged:(id)sender
@@ -43,75 +55,40 @@
     self.monthLabel.text =[dateFormatter stringFromDate:self.datePicker.date];
 }
 
--(void)createDatePickerView
+-(void)setupDatePickerView
 {
-    // Date picker view
-    self.datePickerView = [[UIView alloc] initWithFrame:CGRectMake(5, self.view.frame.size.height*.2, self.view.frame.size.width-10, self.view.frame.size.height*.525)];
-    self.datePickerView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.datePickerView];
-
-    [self drawOutlineOfDatePicker];
-
-    // Month label
-    self.monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.datePickerView.frame.size.width*.25, 0, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
-    self.monthLabel.text = @"Hello World";
-    self.monthLabel.textAlignment = NSTextAlignmentCenter;
-    self.monthLabel.textColor = [UIColor whiteColor];
-    self.monthLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:22.0];
-    [self.datePickerView addSubview:self.monthLabel];
+    // Date picker
+    self.datePicker.date = self.selectedDate;
+    self.datePicker.minimumDate = [NSDate date];
+    [self.datePicker addTarget:self
+                        action:@selector(datePickerValueChanged:)
+              forControlEvents:UIControlEventValueChanged];
+    //    self.datePicker.layer.borderWidth = 2.0;
+    self.datePicker.layer.borderColor = [UIColor whiteColor].CGColor;
 
     // Left arrow
-    self.leftArrowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.datePickerView.frame.size.width*.25, self.datePickerView.frame.size.height*.2)];
-    [self.leftArrowButton centerButtonAndImageWithSpacing:15];
+//    [self.leftArrowButton centerButtonAndImageWithSpacing:15];
     UIImage *leftArrowImage = [[UIImage imageNamed:@"leftArrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.leftArrowButton setImage:leftArrowImage forState:UIControlStateNormal];
     [self.leftArrowButton setTintColor:[UIColor whiteColor]];
     [self.leftArrowButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.leftArrowButton addTarget:self action:@selector(onLeftArrowButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     self.leftArrowButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0];
-    [self.datePickerView addSubview:self.leftArrowButton];
 
     // Right arrow
-    self.rightArrowButton = [[UIButton alloc] initWithFrame:CGRectMake(self.datePickerView.frame.size.width*.75, 0, self.datePickerView.frame.size.width*.25, self.datePickerView.frame.size.height*.2)];
-    [self.rightArrowButton centerButtonAndImageWithSpacing:15];
+//    [self.rightArrowButton centerButtonAndImageWithSpacing:15];
     UIImage *rightArrowImage = [[UIImage imageNamed:@"rightArrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.rightArrowButton setImage:rightArrowImage forState:UIControlStateNormal];
     [self.rightArrowButton setTintColor:[UIColor whiteColor]];
-
     [self.rightArrowButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.rightArrowButton addTarget:self action:@selector(onRightArrowButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     self.rightArrowButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0];
-    [self.datePickerView addSubview:self.rightArrowButton];
 
     // Confirm button
-    self.confirmDateButton = [[UIButton alloc] initWithFrame:CGRectMake(self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
-    [self.confirmDateButton setTitle:@"Confirm" forState:UIControlStateNormal];
-    [self.confirmDateButton addTarget:self action:@selector(confirmDate) forControlEvents:UIControlEventTouchUpInside];
-    self.confirmDateButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0];
-    [self.confirmDateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.datePickerView addSubview:self.confirmDateButton];
+    [self.confirmButton addTarget:self action:@selector(confirmDate) forControlEvents:UIControlEventTouchUpInside];
 
     // Close button
-    self.closeViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.datePickerView.frame.size.height*.8, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.2)];
-    [self.closeViewButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [self.closeViewButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.closeViewButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
-    self.closeViewButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0];
-    [self.datePickerView addSubview:self.closeViewButton];
-
-    // Date picker
-    self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, self.datePickerView.frame.size.height*.20, self.datePickerView.frame.size.width, 0)];
-
-    self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
-    self.datePicker.date = self.selectedDate;
-    self.datePicker.minimumDate = [NSDate date];
-    [self.datePicker addTarget:self
-                        action:@selector(datePickerValueChanged:)
-              forControlEvents:UIControlEventValueChanged];
-//    self.datePicker.layer.borderWidth = 2.0;
-    self.datePicker.layer.borderColor = [UIColor whiteColor].CGColor;
-    [self.datePickerView addSubview:self.datePicker];
-
+    [self.cancelButton addTarget:self action:@selector(closeView) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)confirmDate
@@ -170,7 +147,7 @@
 {
     // Outer border
     CAShapeLayer *outlineRectOval = [CAShapeLayer new];
-    outlineRectOval.path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.datePickerView.frame.size.width, self.datePickerView.frame.size.height)
+    outlineRectOval.path = [UIBezierPath bezierPathWithRoundedRect:self.datePickerView.bounds
                                                  byRoundingCorners:UIRectCornerAllCorners
                                                        cornerRadii:CGSizeMake(20, 20)].CGPath;
     outlineRectOval.lineWidth = 2;
@@ -179,17 +156,17 @@
     //[outlineRectOval setAffineTransform:(CGAffineTransformMakeScale(0.95, 0.95))];
     [self.datePickerView.layer addSublayer:outlineRectOval];
 
-//    // Confirm/Close button separator
+    // Confirm/Close button separator
 //    CAShapeLayer *lineSeperator = [CAShapeLayer new];
 //    CGMutablePathRef line = CGPathCreateMutable();
-//    CGPathMoveToPoint(line, nil,self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height*.83);//Starting Point
-//    CGPathAddLineToPoint(line, nil, self.datePickerView.frame.size.width*.5, self.datePickerView.frame.size.height);
+//    CGPathMoveToPoint(line, nil,self.datePickerView.bounds.size.width/2, self.datePickerView.bounds.size.height);//Starting Point
+//    CGPathAddLineToPoint(line, nil, self.datePickerView.bounds.size.width/2, self.confirmButton.bounds.origin.y);
 //    lineSeperator.path = [UIBezierPath bezierPathWithCGPath:line].CGPath;
 //    lineSeperator.lineWidth = 2;
 //    lineSeperator.strokeColor = [UIColor whiteColor].CGColor;
 //    lineSeperator.fillColor = [UIColor clearColor].CGColor;
 //    [self.datePickerView.layer addSublayer:lineSeperator];
-
+//
 //    // Date picker top border line
 //    CAShapeLayer* datePickerTop = [CAShapeLayer new];
 //    CGMutablePathRef topLine = CGPathCreateMutable();
