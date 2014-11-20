@@ -167,7 +167,8 @@
 - (void)resetTextFields
 {
     self.titleTextField.text = @"";
-    [self.datePickerButton setTitle:@"Select date" forState:UIControlStateNormal];
+    [self.datePickerButton setTitle:@"Select time" forState:UIControlStateNormal];
+    [self.destinationButton setTitle:@" Search" forState:UIControlStateNormal];
     self.locationInfo = nil;
 }
 
