@@ -36,3 +36,5 @@
 // Screen size
 #define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
 #define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+/// The height (in points) of an iPhone 4
+#define kiPhone4Height 480

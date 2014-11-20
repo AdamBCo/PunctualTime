@@ -197,6 +197,10 @@ static CGFloat INITIAL_CONTAINER_LOC;
 
 
     self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33, self.textLabelView.frame.size.width, 30)];
+    if (SCREEN_HEIGHT == kiPhone4Height)// Temporary fix for 3.5" screens
+    {
+        self.eventName.frame = CGRectMake(0, (self.textLabelView.frame.size.height*.33)+25, self.textLabelView.frame.size.width, 30);
+    }
     [self.eventName setTextColor:[UIColor whiteColor]];
     [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventName.textAlignment = NSTextAlignmentCenter;
@@ -206,7 +210,11 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.textLabelView addSubview:self.eventName];
 
 
-    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33+30, self.textLabelView.frame.size.width, 30)];
+    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, (self.textLabelView.frame.size.height*.33)+30+15, self.textLabelView.frame.size.width, 30)];
+    if (SCREEN_HEIGHT == kiPhone4Height) // Temporary fix for 3.5" screens
+    {
+        self.eventTime.frame = CGRectMake(0, (self.textLabelView.frame.size.height*.33)+48, self.textLabelView.frame.size.width, 30);
+    }
     [self.eventTime setTextColor:[UIColor whiteColor]];
     [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventTime.textAlignment = NSTextAlignmentCenter;
