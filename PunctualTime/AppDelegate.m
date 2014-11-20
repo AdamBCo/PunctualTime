@@ -30,29 +30,14 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     self.sharedEventManager = [EventManager sharedEventManager];
     self.userLocationManager = [UserLocationManager sharedLocationManager];
 
-    //Ask the user permission to send them Local Push LocalNotifications
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
-    {
-        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
-                                                        UIUserNotificationTypeBadge |
-                                                        UIUserNotificationTypeSound);
-        UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
-                                                                                 categories:[self createNotificationCategories]];
-        [application registerUserNotificationSettings:settings];
-    }
-
-
-
+    // Naviation appearance
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0 alpha:1.0], NSForegroundColorAttributeName,
                                                            [UIFont fontWithName:@"HelveticaNeue-Thin" size:22.0], NSFontAttributeName, nil]];
-
     [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                           [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0],
                                                           NSFontAttributeName, nil] forState:UIControlStateNormal];
-
-
     return YES;
 }
 
@@ -107,6 +92,21 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
     }
 
     return nil;
+}
+
+- (void)requestNotificationPermissions
+{
+    UIApplication* application = [UIApplication sharedApplication];
+
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                        UIUserNotificationTypeBadge |
+                                                        UIUserNotificationTypeSound);
+        UIUserNotificationSettings* settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                                 categories:[self createNotificationCategories]];
+        [application registerUserNotificationSettings:settings];
+    }
 }
 
 

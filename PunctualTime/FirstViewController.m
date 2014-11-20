@@ -11,7 +11,9 @@
 #import "EventTableViewController.h"
 #import "Constants.h"
 #import "LiveFrost.h"
+#import "AppDelegate.h"
 #import "EventManager.h"
+#import "UserLocationManager.h"
 #import "Event.h"
 #import "PlaneView.h"
 
@@ -592,6 +594,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
     if ([segue.identifier isEqualToString:@"CreateEventVC"])
     {
         self.navigationController.navigationBar.hidden = NO;
+
+        // Request location tracking for the first time
+        UserLocationManager* sharedLocationManager = [UserLocationManager sharedLocationManager];
+        [sharedLocationManager requestLocationFromUser];
+
+        // Request to send local notifications for the first time
+        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate requestNotificationPermissions];
     }
 }
 
