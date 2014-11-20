@@ -263,7 +263,8 @@ static NSString* kLastLeaveTime = @"LastLeaveTime";
 
         if (error || [jsonResult[@"status"] isEqualToString:@"NOT_FOUND"] ||
                 [jsonResult[@"status"] isEqualToString:@"REQUEST_DENIED"] ||
-                    [jsonResult[@"status"] isEqualToString:@"ZERO_RESULTS"])
+                  [jsonResult[@"status"] isEqualToString:@"ZERO_RESULTS"] ||
+                   [jsonResult[@"status"] isEqualToString:@"UNKNOWN_ERROR"])
         {
             if (!error)
             {
