@@ -58,7 +58,7 @@
 -(void)setupDatePickerView
 {
     // Date picker
-    self.datePicker.date = self.selectedDate;
+    self.datePicker.date = self.selectedDate ?: [NSDate date];
     self.datePicker.minimumDate = [NSDate date];
     [self.datePicker addTarget:self
                         action:@selector(datePickerValueChanged:)

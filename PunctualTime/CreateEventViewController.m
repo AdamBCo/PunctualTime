@@ -312,7 +312,7 @@
     {
         MaxDatePickerViewController* datePickerVC = segue.destinationViewController;
         [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
-        datePickerVC.selectedDate = self.selectedDate ?: [NSDate date];
+        datePickerVC.selectedDate = self.selectedDate ?: datePickerVC.selectedDate;
 
         self.blurView = [[LFGlassView alloc] initWithFrame:self.view.bounds];
         self.blurView.alpha = 0.0;
