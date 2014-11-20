@@ -348,9 +348,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		661078DC1A044D830096479F /* PunctualTime */ = {
+		661078DC1A044D830096479F /* Punctual */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 661079001A044D830096479F /* Build configuration list for PBXNativeTarget "PunctualTime" */;
+			buildConfigurationList = 661079001A044D830096479F /* Build configuration list for PBXNativeTarget "Punctual" */;
 			buildPhases = (
 				661078D91A044D830096479F /* Sources */,
 				661078DA1A044D830096479F /* Frameworks */,
@@ -360,7 +360,7 @@
 			);
 			dependencies = (
 			);
-			name = PunctualTime;
+			name = Punctual;
 			productName = PunctualTime;
 			productReference = 661078DD1A044D830096479F /* PunctualTime.app */;
 			productType = "com.apple.product-type.application";
@@ -424,7 +424,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				661078DC1A044D830096479F /* PunctualTime */,
+				661078DC1A044D830096479F /* Punctual */,
 				661078F51A044D830096479F /* PunctualTimeTests */,
 			);
 		};
@@ -497,7 +497,7 @@
 /* Begin PBXTargetDependency section */
 		661078F81A044D830096479F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 661078DC1A044D830096479F /* PunctualTime */;
+			target = 661078DC1A044D830096479F /* Punctual */;
 			targetProxy = 661078F71A044D830096479F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -687,7 +687,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		661079001A044D830096479F /* Build configuration list for PBXNativeTarget "PunctualTime" */ = {
+		661079001A044D830096479F /* Build configuration list for PBXNativeTarget "Punctual" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				661079011A044D830096479F /* Debug */,
