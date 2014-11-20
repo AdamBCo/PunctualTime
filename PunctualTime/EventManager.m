@@ -48,6 +48,14 @@
 
 - (void)removeEvent:(Event *)event
 {
+    // Remove any lingering notification
+    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
+    if (notification.category)
+    {
+        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    }
+
     [self.events removeObject:event];
     [self saveEvents];
 }
@@ -57,7 +65,7 @@
     // Remove any lingering notification
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     UILocalNotification* notification = [appDelegate getNotificationForEvent:event];
-    if (notification)
+    if (notification.category)
     {
         [[UIApplication sharedApplication] cancelLocalNotification:notification];
     }

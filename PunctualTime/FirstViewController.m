@@ -126,18 +126,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
                                    selector:@selector(updateCounter)
                                    userInfo:nil
                                     repeats:YES];
-
-    // Check if any events have expired
-    if (self.sharedEventManager.events.count > 0)
-    {
-        for (Event* event in self.sharedEventManager.events)
-        {
-            if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
-            {
-                [self.sharedEventManager handleExpiredEvent:event completion:^{}];
-            }
-        }
-    }
 }
 
 - (void)updateCounter

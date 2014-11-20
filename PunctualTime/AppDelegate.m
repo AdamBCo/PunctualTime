@@ -72,6 +72,20 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
+    // Check if any events have expired - needs refactored
+    if (self.sharedEventManager.events.count > 0)
+    {
+        NSArray* eventsCopy = [NSArray arrayWithArray:self.sharedEventManager.events];
+
+        for (Event* event in eventsCopy)
+        {
+            if ([[NSDate date] compare:event.lastLeaveTime] == NSOrderedDescending) // Current time is after event time
+            {
+                [self.sharedEventManager handleExpiredEvent:event completion:^{}];
+            }
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
