@@ -12,7 +12,6 @@
 
 -(void)drawPlane{
 
-
     [self drawBody];
     [self drawProp];
     [self drawWheel];
@@ -47,7 +46,6 @@
     CGFloat const height = self.frame.size.height;
     CAShapeLayer *prop = [CAShapeLayer new];
     CGMutablePathRef propPath = CGPathCreateMutable();
-
     CGPathMoveToPoint(propPath, nil, width*.25, height*.25);
     CGPathAddLineToPoint(propPath, nil, width*.23, height*.25);
     CGPathAddLineToPoint(propPath, nil, width*.23, height*.20);
