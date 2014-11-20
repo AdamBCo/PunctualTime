@@ -13,7 +13,6 @@
 #import "LiveFrost.h"
 #import "EventManager.h"
 #import "Event.h"
-#import "CircularTimer.h"
 #import "PlaneView.h"
 
 BOOL isOpeningEventTable;
@@ -27,7 +26,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property EventTableViewController* eventTableViewVC;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
-@property CircularTimer *cirularTimer;
 @property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
 @property UIView *animationShapeView;
