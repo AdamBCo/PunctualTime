@@ -967,7 +967,7 @@
                             <constraint firstItem="bDl-Pu-UlC" firstAttribute="top" secondItem="p7B-z1-vF4" secondAttribute="bottom" id="NQY-9Z-irO"/>
                             <constraint firstAttribute="trailing" secondItem="p7B-z1-vF4" secondAttribute="trailing" id="cNE-yF-gf9"/>
                             <constraint firstAttribute="trailing" secondItem="FQb-qr-UnZ" secondAttribute="trailing" id="o0c-2B-1yR">
-                                <variation key="widthClass=compact" constant="2"/>
+                                <variation key="widthClass=compact" constant="5"/>
                             </constraint>
                             <constraint firstItem="p7B-z1-vF4" firstAttribute="leading" secondItem="sJn-rH-BBf" secondAttribute="leading" id="x0G-fC-pIM"/>
                         </constraints>
