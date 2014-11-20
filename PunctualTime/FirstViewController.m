@@ -11,9 +11,10 @@
 #import "EventTableViewController.h"
 #import "Constants.h"
 #import "LiveFrost.h"
+#import "AppDelegate.h"
 #import "EventManager.h"
+#import "UserLocationManager.h"
 #import "Event.h"
-#import "CircularTimer.h"
 #import "PlaneView.h"
 
 BOOL isOpeningEventTable;
@@ -27,7 +28,6 @@ static CGFloat INITIAL_CONTAINER_LOC;
 @property EventTableViewController* eventTableViewVC;
 @property Event *selectedEvent;
 @property NSNumber *timeTillEventTimer;
-@property CircularTimer *cirularTimer;
 @property CGFloat lastYTranslation;
 @property LFGlassView* blurView;
 @property UIView *animationShapeView;
@@ -594,6 +594,14 @@ static CGFloat INITIAL_CONTAINER_LOC;
     if ([segue.identifier isEqualToString:@"CreateEventVC"])
     {
         self.navigationController.navigationBar.hidden = NO;
+
+        // Request location tracking for the first time
+        UserLocationManager* sharedLocationManager = [UserLocationManager sharedLocationManager];
+        [sharedLocationManager requestLocationFromUser];
+
+        // Request to send local notifications for the first time
+        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate requestNotificationPermissions];
     }
 }
 

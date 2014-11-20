@@ -17,6 +17,7 @@
 @property (strong, nonatomic) UIWindow *window;
 
 - (UILocalNotification *)getNotificationForEvent:(Event *)event;
+- (void)requestNotificationPermissions;
 
 @end
 

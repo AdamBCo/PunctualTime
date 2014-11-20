@@ -40,7 +40,7 @@
     self.userLocationManager = [[CLLocationManager alloc] init];
     self.userLocationManager.delegate = self;
 
-    [_userLocationManager requestAlwaysAuthorization];
+//    [_userLocationManager requestAlwaysAuthorization];
 
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
     {
@@ -63,6 +63,11 @@
         return YES;
     }
     return NO;
+}
+
+- (void)requestLocationFromUser
+{
+    [self.userLocationManager requestAlwaysAuthorization];
 }
 
 
