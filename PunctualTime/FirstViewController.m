@@ -218,7 +218,7 @@ static CGFloat INITIAL_CONTAINER_LOC;
     [self.textLabelView addSubview:self.eventName];
 
 
-    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33+25, self.textLabelView.frame.size.width, 30)];
+    self.eventTime = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33+30, self.textLabelView.frame.size.width, 30)];
     [self.eventTime setTextColor:[UIColor whiteColor]];
     [self.eventTime setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventTime.textAlignment = NSTextAlignmentCenter;
