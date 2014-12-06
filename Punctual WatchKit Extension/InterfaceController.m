@@ -11,6 +11,9 @@
 
 @interface InterfaceController()
 
+@property (strong, nonatomic) IBOutlet WKInterfaceLabel *eventLabel;
+@property (strong, nonatomic) IBOutlet WKInterfaceTimer *eventTimer;
+
 @end
 
 
