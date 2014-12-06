@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "Constants.h"
 
+static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
+
 @interface EventManager () <EventDelegate>
 
 @property (readwrite) NSMutableArray* events;
@@ -177,10 +179,11 @@
 
 - (NSURL *)documentsDirectory
 {
+    // TODO: Migrate user data to new container
     NSFileManager* fileManager = [NSFileManager defaultManager];
-    NSArray* files = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+    NSURL* fileURL = [fileManager containerURLForSecurityApplicationGroupIdentifier:appGroupIdentifier];
 
-    return files.firstObject;
+    return fileURL;
 }
 
 - (void)saveEvents
