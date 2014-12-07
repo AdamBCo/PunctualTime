@@ -44,6 +44,8 @@
                     <connections>
                         <outlet property="eventLabel" destination="9gl-pc-95I" id="kyT-5l-YvB"/>
                         <outlet property="eventTimer" destination="YN4-mE-Oba" id="o9v-FF-h4d"/>
+                        <outlet property="nextButton" destination="dyY-fJ-RXJ" id="uWF-zH-WQ5"/>
+                        <outlet property="previousButton" destination="gkp-vN-0nY" id="IDt-nW-zyo"/>
                     </connections>
                 </controller>
             </objects>
