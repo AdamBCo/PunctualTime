@@ -17,8 +17,8 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
 @property (strong, nonatomic) IBOutlet WKInterfaceLabel *eventLabel;
 @property (strong, nonatomic) IBOutlet WKInterfaceTimer *eventTimer;
-@property NSMutableArray *eventStore;
-@property int count;
+@property NSMutableArray *events;
+@property int eventIndex;
 
 @end
 
@@ -34,15 +34,15 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
         // Configure interface objects here.
 
         [self loadEvents]; // Get the next upcoming
-        self.count = 0;
+        self.eventIndex = 0;
     }
     return self;
 }
 
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
-    [self.eventLabel setText:((EventLite *)[self.eventStore objectAtIndex:self.count]).eventName];
-    [self.eventTimer setDate:((EventLite *)[self.eventStore objectAtIndex:self.count]).lastLeaveTime];
+    [self.eventLabel setText:((EventLite *)[self.events objectAtIndex:self.eventIndex]).eventName];
+    [self.eventTimer setDate:((EventLite *)[self.events objectAtIndex:self.eventIndex]).lastLeaveTime];
 
     [self.eventTimer start];
 }
@@ -53,36 +53,36 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
 - (IBAction)onPreviousButtonTapped
 {
-    if (self.count > 0)
+    if (self.eventIndex > 0)
     {
-        self.count--;
-        [self.eventLabel setText:((EventLite *)[self.eventStore objectAtIndex:self.count]).eventName];
-        [self.eventTimer setDate:((EventLite *)[self.eventStore objectAtIndex:self.count]).lastLeaveTime];
+        self.eventIndex--;
+        [self.eventLabel setText:((EventLite *)[self.events objectAtIndex:self.eventIndex]).eventName];
+        [self.eventTimer setDate:((EventLite *)[self.events objectAtIndex:self.eventIndex]).lastLeaveTime];
     }
 
-    if(self.count < self.eventStore.count-1) {
+    if(self.eventIndex < self.events.count-1) {
         [self.nextButton setEnabled:YES];
     }
 
-    if(self.count == 0) {
+    if(self.eventIndex == 0) {
         [self.previousButton setEnabled:NO];
     }
 }
 
 -(IBAction)onNextButtonTapped
 {
-    if (self.count < self.eventStore.count-1)
+    if (self.eventIndex < self.events.count-1)
     {
-        self.count++;
-        [self.eventLabel setText:((EventLite *)[self.eventStore objectAtIndex:self.count]).eventName];
-        [self.eventTimer setDate:((EventLite *)[self.eventStore objectAtIndex:self.count]).lastLeaveTime];
+        self.eventIndex++;
+        [self.eventLabel setText:((EventLite *)[self.events objectAtIndex:self.eventIndex]).eventName];
+        [self.eventTimer setDate:((EventLite *)[self.events objectAtIndex:self.eventIndex]).lastLeaveTime];
     }
 
-    if (self.count == self.eventStore.count-1) {
+    if (self.eventIndex == self.events.count-1) {
         [self.nextButton setEnabled:NO];
     }
 
-    if (self.count > 0) {
+    if (self.eventIndex > 0) {
         [self.previousButton setEnabled:YES];
     }
 }
@@ -99,16 +99,16 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
     return fileURL;
 }
 
-- (void)loadEvents// This method should NEVER be public
+- (void)loadEvents // This method should NEVER be public
 {
     NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
     NSArray* savedData = [NSArray arrayWithContentsOfURL:plist];
-    self.eventStore = [NSMutableArray new];
+    self.events = [NSMutableArray new];
 
     [NSKeyedUnarchiver setClass:[EventLite class] forClassName:@"Event"];
     for (NSData *data in savedData){
         EventLite *event = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [self.eventStore addObject:event];
+        [self.events addObject:event];
     }
 }
 
