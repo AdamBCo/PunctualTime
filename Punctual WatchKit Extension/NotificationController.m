@@ -10,6 +10,8 @@
 
 @interface NotificationController()
 
+@property (strong, nonatomic) IBOutlet WKInterfaceLabel *alertLabel;
+
 @end
 
 

@@ -10,11 +10,13 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <label alignment="left" text="Event name" id="9gl-pc-95I"/>
-                        <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" format="abbreviated" previewedSeconds="113599" id="YN4-mE-Oba">
+                        <label alignment="left" text="Event name" minimumScaleFactor="0.80000000000000004" id="9gl-pc-95I">
+                            <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
+                        </label>
+                        <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" minimumScaleFactor="0.60000000000000009" format="abbreviated" previewedSeconds="113599" id="YN4-mE-Oba">
                             <color key="textColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
-                            <calendarUnit key="units" day="YES" hour="YES" minute="YES"/>
+                            <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="24"/>
+                            <calendarUnit key="units" day="YES" hour="YES" minute="YES" second="YES"/>
                         </timer>
                     </items>
                     <connections>
@@ -32,14 +34,16 @@
                     <items>
                         <group alignment="left" id="t8f-Gd-c4y">
                             <items>
-                                <label width="78" height="46" alignment="left" text="Event Name" id="ivx-gO-BoC"/>
+                                <label alignment="left" text="Event Name" minimumScaleFactor="0.80000000000000004" id="ivx-gO-BoC">
+                                    <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
+                                </label>
                             </items>
                         </group>
                         <group alignment="left" id="uCw-4Q-Ouw">
                             <items>
-                                <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" format="abbreviated" previewedSeconds="113599" id="kes-yo-Hyd">
+                                <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" minimumScaleFactor="0.60000000000000009" format="abbreviated" previewedSeconds="1193599" id="kes-yo-Hyd">
                                     <color key="textColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                                    <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>
+                                    <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="24"/>
                                     <calendarUnit key="units" day="YES" hour="YES" minute="YES"/>
                                 </timer>
                             </items>
@@ -70,10 +74,17 @@
             </objects>
             <point key="canvasLocation" x="235" y="1001"/>
         </scene>
-        <!--Dynamic Notification Controller-->
+        <!--Notification Controller-->
         <scene sceneID="KIl-fV-djm">
             <objects>
-                <controller id="gdX-wl-uQE" customClass="DynamicNotificationController"/>
+                <controller id="gdX-wl-uQE" customClass="NotificationController">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="cbo-oZ-j2l"/>
+                    </items>
+                    <connections>
+                        <outlet property="alertLabel" destination="cbo-oZ-j2l" id="Rn8-RT-OoW"/>
+                    </connections>
+                </controller>
             </objects>
             <point key="canvasLocation" x="553" y="1001"/>
         </scene>
