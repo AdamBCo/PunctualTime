@@ -33,7 +33,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
         // Initialize variables here.
         // Configure interface objects here.
 
-        [self loadEvents]; // Get the next upcoming
+        [self loadEvents]; // Get the events from the app
         self.eventIndex = 0;
     }
     return self;
