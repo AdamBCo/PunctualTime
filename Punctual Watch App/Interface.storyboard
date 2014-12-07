@@ -10,10 +10,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <label alignment="left" text="Next event" id="Lr4-eI-SzM">
-                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                        </label>
-                        <group width="1" height="102" alignment="left" layout="vertical" spacing="8" hasDetent="YES" id="jil-uF-rK8">
+                        <group width="1" height="0.80000000000000004" heightAdjustment="-8" alignment="left" layout="vertical" spacing="14" hasDetent="YES" id="jil-uF-rK8">
                             <items>
                                 <label alignment="center" verticalAlignment="center" text="Event name" minimumScaleFactor="0.60000000000000009" id="9gl-pc-95I">
                                     <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
