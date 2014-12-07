@@ -45,7 +45,6 @@
 		E9528E861A33A06300E72A8B /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9528E851A33A06300E72A8B /* Interface.storyboard */; };
 		E9528E881A33A06300E72A8B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9528E871A33A06300E72A8B /* Images.xcassets */; };
 		E9528E8B1A33A06300E72A8B /* Punctual WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E9528E6A1A33A06300E72A8B /* Punctual WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		E9528E971A33AB6B00E72A8B /* DynamicNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9528E961A33AB6B00E72A8B /* DynamicNotificationController.m */; };
 		E9528E9B1A33E0D900E72A8B /* EventLite.m in Sources */ = {isa = PBXBuildFile; fileRef = E9528E9A1A33E0D900E72A8B /* EventLite.m */; };
 		E98ED0D21A14637A00F0078C /* RemindersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E98ED0D11A14637A00F0078C /* RemindersViewController.m */; };
 		E996166D1A181E1900044A49 /* SIAlertView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E996166C1A181E1900044A49 /* SIAlertView.bundle */; };
@@ -167,8 +166,6 @@
 		E9528E871A33A06300E72A8B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E9528E931A33A60600E72A8B /* Punctual.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Punctual.entitlements; sourceTree = "<group>"; };
 		E9528E941A33AA7C00E72A8B /* Punctual WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Punctual WatchKit Extension.entitlements"; sourceTree = "<group>"; };
-		E9528E951A33AB6B00E72A8B /* DynamicNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicNotificationController.h; sourceTree = "<group>"; };
-		E9528E961A33AB6B00E72A8B /* DynamicNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicNotificationController.m; sourceTree = "<group>"; };
 		E9528E991A33E0D900E72A8B /* EventLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLite.h; sourceTree = "<group>"; };
 		E9528E9A1A33E0D900E72A8B /* EventLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLite.m; sourceTree = "<group>"; };
 		E98ED0D01A14637A00F0078C /* RemindersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemindersViewController.h; sourceTree = "<group>"; };
@@ -354,8 +351,6 @@
 				E9528E721A33A06300E72A8B /* InterfaceController.m */,
 				E9528E741A33A06300E72A8B /* NotificationController.h */,
 				E9528E751A33A06300E72A8B /* NotificationController.m */,
-				E9528E951A33AB6B00E72A8B /* DynamicNotificationController.h */,
-				E9528E961A33AB6B00E72A8B /* DynamicNotificationController.m */,
 				E9528E771A33A06300E72A8B /* GlanceController.h */,
 				E9528E781A33A06300E72A8B /* GlanceController.m */,
 				E9528E9C1A33E14000E72A8B /* Model */,
@@ -691,7 +686,6 @@
 			files = (
 				E9528E761A33A06300E72A8B /* NotificationController.m in Sources */,
 				E9528E731A33A06300E72A8B /* InterfaceController.m in Sources */,
-				E9528E971A33AB6B00E72A8B /* DynamicNotificationController.m in Sources */,
 				E9528E9B1A33E0D900E72A8B /* EventLite.m in Sources */,
 				E9528E791A33A06300E72A8B /* GlanceController.m in Sources */,
 			);
