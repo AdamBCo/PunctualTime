@@ -64,7 +64,7 @@
                                 </label>
                             </items>
                         </group>
-                        <group alignment="left" layout="vertical" id="uCw-4Q-Ouw">
+                        <group alignment="left" layout="vertical" spacing="8" id="uCw-4Q-Ouw">
                             <items>
                                 <label alignment="center" verticalAlignment="center" text="Event Name" minimumScaleFactor="0.60000000000000009" id="ivx-gO-BoC">
                                     <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
