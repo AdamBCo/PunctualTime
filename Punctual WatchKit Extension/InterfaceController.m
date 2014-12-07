@@ -7,7 +7,7 @@
 //
 
 #import "InterfaceController.h"
-#import "Event.h"
+#import "EventLite.h"
 
 static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
@@ -15,7 +15,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
 @property (strong, nonatomic) IBOutlet WKInterfaceLabel *eventLabel;
 @property (strong, nonatomic) IBOutlet WKInterfaceTimer *eventTimer;
-@property Event* nextEvent;
+@property EventLite* nextEvent;
 
 @end
 
@@ -63,6 +63,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
     NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
     NSArray* savedData = [NSArray arrayWithContentsOfURL:plist];
 
+    [NSKeyedUnarchiver setClass:[EventLite class] forClassName:@"Event"];
     self.nextEvent = [NSKeyedUnarchiver unarchiveObjectWithData:[savedData firstObject]];
 }
 

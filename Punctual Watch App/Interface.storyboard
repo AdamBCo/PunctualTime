@@ -37,7 +37,6 @@
                         </group>
                         <group alignment="left" id="uCw-4Q-Ouw">
                             <items>
-                                <timer alignment="left" id="Dpr-2b-4a0"/>
                                 <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" format="abbreviated" previewedSeconds="113599" id="kes-yo-Hyd">
                                     <color key="textColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                                     <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="16"/>

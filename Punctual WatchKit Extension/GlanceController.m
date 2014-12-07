@@ -7,7 +7,7 @@
 //
 
 #import "GlanceController.h"
-#import "Event.h"
+#import "EventLite.h"
 
 static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
@@ -15,7 +15,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
 @property (weak, nonatomic) IBOutlet WKInterfaceTimer *glanceTimer;
 @property (weak, nonatomic) IBOutlet WKInterfaceLabel *glanceEventLabel;
-@property Event *nextEvent;
+@property EventLite *nextEvent;
 @end
 
 
@@ -35,15 +35,20 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
 
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
-    NSLog(@"%@ will activate", self);
-    [self.glanceEventLabel setText:self.nextEvent.eventName];
-    [self.glanceTimer setDate:self.nextEvent.lastLeaveTime];
-
+    if (self.nextEvent)
+    {
+        [self.glanceEventLabel setText:self.nextEvent.eventName];
+        [self.glanceTimer setDate:self.nextEvent.lastLeaveTime];
+        [self.glanceTimer start];
+    }
+    else
+    {
+        [self.glanceEventLabel setText:@"No events"];
+    }
 }
 
 - (void)didDeactivate {
     // This method is called when watch view controller is no longer visible
-    NSLog(@"%@ did deactivate", self);
 }
 
 - (NSURL *)documentsDirectory
@@ -60,6 +65,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
     NSURL* plist = [[self documentsDirectory] URLByAppendingPathComponent:@"events.plist"];
     NSArray* savedData = [NSArray arrayWithContentsOfURL:plist];
 
+    [NSKeyedUnarchiver setClass:[EventLite class] forClassName:@"Event"];
     self.nextEvent = [NSKeyedUnarchiver unarchiveObjectWithData:[savedData firstObject]];
 }
 
