@@ -30,13 +30,16 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
         // Initialize variables here.
         // Configure interface objects here.
 
-        [self loadEvent]; // Get the next upcoming event
+        [self loadEvent]; // Get the next upcoming
     }
     return self;
 }
 
 - (void)willActivate {
     // This method is called when watch view controller is about to be visible to user
+    [self.eventLabel setText:self.nextEvent.eventName];
+    [self.eventTimer setDate:self.nextEvent.lastLeaveTime];
+    [self.eventTimer start];
 }
 
 - (void)didDeactivate {
