@@ -26,13 +26,13 @@
                         <separator alignment="left" id="AKT-TX-LRG"/>
                         <group width="1" alignment="left" id="HAc-Gu-o0Z">
                             <items>
-                                <button width="0.50000000000000011" alignment="left" title="&lt;" id="gkp-vN-0nY">
+                                <button width="0.50000000000000011" alignment="left" title="Prev" id="gkp-vN-0nY">
                                     <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                     <connections>
                                         <action selector="onPreviousButtonTapped" destination="AgC-eL-Hgc" id="msr-Cq-9y9"/>
                                     </connections>
                                 </button>
-                                <button width="0.50000000000000011" alignment="left" title="&gt;" id="dyY-fJ-RXJ">
+                                <button width="0.50000000000000011" alignment="left" title="Next" id="dyY-fJ-RXJ">
                                     <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                     <connections>
                                         <action selector="onNextButtonTapped" destination="AgC-eL-Hgc" id="zfe-Eu-XFf"/>
