@@ -46,6 +46,16 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
     // This method is called when watch view controller is no longer visible
 }
 
+- (IBAction)onPreviousButtonTapped
+{
+    //
+}
+
+- (IBAction)onNextButtonTapped
+{
+    //
+}
+
 
 #pragma mark - Data persistence
 

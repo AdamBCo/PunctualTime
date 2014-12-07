@@ -13,7 +13,7 @@
                         <label alignment="left" text="Next event" id="Lr4-eI-SzM">
                             <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <group width="1" height="151" alignment="left" layout="vertical" spacing="18" hasDetent="YES" id="jil-uF-rK8">
+                        <group width="1" height="102" alignment="left" layout="vertical" spacing="8" hasDetent="YES" id="jil-uF-rK8">
                             <items>
                                 <label alignment="center" verticalAlignment="center" text="Event name" minimumScaleFactor="0.60000000000000009" id="9gl-pc-95I">
                                     <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
@@ -26,6 +26,23 @@
                             </items>
                             <color key="backgroundColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         </group>
+                        <separator alignment="left" id="AKT-TX-LRG"/>
+                        <group width="1" alignment="left" id="HAc-Gu-o0Z">
+                            <items>
+                                <button width="0.50000000000000011" alignment="left" title="&lt;" id="gkp-vN-0nY">
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                    <connections>
+                                        <action selector="onPreviousButtonTapped" destination="AgC-eL-Hgc" id="msr-Cq-9y9"/>
+                                    </connections>
+                                </button>
+                                <button width="0.50000000000000011" alignment="left" title="&gt;" id="dyY-fJ-RXJ">
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                    <connections>
+                                        <action selector="onNextButtonTapped" destination="AgC-eL-Hgc" id="zfe-Eu-XFf"/>
+                                    </connections>
+                                </button>
+                            </items>
+                        </group>
                     </items>
                     <connections>
                         <outlet property="eventLabel" destination="9gl-pc-95I" id="kyT-5l-YvB"/>
@@ -33,7 +50,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="327"/>
+            <point key="canvasLocation" x="235" y="303.5"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
