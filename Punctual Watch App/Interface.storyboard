@@ -10,14 +10,22 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <label alignment="left" text="Event name" minimumScaleFactor="0.80000000000000004" id="9gl-pc-95I">
-                            <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
+                        <label alignment="left" text="Next event" id="Lr4-eI-SzM">
+                            <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                         </label>
-                        <timer width="1" alignment="center" verticalAlignment="center" textAlignment="center" minimumScaleFactor="0.60000000000000009" format="abbreviated" previewedSeconds="113599" id="YN4-mE-Oba">
-                            <color key="textColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="24"/>
-                            <calendarUnit key="units" day="YES" hour="YES" minute="YES" second="YES"/>
-                        </timer>
+                        <group width="1" height="151" alignment="left" layout="vertical" spacing="18" hasDetent="YES" id="jil-uF-rK8">
+                            <items>
+                                <label alignment="center" verticalAlignment="center" text="Event name" minimumScaleFactor="0.60000000000000009" id="9gl-pc-95I">
+                                    <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
+                                </label>
+                                <timer alignment="center" verticalAlignment="center" textAlignment="center" minimumScaleFactor="0.60000000000000009" format="abbreviated" previewedSeconds="113599" id="YN4-mE-Oba">
+                                    <color key="textColor" red="0.13725490196078433" green="0.13725490196078433" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="font" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
+                                    <calendarUnit key="units" day="YES" hour="YES" minute="YES" second="YES"/>
+                                </timer>
+                            </items>
+                            <color key="backgroundColor" red="1" green="0.54117647059999996" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                        </group>
                     </items>
                     <connections>
                         <outlet property="eventLabel" destination="9gl-pc-95I" id="kyT-5l-YvB"/>
@@ -25,7 +33,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="235" y="347"/>
+            <point key="canvasLocation" x="235" y="327"/>
         </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
