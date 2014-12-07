@@ -43,6 +43,7 @@ static NSString* const appGroupIdentifier = @"group.com.Punctual.app";
     // This method is called when watch view controller is about to be visible to user
     [self.eventLabel setText:((EventLite *)[self.events objectAtIndex:self.eventIndex]).eventName];
     [self.eventTimer setDate:((EventLite *)[self.events objectAtIndex:self.eventIndex]).lastLeaveTime];
+    [self.previousButton setEnabled:NO];
 
     [self.eventTimer start];
 }
