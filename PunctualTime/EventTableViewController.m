@@ -111,5 +111,8 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:EVENTS_UPDATED object:self];
     }
 }
+- (IBAction)onBackButtonPressed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 
 @end

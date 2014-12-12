@@ -27,6 +27,7 @@ static NSString* FINAL_BUTTON = @"I'm leaving!";
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     self.sharedEventManager = [EventManager sharedEventManager];
     self.userLocationManager = [UserLocationManager sharedLocationManager];
 

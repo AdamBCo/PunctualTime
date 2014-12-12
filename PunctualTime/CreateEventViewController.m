@@ -99,11 +99,6 @@
         self.isMapExpanded = NO;
         [self expandMap];
     }
-
-    self.datePickerButton.layer.borderColor = [self.datePickerButton.titleLabel.textColor CGColor];
-    self.datePickerButton.layer.borderWidth = 1.0;
-    self.destinationButton.layer.borderColor = [self.destinationButton.titleLabel.textColor CGColor];
-    self.destinationButton.layer.borderWidth = 1.0;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -111,6 +106,10 @@
     [super touchesBegan:touches withEvent:event];
     [self.titleTextField resignFirstResponder];
     [self.blackView removeFromSuperview];
+}
+
+- (IBAction)onCloseButtonPressed:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) expandMap

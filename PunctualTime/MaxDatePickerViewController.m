@@ -99,7 +99,6 @@
 
 - (void)closeView
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
     [self performSegueWithIdentifier:@"UnwindToCreateVC" sender:self];
 }
 
