@@ -92,8 +92,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     return YES;
 }
 
-
--(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar{
+- (IBAction)onCancelButtonPressed:(id)sender {
     [self.searchTextField resignFirstResponder];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -261,10 +260,10 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
-            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0];
-            cell.textLabel.textColor = [UIColor whiteColor];
+//            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0];
+//            cell.textLabel.textColor = [UIColor whiteColor];
             
-            cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0];
+//            cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0];
             cell.detailTextLabel.textColor = [UIColor blackColor];
         }break;
 

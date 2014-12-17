@@ -29,7 +29,7 @@ static UIColor* selectedTextColor;
     initialTextColor = [self.buttons.firstObject titleColorForState:UIControlStateNormal];
     selectedTextColor = [UIColor colorWithRed:0.071 green:0.871 blue:1.000 alpha:1.000];
 
-    CGFloat buttonSize = (SCREEN_WIDTH-40.0)/4.0;
+    CGFloat buttonSize = (SCREEN_WIDTH-60.0)/4.0;
     CGFloat buttonSpacing = (SCREEN_WIDTH - buttonSize*4 - 16)/3;
     [self.delegate transportationButtonHeightWasSet:buttonSize];
 

@@ -100,6 +100,7 @@
 - (void)closeView
 {
     [self performSegueWithIdentifier:@"UnwindToCreateVC" sender:self];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)onRightArrowButtonPressed
