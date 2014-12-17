@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="bottom" id="LOd-Yk-LvC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="FGA-MB-bzh">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="536"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="aP8-tl-oJ3">
@@ -46,10 +46,10 @@
                                 <exclude reference="aP8-tl-oJ3"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="M1M-QC-yLd"/>
                                 <exclude reference="Iu8-f7-JzI"/>
                                 <exclude reference="qPu-hY-PXp"/>
                                 <exclude reference="ubm-0d-5Yo"/>
-                                <exclude reference="M1M-QC-yLd"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -57,10 +57,10 @@
                                 <include reference="aP8-tl-oJ3"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="M1M-QC-yLd"/>
                                 <include reference="Iu8-f7-JzI"/>
                                 <include reference="qPu-hY-PXp"/>
                                 <include reference="ubm-0d-5Yo"/>
-                                <include reference="M1M-QC-yLd"/>
                             </mask>
                         </variation>
                     </view>
@@ -73,6 +73,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="saveButton" destination="bia-rx-RUM" id="7uq-MY-K4E"/>
                         <outlet property="tableView" destination="aP8-tl-oJ3" id="dXZ-8t-79E"/>
                         <segue destination="JOo-w3-gvs" kind="presentation" identifier="ToSearchViewSegue" id="AK7-dB-WU2"/>
                         <segue destination="sXx-xz-GLs" kind="show" identifier="RepeatTableViewSegue" id="Z5P-aN-sHg"/>
@@ -96,16 +97,9 @@
                         <viewControllerLayoutGuide type="bottom" id="Mah-ur-5dD"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QeB-02-t5p">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="nyo-dZ-yON">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
-                                </variation>
-                            </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="jcI-Qp-nmh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -155,7 +149,7 @@
                                 </scopeButtonTitles>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="0.92549019610000005" green="0.94117647059999998" blue="0.94509803920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="jcI-Qp-nmh" firstAttribute="leading" secondItem="QeB-02-t5p" secondAttribute="leading" id="1Hb-9v-UJk"/>
                             <constraint firstItem="Mah-ur-5dD" firstAttribute="top" secondItem="jcI-Qp-nmh" secondAttribute="bottom" id="CMn-TA-As8"/>
@@ -168,7 +162,6 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="nyo-dZ-yON"/>
                                 <exclude reference="jcI-Qp-nmh"/>
                                 <exclude reference="uUP-7S-Exv"/>
                             </mask>
@@ -185,7 +178,6 @@
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="nyo-dZ-yON"/>
                                 <include reference="jcI-Qp-nmh"/>
                                 <include reference="uUP-7S-Exv"/>
                             </mask>
@@ -228,7 +220,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="cXb-Yz-yyN">
@@ -330,7 +322,7 @@
                         <viewControllerLayoutGuide type="bottom" id="bDl-Pu-UlC"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="sJn-rH-BBf">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="536"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.90196078430000004" green="0.4941176471" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -361,6 +353,7 @@
             <objects>
                 <tableViewController id="sXx-xz-GLs" customClass="RepeatTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jP2-cy-luw">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -390,6 +383,7 @@
             <objects>
                 <tableViewController id="4DS-b7-HzB" customClass="AlertTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="EQs-H3-2ZH">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
@@ -419,6 +413,7 @@
             <objects>
                 <tableViewController id="BeB-7D-B07" customClass="TransportationTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="bXa-1W-gD8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>

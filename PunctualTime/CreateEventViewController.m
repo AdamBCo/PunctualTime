@@ -28,6 +28,7 @@
 @property NSArray *sourceLocations;
 @property NSArray *destinationLocations;
 @property NSString *transportationType;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
 
 @property LocationInfo *locationInfo;
 @property EventManager *sharedEventManager;
@@ -72,6 +73,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     self.initialNotificationCategory = FIVE_MINUTE_WARNING;
     self.transportationType = TRANSPO_DRIVING;
     self.selectedDate = [NSDate date];
+    self.saveButton.enabled = NO;
 
     //The arrow
     [self.navigationController.navigationBar.subviews.lastObject setTintColor:[UIColor whiteColor]];
@@ -93,6 +95,12 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return TableViewSectionCount;
+}
+
+-(void)checkIfSaveIsPossible {
+    if (self.locationInfo && self.eventTitle) {
+        self.saveButton.enabled = YES;
+    }
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -288,12 +296,14 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField{
     self.eventTitle = textField.text;
+    [self checkIfSaveIsPossible];
     [textField resignFirstResponder];
     return YES;
 }
 
 -(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
     self.eventTitle = textField.text;
+    [self checkIfSaveIsPossible];
     return YES;
 }
 
@@ -389,6 +399,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:locationCell];
     cell.textLabel.text = self.locationInfo.name;
     cell.detailTextLabel.text = self.locationInfo.address;
+    
+    [self checkIfSaveIsPossible];
 }
 
 - (IBAction)unwindFromRepeatTableViewController:(UIStoryboardSegue *)segue

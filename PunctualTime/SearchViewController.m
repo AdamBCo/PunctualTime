@@ -259,10 +259,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
             cell.textLabel.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
             cell.detailTextLabel.text = searchResult[@"description"];
-//            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:16.0];
-//            cell.textLabel.textColor = [UIColor whiteColor];
-            
-//            cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:10.0];
             cell.detailTextLabel.textColor = [UIColor blackColor];
         }break;
 
@@ -275,7 +271,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)createFooterViewForTable{
     UIView *footerView  = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 320, 70)];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-non-white"]];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"powered-by-google-on-white"]];
     imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
     imageView.frame = CGRectMake(110,10,85,12);
     [footerView addSubview:imageView];
