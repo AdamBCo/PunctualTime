@@ -24,21 +24,25 @@
 
 @interface CreateEventViewController () <UISearchBarDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UITextField *titleTextField;
 @property AppDelegate *applicationDelegate;
 @property MKPointAnnotation *userDestination;
 @property NSArray *sourceLocations;
 @property NSArray *destinationLocations;
 @property NSString *transportationType;
+
 @property LocationInfo *locationInfo;
 @property EventManager *sharedEventManager;
 @property LocationSearchController *locationSearchController;
+
+@property NSString *eventTitle;
 @property NSString* initialNotificationCategory;
 @property PTEventRecurrenceOption recurrenceOption;
 @property NSDate* selectedDate;
 
 @property UITextView *animatedTextView;
-@property BOOL isMapExpanded;
+
+@property UIDatePicker *datePicker;
+@property BOOL datePickerExpanded;
 
 
 
@@ -79,7 +83,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     self.locationSearchController = [LocationSearchController new];
     self.applicationDelegate = [UIApplication sharedApplication].delegate;
     self.sharedEventManager = [EventManager sharedEventManager];
-    self.titleTextField.delegate = self;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -97,7 +100,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             return 2;
             break;
         case TableViewDateSection:
-            return 3;
+            return 4;
             break;
         case TableViewTransportationSection:
             return 1;
@@ -108,16 +111,37 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    [self.tableView beginUpdates];
+    
     switch (indexPath.section) {
         case TableViewEventTitleSection:
-            if ([indexPath row] == 1) {
+            if ([indexPath row] == 0) {
+            } else if ([indexPath row] == 1) {
                 [self performSegueWithIdentifier:@"ToSearchViewSegue" sender:self];
             }
             break;
         case TableViewDateSection:
-            if ([indexPath row] == 1) {
+            
+            if ([indexPath row] == 0) {
+                self.datePickerExpanded = !self.datePickerExpanded;
+                if (self.datePickerExpanded) {
+                    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        self.datePicker.alpha = 1;
+                    } completion:^(BOOL finished) {
+                        
+                    }];
+                } else {
+                    [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                        self.datePicker.alpha = 0;
+                    } completion:^(BOOL finished) {
+                        
+                    }];
+                }
+            }
+            
+            else if ([indexPath row] == 2) {
                 [self performSegueWithIdentifier:@"RepeatTableViewSegue" sender:self];
-            } else if ([indexPath row] == 2) {
+            } else if ([indexPath row] == 3) {
                 [self performSegueWithIdentifier:@"AlertTableViewSegue" sender:self];
             }
             break;
@@ -127,6 +151,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [self.tableView endUpdates];
     
 }
 
@@ -139,6 +165,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 UITextField *titleTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width*.05, 0, self.tableView.frame.size.width*.95, cell.contentView.frame.size.height)];
                 titleTextField.placeholder = @"Title";
                 [cell.contentView addSubview:titleTextField];
+                titleTextField.delegate = self;
             } else {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
                 cell.textLabel.text = @"Location";
@@ -157,7 +184,16 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 dateFormatter.timeStyle = NSDateFormatterShortStyle;
                 cell.detailTextLabel.text = [dateFormatter stringFromDate:self.selectedDate];
                 
-            } else if ([indexPath row] == 1) {
+            }else if ([indexPath row] == 1) {
+                
+                self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, cell.contentView.frame.size.height)];
+                self.datePicker.alpha = 0;
+                self.datePicker.date = [NSDate date];
+                [self.datePicker addTarget:self action:@selector(datePickerDateChanged:) forControlEvents:UIControlEventValueChanged];
+                
+                [cell.contentView addSubview:self.datePicker];
+                
+            } else if ([indexPath row] == 2) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Cell"];
                 cell.textLabel.text = @"Repeat";
                 
@@ -172,7 +208,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
                 }
                 
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            } else if ([indexPath row] == 2){
+            } else if ([indexPath row] == 3){
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Cell"];
                 cell.textLabel.text = @"Alert";
                 
@@ -210,12 +246,50 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     
 }
 
-
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [super touchesBegan:touches withEvent:event];
-    [self.titleTextField resignFirstResponder];
+- (void)datePickerDateChanged:(id)sender {
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.timeZone = [NSTimeZone localTimeZone];
+    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    
+    NSIndexPath *dateCell = [NSIndexPath indexPathForRow:0 inSection:TableViewDateSection];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:dateCell];
+    cell.detailTextLabel.text = [dateFormatter stringFromDate:self.datePicker.date];
+    self.selectedDate = self.datePicker.date;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    switch (indexPath.section) {
+        case TableViewEventTitleSection:
+            return 44;
+            break;
+        case TableViewDateSection:
+            if ([indexPath row] == 1) {
+                if (self.datePickerExpanded) {
+                    return 220.0; // Expanded height
+                } else{
+                    return 0;
+                }
+            } else {
+                return  44;
+            }
+            break;
+        case TableViewTransportationSection:
+            return 44;
+            break;
+    }
+    return 44.0; // Normal height
+}
+
+
+-(BOOL) textFieldShouldReturn:(UITextField *)textField{
+    self.eventTitle = textField.text;
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 - (IBAction)onCloseButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -223,7 +297,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
-    Event *newEvent = [[Event alloc] initWithEventName:self.titleTextField.text
+    Event *newEvent = [[Event alloc] initWithEventName:self.eventTitle
                                          endingAddress:self.locationInfo.locationCoordinates
                                            arrivalTime:self.selectedDate
                                     transportationType:self.transportationType
@@ -243,34 +317,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         }
     }];
 }
-
-//- (void)enableSaveButtonIfReady // Only enable Save button if user has finished creating Event
-//{
-//    if (![self.titleTextField.text isEqualToString:@""] &&
-//        self.selectedDate.timeIntervalSince1970 > [NSDate date].timeIntervalSince1970 &&
-//        self.locationInfo != nil)
-//    {
-//        self.saveButton.enabled = YES;
-//    }
-//    else
-//    {
-//        [self.saveButton setTitle:@"Need:" forState:UIControlStateDisabled];
-//        self.saveButton.enabled = NO;
-//
-//        if ([self.titleTextField.text isEqualToString:@""])
-//        {
-//            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Name"] forState:UIControlStateDisabled];
-//        }
-//        if (self.selectedDate.timeIntervalSince1970 < [NSDate date].timeIntervalSince1970)
-//        {
-//            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Date"] forState:UIControlStateDisabled];
-//        }
-//        if (self.locationInfo == nil)
-//        {
-//            [self.saveButton setTitle:[[self.saveButton titleForState:UIControlStateDisabled ] stringByAppendingString:@" Destination"] forState:UIControlStateDisabled];
-//        }
-//    }
-//}
 
 - (void)makeAlertForErrorCode:(PTEventCreationErrorCode)errorCode errorUserInfo:(NSDictionary *)userInfo
 {
@@ -313,11 +359,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"ToSearchViewSegue"])
-    {
-        [self.titleTextField resignFirstResponder];
-    }
-    else if ([segue.identifier isEqualToString:@"DatePickerVC"])
+    if ([segue.identifier isEqualToString:@"DatePickerVC"])
     {
         MaxDatePickerViewController* datePickerVC = segue.destinationViewController;
         [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
@@ -393,5 +435,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         [self.blurView removeFromSuperview];
     }];
 }
+
 
 @end

@@ -30,7 +30,7 @@ static void swizzle(Class klass, SEL from, SEL to) {
 }
 
 - (void)swizzledSetTextColor:(UIColor *)newTextColor {
-    [self swizzledSetTextColor:self.shouldBeSwizzled ? [UIColor whiteColor] : newTextColor];
+    [self swizzledSetTextColor:self.shouldBeSwizzled ? [UIColor blackColor] : newTextColor];
 }
 
 @end
