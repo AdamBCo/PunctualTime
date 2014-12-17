@@ -36,7 +36,6 @@
     CGPoint scrollPoint = CGPointMake(0, 0);
     [self.scrollView setContentOffset:scrollPoint animated:YES];
 
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{

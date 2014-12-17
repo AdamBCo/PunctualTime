@@ -88,7 +88,6 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         NSLog(@"This string: %@ had a space at the begining.",self.substring);
     }
 
-
     return YES;
 }
 

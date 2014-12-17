@@ -10,13 +10,13 @@
 #import "EventManager.h"
 #import "Constants.h"
 #import "Event.h"
+#import "CreateEventViewController.h"
+#import "AppDelegate.h"
+#import "UserLocationManager.h"
 
 @interface EventTableViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIImageView *dragImageView;
-@property (strong, nonatomic) IBOutlet UIImageView *arrowImageView;
-@property (strong, nonatomic) IBOutlet UIView *panView;
 @property EventManager *sharedEventManager;
 
 @end
@@ -29,12 +29,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
 
     self.sharedEventManager = [EventManager sharedEventManager];
-
-    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPanGestureDetected:)];
-    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapGestureDetected:)];
-    [self.panView setGestureRecognizers:@[panGesture, tapGesture]];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:EVENTS_UPDATED
                                                       object:self.sharedEventManager
@@ -42,46 +41,27 @@
                                                   usingBlock:^(NSNotification *note){
                                                       [self.tableView reloadData];
                                                   }];
+    
+}
+- (IBAction)onAddButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"CreateEventVCFromTable" sender:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
-    self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.view.backgroundColor = [UIColor clearColor];
-    
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
-
-- (void)rotateArrowImageToDegrees:(CGFloat)degrees
-{
-    [UIView animateWithDuration:0.2 animations:^{
-        self.arrowImageView.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
-    }];
-}
-
-
-#pragma mark - Private methods
-
-- (IBAction)onPanGestureDetected:(UIPanGestureRecognizer *)panGesture
-{
-    [self.tableView setEditing:NO animated:YES];
-    [self.delegate panGestureDetected:panGesture];
-}
-
-- (IBAction)onTapGestureDetected:(UITapGestureRecognizer *)tapGesture
-{
-    [self.tableView setEditing:NO animated:YES];
-    [self.delegate tapGestureDetected:tapGesture];
-}
-
 
 #pragma mark - UITableView
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.sharedEventManager.events.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -113,6 +93,28 @@
 }
 - (IBAction)onBackButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)unwindFromCreateEventVCToTable:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"CreateEventVCFromTable"])
+    {
+        
+        CreateEventViewController *destinationViewController = segue.destinationViewController;
+        destinationViewController.segueFromTableView = YES;
+        // Request location tracking for the first time
+        UserLocationManager* sharedLocationManager = [UserLocationManager sharedLocationManager];
+        [sharedLocationManager requestLocationFromUser];
+        
+        // Request to send local notifications for the first time
+        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate requestNotificationPermissions];
+    }
+    
 }
 
 @end

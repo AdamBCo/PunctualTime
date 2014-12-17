@@ -16,6 +16,7 @@
 #import "UserLocationManager.h"
 #import "Event.h"
 #import "PlaneView.h"
+#import "CreateEventViewController.h"
 
 @interface FirstViewController ()
 @property EventManager *sharedEventManager;
@@ -86,8 +87,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleDefault;
-
 
     //SkyView Animation
     [UIView animateWithDuration:10.0
@@ -108,8 +107,6 @@
                      }
                      completion:nil];
 
-
-//    self.navigationController.navigationBar.hidden = YES;
 
     self.selectedEvent = self.sharedEventManager.events.firstObject;
 
@@ -179,20 +176,15 @@
     self.sunView.center = CGPointMake(0, h);
     [self.sunView.layer addSublayer:sun];
 
-//    CABasicAnimation* sunRotationAnimation;
-//    sunRotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-//    sunRotationAnimation.toValue = [NSNumber numberWithFloat:M_PI * 2.0];
-//    sunRotationAnimation.duration = 1000;
-//    sunRotationAnimation.repeatCount = INFINITY;
-//    [self.sunView.layer addAnimation:sunRotationAnimation forKey:@"rotationAnimation"];
-
 
 
     self.eventName = [[UILabel alloc] initWithFrame:CGRectMake(0, self.textLabelView.frame.size.height*.33, self.textLabelView.frame.size.width, 30)];
+    
     if (SCREEN_HEIGHT == kiPhone4Height)// Temporary fix for 3.5" screens
     {
         self.eventName.frame = CGRectMake(0, (self.textLabelView.frame.size.height*.33)+25, self.textLabelView.frame.size.width, 30);
     }
+    
     [self.eventName setTextColor:[UIColor whiteColor]];
     [self.eventName setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:25.0]];
     self.eventName.textAlignment = NSTextAlignmentCenter;
@@ -455,23 +447,24 @@
 
 #pragma mark - Navigation
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"CreateEventVC"])
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"CreateEventVCFromTable"])
     {
-        self.navigationController.navigationBar.hidden = NO;
-
+        
+        CreateEventViewController *destinationViewController = segue.destinationViewController;
+        destinationViewController.segueFromTableView = NO;
         // Request location tracking for the first time
         UserLocationManager* sharedLocationManager = [UserLocationManager sharedLocationManager];
         [sharedLocationManager requestLocationFromUser];
-
+        
         // Request to send local notifications for the first time
         AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
         [appDelegate requestNotificationPermissions];
     }
+    
 }
 
-- (IBAction)unwindFromCreateEventVC:(UIStoryboardSegue *)segue sender:(id)sender
+- (IBAction)unwindFromCreateEventVCToFirst:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //
 }

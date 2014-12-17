@@ -10,7 +10,6 @@
 #import "EventManager.h"
 #import "AppDelegate.h"
 #import "Constants.h"
-#import "MaxDatePickerViewController.h"
 #import "LocationSearchController.h"
 #import "SearchViewController.h"
 #import "Event.h"
@@ -88,6 +87,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController.navigationBar setBackgroundColor:[UIColor greenColor]];
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -169,7 +170,8 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             } else {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
                 cell.textLabel.text = @"Location";
-                cell.detailTextLabel.text = @"Address";
+                cell.detailTextLabel.text = @"";
+                [cell.detailTextLabel sizeToFit];
             }
             break;
         }
@@ -290,10 +292,11 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     return YES;
 }
 
-
-- (IBAction)onCloseButtonPressed:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+-(BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+    self.eventTitle = textField.text;
+    return YES;
 }
+
 
 - (IBAction)onSaveEventButtonPressed:(id)sender
 {
@@ -312,8 +315,14 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
         }
         else
         {
+            
             [self.sharedEventManager addEvent:newEvent];
-            [self performSegueWithIdentifier:@"UnwindFromCreateEventVC" sender:self];
+            
+            if (self.segueFromTableView) {
+                [self performSegueWithIdentifier:@"UnwindFromCreateEventVCToTable" sender:self];
+            } else {
+                [self performSegueWithIdentifier:@"UnwindFromCreateEventVCToFirst" sender:self];
+            }
         }
     }];
 }
@@ -359,20 +368,7 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"DatePickerVC"])
-    {
-        MaxDatePickerViewController* datePickerVC = segue.destinationViewController;
-        [datePickerVC setModalPresentationStyle:UIModalPresentationOverCurrentContext];
-        datePickerVC.selectedDate = self.selectedDate ?: datePickerVC.selectedDate;
-
-        self.blurView = [[LFGlassView alloc] initWithFrame:self.view.bounds];
-        self.blurView.alpha = 0.0;
-        [self.view addSubview:self.blurView];
-
-        [UIView animateWithDuration:0.3 animations:^{
-            self.blurView.alpha = 1.0;
-        }];
-    } else if ([segue.identifier isEqualToString:@"RepeatTableViewSegue"]){
+    if ([segue.identifier isEqualToString:@"RepeatTableViewSegue"]){
         RepeatTableViewController *viewController = segue.destinationViewController;
         viewController.selectedRecurrenceOption = self.recurrenceOption;
     } else if ([segue.identifier isEqualToString:@"AlertTableViewSegue"]){
@@ -416,25 +412,5 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
     self.transportationType = viewController.selectedMethodOfTransportation;
     [self.tableView reloadData];
 }
-
-- (IBAction)unwindeFromDatePickerViewController:(UIStoryboardSegue *)segue
-{
-    self.selectedDate = ((MaxDatePickerViewController*)segue.sourceViewController).selectedDate ?: self.selectedDate;
-
-    if (self.selectedDate)
-    {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.timeZone = [NSTimeZone localTimeZone];
-        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-        dateFormatter.timeStyle = NSDateFormatterShortStyle;
-    }
-
-    [UIView animateWithDuration:0.3 animations:^{
-        self.blurView.alpha = 0.0;
-    }completion:^(BOOL finished) {
-        [self.blurView removeFromSuperview];
-    }];
-}
-
 
 @end

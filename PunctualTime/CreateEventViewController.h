@@ -10,4 +10,6 @@
 
 @interface CreateEventViewController : UIViewController
 
+@property BOOL segueFromTableView;
+
 @end

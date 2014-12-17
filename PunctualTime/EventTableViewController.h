@@ -8,18 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol EventTableViewDelegate <NSObject>
-
-- (void)panGestureDetected:(UIPanGestureRecognizer *)panGesture;
-- (void)tapGestureDetected:(UITapGestureRecognizer *)tapGesture;
-
-@end
-
 @interface EventTableViewController : UIViewController
-
-@property id<EventTableViewDelegate> delegate;
-
-- (void)rotateArrowImageToDegrees:(CGFloat)degrees;
 
 @end
 
