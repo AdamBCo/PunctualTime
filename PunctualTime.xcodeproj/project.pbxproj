@@ -31,6 +31,10 @@
 		87545A7B1A40B8CD000BECD7 /* RepeatTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87545A7A1A40B8CD000BECD7 /* RepeatTableViewController.m */; };
 		87545A7E1A40F549000BECD7 /* AlertTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87545A7D1A40F549000BECD7 /* AlertTableViewController.m */; };
 		87545A811A40FCCB000BECD7 /* TransportationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87545A801A40FCCB000BECD7 /* TransportationTableViewController.m */; };
+		87B9AFC71A46F23C00B8F3F4 /* ChicagoAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B9AFC61A46F23C00B8F3F4 /* ChicagoAnimationView.m */; };
+		87B9AFCA1A46F88600B8F3F4 /* SkyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B9AFC91A46F88600B8F3F4 /* SkyView.m */; };
+		87B9AFCD1A46FB6300B8F3F4 /* BirdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B9AFCC1A46FB6300B8F3F4 /* BirdView.m */; };
+		87B9AFD01A46FCC100B8F3F4 /* SunView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87B9AFCF1A46FCC100B8F3F4 /* SunView.m */; };
 		E910C81F1A0D4E1E00CDD64D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */; };
 		E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */; };
 		E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = E94821201A13E1EC00DAAC63 /* LFGlassView.m */; };
@@ -97,6 +101,14 @@
 		87545A7D1A40F549000BECD7 /* AlertTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertTableViewController.m; sourceTree = "<group>"; };
 		87545A7F1A40FCCB000BECD7 /* TransportationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransportationTableViewController.h; sourceTree = "<group>"; };
 		87545A801A40FCCB000BECD7 /* TransportationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransportationTableViewController.m; sourceTree = "<group>"; };
+		87B9AFC51A46F23C00B8F3F4 /* ChicagoAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChicagoAnimationView.h; path = ../ChicagoAnimationView.h; sourceTree = "<group>"; };
+		87B9AFC61A46F23C00B8F3F4 /* ChicagoAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChicagoAnimationView.m; path = ../ChicagoAnimationView.m; sourceTree = "<group>"; };
+		87B9AFC81A46F88600B8F3F4 /* SkyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkyView.h; sourceTree = "<group>"; };
+		87B9AFC91A46F88600B8F3F4 /* SkyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SkyView.m; sourceTree = "<group>"; };
+		87B9AFCB1A46FB6300B8F3F4 /* BirdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BirdView.h; sourceTree = "<group>"; };
+		87B9AFCC1A46FB6300B8F3F4 /* BirdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BirdView.m; sourceTree = "<group>"; };
+		87B9AFCE1A46FCC100B8F3F4 /* SunView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SunView.h; sourceTree = "<group>"; };
+		87B9AFCF1A46FCC100B8F3F4 /* SunView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SunView.m; sourceTree = "<group>"; };
 		E910C81E1A0D4E1E00CDD64D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E948211D1A13E1EC00DAAC63 /* LFDisplayBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LFDisplayBridge.h; sourceTree = "<group>"; };
 		E948211E1A13E1EC00DAAC63 /* LFDisplayBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LFDisplayBridge.m; sourceTree = "<group>"; };
@@ -209,6 +221,23 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		87B9AFD11A47004100B8F3F4 /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				87B9AFC51A46F23C00B8F3F4 /* ChicagoAnimationView.h */,
+				87B9AFC61A46F23C00B8F3F4 /* ChicagoAnimationView.m */,
+				87B9AFCE1A46FCC100B8F3F4 /* SunView.h */,
+				87B9AFCF1A46FCC100B8F3F4 /* SunView.m */,
+				87B9AFCB1A46FB6300B8F3F4 /* BirdView.h */,
+				87B9AFCC1A46FB6300B8F3F4 /* BirdView.m */,
+				87B9AFC81A46F88600B8F3F4 /* SkyView.h */,
+				87B9AFC91A46F88600B8F3F4 /* SkyView.m */,
+				6677990B1A1ADDDB000FD20D /* PlaneView.h */,
+				6677990C1A1ADDDB000FD20D /* PlaneView.m */,
+			);
+			name = Animations;
+			sourceTree = "<group>";
+		};
 		E90100DD1A046D2E00D44789 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,8 +331,7 @@
 		E9D79C371A046E1D00C9D65F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6677990B1A1ADDDB000FD20D /* PlaneView.h */,
-				6677990C1A1ADDDB000FD20D /* PlaneView.m */,
+				87B9AFD11A47004100B8F3F4 /* Animations */,
 				E9D79C341A046DE600C9D65F /* Event.h */,
 				E9D79C351A046DE600C9D65F /* Event.m */,
 				6649BF431A09A3BD007B447B /* LocationInfo.h */,
@@ -425,6 +453,7 @@
 				6666E2991A1CF19600B99BA2 /* UILabel+UIDatePickerTextColor.m in Sources */,
 				664978551A0ACCF90081EA43 /* FirstViewController.m in Sources */,
 				661079151A057A7A0096479F /* LocationSearchController.m in Sources */,
+				87B9AFD01A46FCC100B8F3F4 /* SunView.m in Sources */,
 				87545A811A40FCCB000BECD7 /* TransportationTableViewController.m in Sources */,
 				661078E91A044D830096479F /* EventTableViewController.m in Sources */,
 				6616C6821A1323A900D8C872 /* EventManager.m in Sources */,
@@ -433,12 +462,15 @@
 				87545A7B1A40B8CD000BECD7 /* RepeatTableViewController.m in Sources */,
 				E94821231A13E1EC00DAAC63 /* LFGlassView.m in Sources */,
 				E94821221A13E1EC00DAAC63 /* LFDisplayBridge.m in Sources */,
+				87B9AFCD1A46FB6300B8F3F4 /* BirdView.m in Sources */,
 				6649BF041A080367007B447B /* SearchViewController.m in Sources */,
 				87545A7E1A40F549000BECD7 /* AlertTableViewController.m in Sources */,
 				E9D79C361A046DE600C9D65F /* Event.m in Sources */,
+				87B9AFCA1A46F88600B8F3F4 /* SkyView.m in Sources */,
 				6649BF451A09A3BD007B447B /* LocationInfo.m in Sources */,
 				6677990D1A1ADDDB000FD20D /* PlaneView.m in Sources */,
 				6616C67E1A13232A00D8C872 /* SIAlertView.m in Sources */,
+				87B9AFC71A46F23C00B8F3F4 /* ChicagoAnimationView.m in Sources */,
 				6649BF3F1A0966EF007B447B /* CreateEventViewController.m in Sources */,
 				661078E31A044D830096479F /* main.m in Sources */,
 				6666E2951A1CD9D600B99BA2 /* UIButton+UIButton_Position.m in Sources */,

@@ -133,16 +133,24 @@ typedef NS_ENUM(NSUInteger, TableViewSection){
             
             if ([indexPath row] == 0) {
                 self.datePickerExpanded = !self.datePickerExpanded;
+                
+                NSIndexPath *dateCell = [NSIndexPath indexPathForRow:0 inSection:TableViewDateSection];
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:dateCell];
+                
+                
                 if (self.datePickerExpanded) {
                     [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                         self.datePicker.alpha = 1;
+                        cell.detailTextLabel.textColor = [UIColor redColor];
                     } completion:^(BOOL finished) {
                         
                     }];
                 } else {
                     [UIView animateWithDuration:0.15 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                         self.datePicker.alpha = 0;
+                        cell.detailTextLabel.textColor = [UIColor grayColor];
                     } completion:^(BOOL finished) {
+                        
                         
                     }];
                 }

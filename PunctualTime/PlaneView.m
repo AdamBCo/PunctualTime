@@ -10,15 +10,18 @@
 
 @implementation PlaneView
 
--(void)drawPlane{
-
-
-    [self drawBody];
-    [self drawProp];
-    [self drawWheel];
-    [self drawTail];
-    [self drawWings];
-
+-(instancetype)initWithFrame:(CGRect)frame{
+    
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        [self drawBody];
+        [self drawProp];
+        [self drawWheel];
+        [self drawTail];
+        [self drawWings];
+    }
+    return self;
 }
 
 -(void)drawBody{

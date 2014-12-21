@@ -10,6 +10,4 @@
 
 @interface PlaneView : UIView
 
--(void)drawPlane;
-
 @end
